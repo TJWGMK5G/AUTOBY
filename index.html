@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Kachow Cars — авто на заказ из Европы, США, Китая и Кореи. Любые модели и комплектации под ключ в Беларуси. Растаможка, доставка, честные цены."
+    />
+    <meta
+      name="keywords"
+      content="авто на заказ Беларусь, купить авто из Европы, авто из США в Минске, растаможка авто РБ, новые авто под заказ, Geely, Skoda, Tesla, BMW, Mercedes, доставка авто Беларусь"
+    />
+    <meta name="robots" content="index, follow" />
+    <meta
+      property="og:title"
+      content="Kachow Cars — Авто на заказ из любой страны • Беларусь"
+    />
+    <meta
+      property="og:description"
+      content="Подберём и привезём любой автомобиль под ключ. Европа, США, Китай, Корея. Полное сопровождение: поиск, покупка, растаможка, доставка по всей Беларуси."
+    />
+    <meta property="og:type" content="website" />
+    <link type="image/x-icon" href="image/favicon.ico" rel="icon" />
+
+    <!-- ШРИФТЫ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Асинхронная загрузка шрифтов -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'; this.onload=null;"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+
+    <!-- Preload критических изображений -->
+    <link rel="preload" as="image" href="image/bg1.webp" fetchpriority="high" />
+    <link
+      rel="preload"
+      as="image"
+      href="image/multi-car.png"
+      fetchpriority="high"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+
+    <title>Kachow Cars — Авто на заказ из Европы, США, Китая • Беларусь</title>
+  </head>
+  <body>
+    <!-- ==================== HEADER ==================== -->
+    <header class="home-header">
+      <div class="home-header__container">
+        <a href="home.html" class="home-logo">
+          <svg
+            class="home-logo__svg"
+            width="48"
+            height="42"
+            viewBox="0 0 48 42"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M6 32 L12 12 L36 12 L42 32 Z" fill="#e74c3c" />
+            <rect x="10" y="24" width="28" height="10" rx="2" fill="#2c3e50" />
+            <circle cx="16" cy="34" r="7" fill="#f1c40f" />
+            <circle cx="32" cy="34" r="7" fill="#f1c40f" />
+          </svg>
+          <span class="home-logo__text">KACHOW</span>
+        </a>
+
+        <nav class="home-nav" id="home-nav-menu">
+          <ul class="home-nav__list">
+            <li><a href="home.html" class="home-nav__link">Главная</a></li>
+            <li>
+              <a href="home.html#inventory" class="home-nav__link">Автопарк</a>
+            </li>
+            <li>
+              <a href="home.html#service" class="home-nav__link">Услуги</a>
+            </li>
+            <li>
+              <a href="home.html#calculator" class="home-nav__link"
+                >Калькулятор</a
+              >
+            </li>
+
+            <li>
+              <a href="home.html#contact" class="home-nav__link">Контакты</a>
+            </li>
+          </ul>
+        </nav>
+
+        <div
+          class="home-burger"
+          id="home-burger-toggle"
+          aria-label="Открыть меню"
+          role="button"
+        >
+          <span class="home-burger__line"></span>
+          <span class="home-burger__line"></span>
+          <span class="home-burger__line"></span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- ==================== HERO ==================== -->
+      <section class="home-hero">
+        <div class="home-hero__container">
+          <div class="home-hero__badge">🇧🇾 АВТО НА ЗАКАЗ ИЗ ЛЮБОЙ СТРАНЫ</div>
+          <h1 class="home-hero__title">Любой автомобиль<br />под ваш запрос</h1>
+          <p class="home-hero__subtitle">
+            Привозим авто из Европы, США, Китая, Кореи и других стран.<br />
+            Полное сопровождение: поиск, покупка, растаможка, доставка и
+            постановка на учёт в Беларуси.
+          </p>
+          <a href="home.html#contact" class="home-hero__cta">
+            ЗАКАЗАТЬ АВТО ПОД КЛЮЧ
+            <span>→</span>
+          </a>
+          <p class="home-hero__note">
+            Более 2400 успешно реализованных авто • Работаем по всей Беларуси
+          </p>
+        </div>
+
+        <!-- Картинка с машинками в правом нижнем углу -->
+        <img
+          loading="lazy"
+          src="image/multi-car.png"
+          alt="Автомобили под заказ"
+          class="home-hero__car-image"
+        />
+      </section>
+
+      <!-- ==================== WHY (SERVICES) - Аккордеон ==================== -->
+      <section class="home-why" id="services">
+        <div class="home-why__container">
+          <h2 class="home-why__heading">
+            <span>Пакеты услуг</span>
+          </h2>
+          <p class="home-why__subtitle">
+            Выберите оптимальный пакет обслуживания — от базового подбора до
+            полного сопровождения «под ключ» с максимальной выгодой.
+          </p>
+
+          <div class="home-why__grid">
+            <!-- ПАКЕТ 1: Базовый -->
+            <div class="home-why__item" data-tab="tab1">
+              <img
+                loading="lazy"
+                src="image/icon1.png"
+                alt="icon picture"
+                class="home-why__icon"
+              />
+              <h3 class="home-why__title">Базовый</h3>
+              <p class="home-why__preview">
+                Поиск и бронирование авто по вашему ТЗ. Помощь в проверке
+                документов.
+              </p>
+              <img
+                loading="lazy"
+                src="image/item1.webp"
+                alt=""
+                class="home-why__corner-image"
+                aria-hidden="true"
+              />
+              <!-- Контент для аккордеона (мобильная версия) -->
+              <div class="home-why__item-content">
+                <h4>Что входит в пакет «Базовый»</h4>
+                <ul class="home-why__item-list">
+                  <li>
+                    🔎 Поиск автомобиля по вашим критериям (марка, год, бюджет)
+                  </li>
+                  <li>
+                    📄 Проверка базовых документов и VIN на юридическую чистоту
+                  </li>
+                  <li>
+                    🌍 Подбор вариантов из Европы, США, Китая, Кореи, Японии
+                  </li>
+                  <li>📊 Сравнение цен и условий у проверенных поставщиков</li>
+                  <li>
+                    📞 Консультация по таможенным платежам (предварительный
+                    расчёт)
+                  </li>
+                </ul>
+                <p class="home-why__item-note">
+                  * Пакет подходит для самостоятельной покупки с нашей
+                  информационной поддержкой.
+                </p>
+              </div>
+            </div>
+
+            <!-- ПАКЕТ 2: PRO -->
+            <div class="home-why__item" data-tab="tab2">
+              <img
+                loading="lazy"
+                src="image/icon2.png"
+                alt="icon picture"
+                class="home-why__icon"
+              />
+              <h3 class="home-why__title">PRO</h3>
+              <p class="home-why__preview">
+                Расширенная проверка, юридическая чистота, полная диагностика
+                перед покупкой.
+              </p>
+              <img
+                loading="lazy"
+                src="image/item2.webp"
+                alt=""
+                class="home-why__corner-image"
+                aria-hidden="true"
+              />
+              <div class="home-why__item-content">
+                <h4>Что входит в пакет «PRO»</h4>
+                <ul class="home-why__item-list">
+                  <li>📑 Полный отчёт Carfax / AutoCheck (США, Канада)</li>
+                  <li>
+                    ⚖️ Проверка на залоги, аресты, ограничения в Беларуси и РФ
+                  </li>
+                  <li>
+                    🛠️ Диагностика двигателя, КПП, ходовой части (фото/видео)
+                  </li>
+                  <li>
+                    🎨 Замер толщины ЛКП — выявление окрашенных элементов и ДТП
+                  </li>
+                  <li>📋 Юридическое сопровождение сделки с продавцом</li>
+                </ul>
+                <p class="home-why__item-note">
+                  * Рекомендуем для приобретения авто с пробегом из США и
+                  Европы.
+                </p>
+              </div>
+            </div>
+
+            <!-- ПАКЕТ 3: Под ключ -->
+            <div class="home-why__item" data-tab="tab3">
+              <img
+                loading="lazy"
+                src="image/icon3.png"
+                alt="icon picture"
+                class="home-why__icon"
+              />
+              <h3 class="home-why__title">Под ключ</h3>
+              <p class="home-why__preview">
+                Полный цикл: покупка, растаможка, доставка, постановка на учёт в
+                Беларуси.
+              </p>
+              <img
+                loading="lazy"
+                src="image/item3.webp"
+                alt=""
+                class="home-why__corner-image"
+                aria-hidden="true"
+              />
+              <div class="home-why__item-content">
+                <h4>Что входит в пакет «Под ключ»</h4>
+                <ul class="home-why__item-list">
+                  <li>
+                    🚢 Организация доставки автовозом или контейнером до
+                    Беларуси
+                  </li>
+                  <li>
+                    📋 Полное таможенное оформление (СБКТС, ЭПТС, утильсбор)
+                  </li>
+                  <li>🏢 Постановка на учёт в ГАИ с нашим представителем</li>
+                  <li>🔧 Установка кнопки ЭРА-ГЛОНАСС (при необходимости)</li>
+                  <li>
+                    📦 Страхование авто на время перевозки (КАСКО на транзит)
+                  </li>
+                </ul>
+                <p class="home-why__item-note">
+                  * Вы получаете автомобиль на ходу с чистыми документами —
+                  полный «white glove» сервис.
+                </p>
+              </div>
+            </div>
+
+            <!-- ПАКЕТ 4: Максимальная экономия -->
+            <div class="home-why__item" data-tab="tab4">
+              <img
+                loading="lazy"
+                src="image/icon4.png"
+                alt="icon picture"
+                class="home-why__icon"
+              />
+              <h3 class="home-why__title">Экономия</h3>
+              <p class="home-why__preview">
+                Прямые поставки без посредников, кэшбэк, бесплатное хранение,
+                возврат НДС.
+              </p>
+              <img
+                loading="lazy"
+                src="image/item4.webp"
+                alt=""
+                class="home-why__corner-image"
+                aria-hidden="true"
+              />
+              <div class="home-why__item-content">
+                <h4>Пакет «Максимальная экономия»</h4>
+                <ul class="home-why__item-list">
+                  <li>
+                    💰 Прямые контракты с продавцами — без посреднических
+                    наценок
+                  </li>
+                  <li>
+                    💰 Фиксированная комиссия от 500 $ — никаких скрытых
+                    процентов
+                  </li>
+                  <li>
+                    💰 Оптимизация таможенных платежей (правильный код ТН ВЭД)
+                  </li>
+                  <li>
+                    💰 Возврат НДС для юридических лиц и ИП (до 20% от
+                    стоимости)
+                  </li>
+                  <li>
+                    💰 Бесплатное хранение на складах в Европе и США до 30 дней
+                  </li>
+                </ul>
+                <p class="home-why__item-note">
+                  * Экономия достигает 30% по сравнению с покупкой у локальных
+                  перекупщиков.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== FEATURED (INVENTORY) ==================== -->
+      <section class="home-featured" id="inventory">
+        <div class="home-featured__container">
+          <div class="home-featured__header">
+            <div class="home-featured__pretitle">ПОПУЛЯРНЫЕ ЗАПРОСЫ</div>
+            <h2 class="home-featured__title">
+              Авто, которые белорусы чаще всего заказывают у нас
+            </h2>
+            <p class="home-featured__subtitle">
+              Надёжные, проверенные и выгодные варианты из Европы, США, Китая и
+              Кореи
+            </p>
+          </div>
+
+          <div class="home-featured__grid">
+            <!-- Карточка 1 -->
+            <div class="home-featured__card">
+              <div class="home-featured__card-image-wrapper">
+                <img
+                  loading="lazy"
+                  src="image/car1.png"
+                  alt="Geely Atlas Pro"
+                  loading="lazy"
+                />
+                <div class="price-badge">
+                  <span class="old-price">$224,000.00</span>
+                  <span class="current-price">$224,000.00</span>
+                  <button class="tax-btn">Tax table</button>
+                </div>
+              </div>
+
+              <div class="home-featured__card-content">
+                <div class="model-code">Q32.OT Prestige</div>
+                <h3 class="home-featured__card-title">Geely Atlas Pro</h3>
+                <div class="specs">
+                  <div class="spec-item">
+                    <span class="spec-label">Year</span>
+                    <span class="spec-value">2024</span>
+                  </div>
+                  <div class="spec-item">
+                    <span class="spec-label">Body Style</span>
+                    <span class="spec-value">SUV</span>
+                  </div>
+                  <div class="spec-item">
+                    <span class="spec-label">Transmission</span>
+                    <span class="spec-value">Automatic</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Карточка 2 -->
+            <div class="home-featured__card">
+              <div class="home-featured__card-image-wrapper">
+                <img
+                  loading="lazy"
+                  src="image/car2.png"
+                  alt="Geely Atlas Pro"
+                  loading="lazy"
+                />
+                <div class="price-badge">
+                  <span class="old-price">$224,000.00</span>
+                  <span class="current-price">$224,000.00</span>
+                  <button class="tax-btn">Tax table</button>
+                </div>
+              </div>
+
+              <div class="home-featured__card-content">
+                <div class="model-code">Q32.OT Prestige</div>
+                <h3 class="home-featured__card-title">Geely Atlas Pro</h3>
+                <div class="specs">
+                  <div class="spec-item">
+                    <span class="spec-label">Year</span>
+                    <span class="spec-value">2024</span>
+                  </div>
+                  <div class="spec-item">
+                    <span class="spec-label">Body Style</span>
+                    <span class="spec-value">SUV</span>
+                  </div>
+                  <div class="spec-item">
+                    <span class="spec-label">Transmission</span>
+                    <span class="spec-value">Automatic</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Карточка 3 -->
+            <div class="home-featured__card">
+              <div class="home-featured__card-image-wrapper">
+                <img
+                  loading="lazy"
+                  src="image/car3.png"
+                  alt="Geely Atlas Pro"
+                  loading="lazy"
+                />
+                <div class="price-badge">
+                  <span class="old-price">$224,000.00</span>
+                  <span class="current-price">$224,000.00</span>
+                  <button class="tax-btn">Tax table</button>
+                </div>
+              </div>
+
+              <div class="home-featured__card-content">
+                <div class="model-code">Q32.OT Prestige</div>
+                <h3 class="home-featured__card-title">Geely Atlas Pro</h3>
+                <div class="specs">
+                  <div class="spec-item">
+                    <span class="spec-label">Year</span>
+                    <span class="spec-value">2024</span>
+                  </div>
+                  <div class="spec-item">
+                    <span class="spec-label">Body Style</span>
+                    <span class="spec-value">SUV</span>
+                  </div>
+                  <div class="spec-item">
+                    <span class="spec-label">Transmission</span>
+                    <span class="spec-value">Automatic</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Карточка 4 -->
+            <div class="home-featured__card">
+              <div class="home-featured__card-image-wrapper">
+                <img
+                  loading="lazy"
+                  src="image/car4.png"
+                  alt="Geely Atlas Pro"
+                  loading="lazy"
+                />
+                <div class="price-badge">
+                  <span class="old-price">$224,000.00</span>
+                  <span class="current-price">$224,000.00</span>
+                  <button class="tax-btn">Tax table</button>
+                </div>
+              </div>
+
+              <div class="home-featured__card-content">
+                <div class="model-code">Q32.OT Prestige</div>
+                <h3 class="home-featured__card-title">Geely Atlas Pro</h3>
+                <div class="specs">
+                  <div class="spec-item">
+                    <span class="spec-label">Year</span>
+                    <span class="spec-value">2024</span>
+                  </div>
+                  <div class="spec-item">
+                    <span class="spec-label">Body Style</span>
+                    <span class="spec-value">SUV</span>
+                  </div>
+                  <div class="spec-item">
+                    <span class="spec-label">Transmission</span>
+                    <span class="spec-value">Automatic</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Карточка 5 -->
+            <div class="home-featured__card">
+              <div class="home-featured__card-image-wrapper">
+                <img
+                  loading="lazy"
+                  src="image/car5.png"
+                  alt="Geely Atlas Pro"
+                  loading="lazy"
+                />
+                <div class="price-badge">
+                  <span class="old-price">$224,000.00</span>
+                  <span class="current-price">$224,000.00</span>
+                  <button class="tax-btn">Tax table</button>
+                </div>
+              </div>
+
+              <div class="home-featured__card-content">
+                <div class="model-code">Q32.OT Prestige</div>
+                <h3 class="home-featured__card-title">Geely Atlas Pro</h3>
+                <div class="specs">
+                  <div class="spec-item">
+                    <span class="spec-label">Year</span>
+                    <span class="spec-value">2024</span>
+                  </div>
+                  <div class="spec-item">
+                    <span class="spec-label">Body Style</span>
+                    <span class="spec-value">SUV</span>
+                  </div>
+                  <div class="spec-item">
+                    <span class="spec-label">Transmission</span>
+                    <span class="spec-value">Automatic</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Карточка 6 -->
+            <div class="home-featured__card">
+              <div class="home-featured__card-image-wrapper">
+                <img
+                  loading="lazy"
+                  src="image/car6.png"
+                  alt="Geely Atlas Pro"
+                  loading="lazy"
+                />
+                <div class="price-badge">
+                  <span class="old-price">$224,000.00</span>
+                  <span class="current-price">$224,000.00</span>
+                  <button class="tax-btn">Tax table</button>
+                </div>
+              </div>
+
+              <div class="home-featured__card-content">
+                <div class="model-code">Q32.OT Prestige</div>
+                <h3 class="home-featured__card-title">Geely Atlas Pro</h3>
+                <div class="specs">
+                  <div class="spec-item">
+                    <span class="spec-label">Year</span>
+                    <span class="spec-value">2024</span>
+                  </div>
+                  <div class="spec-item">
+                    <span class="spec-label">Body Style</span>
+                    <span class="spec-value">SUV</span>
+                  </div>
+                  <div class="spec-item">
+                    <span class="spec-label">Transmission</span>
+                    <span class="spec-value">Automatic</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Повторите остальные 5 карточек аналогично, меняя только изображение, название и год -->
+            <!-- ... -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TESTIMONIALS ==================== -->
+      <section class="home-testimonials">
+        <div class="home-testimonials__container">
+          <div class="home-testimonials__header">
+            <div class="home-testimonials__pretitle">ГОНОЧНЫЕ ИСТОРИИ</div>
+            <h2 class="home-testimonials__title">Что говорят наши гонщики</h2>
+            <p class="home-testimonials__subtitle">
+              Более 2400 автомобилей успешно доставлено по всей Беларуси 🏆
+            </p>
+          </div>
+
+          <div class="home-testimonials__carousel-wrapper" id="carouselWrapper">
+            <div class="home-testimonials__carousel" id="testimonialsCarousel">
+              <!-- Карточка 1 -->
+              <div class="home-testimonials__card" data-card="1">
+                <div class="home-testimonials__avatar">
+                  <div class="home-testimonials__avatar-circle">👨</div>
+                </div>
+                <div class="home-testimonials__quote">
+                  «Заказал Skoda Kodiaq из Германии. Всё прошло как на гоночной
+                  трассе: быстро, чётко, без ошибок. Цена на 18% ниже!»
+                </div>
+                <div class="home-testimonials__author">
+                  <strong>Молния Андрей</strong>
+                  <span>Минск • Skoda Kodiaq</span>
+                </div>
+              </div>
+
+              <!-- Карточка 2 -->
+              <div class="home-testimonials__card" data-card="2">
+                <div class="home-testimonials__avatar">
+                  <div class="home-testimonials__avatar-circle">👩</div>
+                </div>
+                <div class="home-testimonials__quote">
+                  «Tesla Model Y из США — мой электрический молниеотвод! Всё
+                  прозрачно, доставили быстрее обещанного.»
+                </div>
+                <div class="home-testimonials__author">
+                  <strong>Салли Екатерина</strong>
+                  <span>Брест • Tesla Model Y</span>
+                </div>
+              </div>
+
+              <!-- Карточка 3 -->
+              <div class="home-testimonials__card" data-card="3">
+                <div class="home-testimonials__avatar">
+                  <div class="home-testimonials__avatar-circle">👨‍🔧</div>
+                </div>
+                <div class="home-testimonials__quote">
+                  «Geely из Китая — настоящий дракон на дороге! Сервис на
+                  высоте, ребята знают своё дело. Рекомендую!»
+                </div>
+                <div class="home-testimonials__author">
+                  <strong>Шланг Сергей</strong>
+                  <span>Гродно • Geely Atlas Pro</span>
+                </div>
+              </div>
+
+              <!-- Карточка 4 -->
+              <div class="home-testimonials__card" data-card="4">
+                <div class="home-testimonials__avatar">
+                  <div class="home-testimonials__avatar-circle">👨‍🚀</div>
+                </div>
+                <div class="home-testimonials__quote">
+                  «BMW X5 из Литвы — зверь на колёсах! Растаможили без проблем.
+                  Тачка — огонь, сервис — ракета!»
+                </div>
+                <div class="home-testimonials__author">
+                  <strong>Гвидо Дмитрий</strong>
+                  <span>Могилёв • BMW X5</span>
+                </div>
+              </div>
+
+              <!-- Карточка 5 -->
+              <div class="home-testimonials__card" data-card="5">
+                <div class="home-testimonials__avatar">
+                  <div class="home-testimonials__avatar-circle">👩‍💼</div>
+                </div>
+                <div class="home-testimonials__quote">
+                  «Hyundai Tucson из Кореи — мой корейский суперкар! Доставка за
+                  4 недели? Легко! Спасибо команде!»
+                </div>
+                <div class="home-testimonials__author">
+                  <strong>Крутая Ольга</strong>
+                  <span>Витебск • Hyundai Tucson</span>
+                </div>
+              </div>
+
+              <!-- Карточка 6 -->
+              <div class="home-testimonials__card" data-card="6">
+                <div class="home-testimonials__avatar">
+                  <div class="home-testimonials__avatar-circle">👨‍💼</div>
+                </div>
+                <div class="home-testimonials__quote">
+                  «Mercedes GLC из Германии — немецкий танк на трассе! Оформили
+                  под ключ быстрее, чем я доехал до салона.»
+                </div>
+                <div class="home-testimonials__author">
+                  <strong>Доктор Хадсон Виктор</strong>
+                  <span>Гомель • Mercedes GLC</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="home-testimonials__controls">
+            <button class="home-testimonials__btn" id="prevTestimonialBtn">
+              ←
+            </button>
+            <button class="home-testimonials__btn" id="nextTestimonialBtn">
+              →
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== ПОЧЕМУ ВЫБИРАЮТ НАС ==================== -->
+      <section class="why-choose" id="service">
+        <div class="why-choose__container">
+          <div class="why-choose__header">
+            <h2 class="why-choose__title">Почему выбирают нас</h2>
+            <p class="why-choose__subtitle">
+              Профессиональный подход к подбору автомобилей из любой точки
+              мира.<br />
+              Полная прозрачность сделки, максимальная выгода и забота о каждом
+              клиенте.
+            </p>
+            <div class="why-choose__racing-line"></div>
+          </div>
+
+          <div class="why-choose__grid">
+            <!-- Карточка 1: Любая страна -->
+            <div class="why-choose__card" data-number="01">
+              <div class="why-choose__icon">🌍</div>
+              <h3 class="why-choose__card-title">Любая страна</h3>
+              <p class="why-choose__card-desc">
+                Доставка автомобилей из Европы, США, Китая, Кореи, Японии и ОАЭ.
+                Работаем напрямую с аукционами и дилерами по всему миру.
+              </p>
+              <div class="why-choose__card-stripe"></div>
+            </div>
+
+            <!-- Карточка 2: Полная проверка -->
+            <div class="why-choose__card" data-number="02">
+              <div class="why-choose__icon">🔍</div>
+              <h3 class="why-choose__card-title">Полная проверка</h3>
+              <p class="why-choose__card-desc">
+                Carfax, AutoCheck, диагностика двигателя, замер ЛКП, юридическая
+                чистота — 120+ пунктов контроля.
+              </p>
+              <div class="why-choose__card-stripe"></div>
+            </div>
+
+            <!-- Карточка 3: Под ключ -->
+            <div class="why-choose__card" data-number="03">
+              <div class="why-choose__icon">🔑</div>
+              <h3 class="why-choose__card-title">Под ключ</h3>
+              <p class="why-choose__card-desc">
+                Полное сопровождение: покупка, доставка, растаможка, постановка
+                на учёт. Вы получаете авто на ходу.
+              </p>
+              <div class="why-choose__card-stripe"></div>
+            </div>
+
+            <!-- Карточка 4: Выгодные цены -->
+            <div class="why-choose__card" data-number="04">
+              <div class="why-choose__icon">💰</div>
+              <h3 class="why-choose__card-title">Выгодные цены</h3>
+              <p class="why-choose__card-desc">
+                Прямые контракты без посредников, фиксированная комиссия от
+                500$, возврат НДС, кэшбэк до 3%.
+              </p>
+              <div class="why-choose__card-stripe"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== KACHOW CAR SLIDER ==================== -->
+      <section class="illustration-cars">
+        <div class="illustration-cars__header">
+          <h2 class="illustration-cars__title">
+            <span class="illustration-cars__title-accent">Эксклюзивный</span>
+            автопарк
+          </h2>
+          <p class="illustration-cars__subtitle">
+            Выберите автомобиль своей мечты
+          </p>
+          <div class="illustration-cars__decoration"></div>
+        </div>
+
+        <div class="illustration-cars__viewport">
+          <div class="illustration-cars__track" id="illustrationTrack">
+            <!-- Карточки с машинами (контент остаётся тем же) -->
+            <div class="illustration-cars__slide">
+              <img
+                loading="lazy"
+                src="https://images.unsplash.com/photo-1617788138017-80ad40651399?w=400&h=250&fit=crop"
+                alt="Ferrari"
+              />
+            </div>
+            <div class="illustration-cars__slide">
+              <img
+                loading="lazy"
+                src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&h=250&fit=crop"
+                alt="Porsche"
+              />
+            </div>
+            <div class="illustration-cars__slide">
+              <img
+                loading="lazy"
+                src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&h=250&fit=crop"
+                alt="Lamborghini"
+              />
+            </div>
+            <div class="illustration-cars__slide">
+              <img
+                loading="lazy"
+                src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&h=250&fit=crop"
+                alt="Mercedes"
+              />
+            </div>
+            <div class="illustration-cars__slide">
+              <img
+                loading="lazy"
+                src="https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=400&h=250&fit=crop"
+                alt="BMW"
+              />
+            </div>
+            <div class="illustration-cars__slide">
+              <img
+                loading="lazy"
+                src="https://images.unsplash.com/photo-1621135802920-133df287f89c?w=400&h=250&fit=crop"
+                alt="Audi"
+              />
+            </div>
+            <div class="illustration-cars__slide">
+              <img
+                loading="lazy"
+                src="https://images.unsplash.com/photo-1584345604476-8ec5e12e42dd?w=400&h=250&fit=crop"
+                alt="Tesla"
+              />
+            </div>
+            <div class="illustration-cars__slide">
+              <img
+                loading="lazy"
+                src="https://images.unsplash.com/photo-1580274455191-1c62238fa333?w=400&h=250&fit=crop"
+                alt="Ford Mustang"
+              />
+            </div>
+            <div class="illustration-cars__slide">
+              <img
+                loading="lazy"
+                src="https://images.unsplash.com/photo-1603584173870-7e23c9123dce?w=400&h=250&fit=crop"
+                alt="Chevrolet"
+              />
+            </div>
+            <div class="illustration-cars__slide">
+              <img
+                loading="lazy"
+                src="https://images.unsplash.com/photo-1592198084033-aade902d79a6?w=400&h=250&fit=crop"
+                alt="Toyota Supra"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="illustration-cars__buttons">
+          <button
+            class="illustration-cars__btn illustration-cars__btn--prev"
+            id="illustrationPrevBtn"
+          >
+            ←
+          </button>
+          <button
+            class="illustration-cars__btn illustration-cars__btn--next"
+            id="illustrationNextBtn"
+          >
+            →
+          </button>
+        </div>
+
+        <div class="illustration-cars__dots" id="illustrationDots"></div>
+      </section>
+
+      <!-- ==================== PARALLAX 1 ==================== -->
+      <section class="parallax-divider">
+        <div class="parallax-bg parallax-bg--1"></div>
+
+        <div class="parallax-overlay">
+          <div class="parallax-content">
+            <div class="parallax-divider__title">
+              Автомобиль вашей мечты из любой страны мира
+            </div>
+
+            <!-- Новый блок статистики -->
+            <div class="parallax-stats">
+              <div class="stat-item">
+                <div class="stat-number">1200+</div>
+                <div class="stat-text">Автомобилей доставлено</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">98%</div>
+                <div class="stat-text">Довольных клиентов</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">8</div>
+                <div class="stat-text">Лет на рынке</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">25-30%</div>
+                <div class="stat-text">Экономия для клиента</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== КАЛЬКУЛЯТОР ПОД КЛЮЧ ==================== -->
+      <section class="home-calculator" id="calculator">
+        <div class="home-calculator__container">
+          <!-- Предупреждение -->
+          <div class="calculator-warning">
+            <strong>Внимание!</strong> Все расчёты в калькуляторе являются
+            <strong>ориентировочными</strong>.<br />
+            Точная стоимость зависит от конкретной модели автомобиля, года
+            выпуска, комплектации, курса валют на день оформления и других
+            факторов.<br />
+            Для получения точного расчёта под ваш запрос — обратитесь к нашему
+            специалисту.
+          </div>
+
+          <div class="home-calculator__header">
+            <div class="home-featured__pretitle">РАССЧИТАЙТЕ СТОИМОСТЬ</div>
+            <h2>Калькулятор авто под ключ в Беларуси</h2>
+            <p>
+              Реальный курс НБРБ • Актуальные ставки 2026 • Расчёт за 15 секунд
+            </p>
+          </div>
+
+          <div class="home-calculator__grid">
+            <!-- Форма -->
+            <div class="home-calculator__form">
+              <div class="form-group">
+                <label for="country">Страна ввоза</label>
+                <select id="country" class="form-control">
+                  <option value="europe">Европа</option>
+                  <option value="usa">США</option>
+                  <option value="china">Китай</option>
+                  <option value="korea">Корея</option>
+                  <option value="japan">Япония</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="price">Стоимость автомобиля</label>
+                <div class="price-input-wrapper">
+                  <input
+                    type="number"
+                    id="price"
+                    value="85000"
+                    class="form-control price-input"
+                    placeholder="85000"
+                  />
+                  <label for="currency" class="visually-hidden">Валюта</label>
+                  <select id="currency" class="form-control currency-select">
+                    <option value="BYN">BYN</option>
+                    <option value="EUR">EUR €</option>
+                    <option value="USD">USD $</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="year">Год выпуска</label>
+                <input
+                  type="number"
+                  id="year"
+                  value="2024"
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="volume">Объём двигателя (см³)</label>
+                <input
+                  type="number"
+                  id="volume"
+                  value="1995"
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="engineType">Тип двигателя</label>
+                <select id="engineType" class="form-control">
+                  <option value="petrol">Бензин</option>
+                  <option value="diesel">Дизель</option>
+                  <option value="hybrid">Гибрид</option>
+                  <option value="electric">Электро</option>
+                </select>
+              </div>
+
+              <div class="form-group checkbox-group-inline">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="evQuota" checked /> Электромобиль
+                  (квота 2026)
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" id="discount50" /> Льгота 50%
+                  (многодетные / инвалиды)
+                </label>
+              </div>
+
+              <p class="calculator-note">
+                * Расчёт справочный. Точная сумма — после проверки VIN и
+                документов.
+              </p>
+            </div>
+
+            <!-- Результат -->
+            <div class="home-calculator__result">
+              <h3>Итоговая стоимость под ключ</h3>
+              <div class="result-total" id="totalByn" aria-live="polite">
+                — BYN
+              </div>
+              <div
+                class="result-breakdown"
+                id="breakdown"
+                aria-live="polite"
+              ></div>
+              <div class="result-footer">
+                <strong>Итого к оплате:</strong>
+                <div id="finalTotal" class="final-price" aria-live="polite">
+                  — BYN
+                </div>
+                <small id="rateInfo"
+                  >Курс НБРБ на 16.04.2026 • EUR 3.3209 • USD 2.8193</small
+                >
+              </div>
+              <a
+                href="home.html#contact"
+                class="home-hero__cta home-calculator__cta"
+                >ЗАКАЗАТЬ АВТО ПО ЭТОЙ ЦЕНЕ →</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Полезная информация -->
+      <section class="calculator-info">
+        <h3>Полезная информация</h3>
+        <div class="info-grid">
+          <div>
+            <strong>Курс НБРБ:</strong> <span id="liveEur">—</span> BYN за 1 EUR
+          </div>
+          <div>
+            <strong>Утильсбор:</strong> 544,5 BYN (до 3 лет) / 1089 BYN (старше
+            3 лет)
+          </div>
+          <div><strong>Таможенный сбор:</strong> 120 BYN (фиксировано)</div>
+          <div><strong>НДС:</strong> 20 % (от стоимости авто + пошлины)</div>
+          <div>
+            <strong>Электромобили:</strong> 0 % пошлина (квота 20 000 шт. в
+            2026)
+          </div>
+        </div>
+        <p class="calculator-info__note">
+          Официальные источники:
+          <a href="https://customs.gov.by" target="_blank">Таможня РБ</a> •
+          <a href="https://www.nbrb.by" target="_blank">Нацбанк РБ</a> •
+          <a href="https://eec.eaeunion.org" target="_blank">ЕЭК</a>
+        </p>
+      </section>
+    </main>
+
+    <!-- ==================== MODAL CONTACTS ==================== -->
+    <div class="home-modal" id="contactModal">
+      <div class="home-modal__overlay" id="modalOverlay"></div>
+      <div class="home-modal__content">
+        <button
+          class="home-modal__close"
+          id="modalClose"
+          aria-label="Закрыть модальное окно"
+        >
+          ✕
+        </button>
+        <div class="home-modal__header">
+          <h2>Связаться с нами</h2>
+          <p>
+            Мы готовы помочь с подбором автомобиля и ответить на все вопросы
+          </p>
+        </div>
+        <div class="home-modal__body">
+          <div class="home-modal__info">
+            <div class="home-modal__item">
+              <span class="home-modal__icon">📍</span>
+              <div>
+                <strong>Главный офис</strong><br />Минск, ул. Притыцкого, 156
+              </div>
+            </div>
+            <div class="home-modal__item">
+              <span class="home-modal__icon">☎️</span>
+              <div>
+                <strong>Телефон</strong><br /><a href="tel:+375291234567"
+                  >+375 29 123-45-67</a
+                >
+              </div>
+            </div>
+            <div class="home-modal__item">
+              <span class="home-modal__icon">✉️</span>
+              <div>
+                <strong>Email</strong><br /><a
+                  href="mailto:info@illustrationcars.by"
+                  >info@illustrationcars.by</a
+                >
+              </div>
+            </div>
+          </div>
+          <div class="home-modal__note">
+            <strong>Работаем по всей Беларуси</strong><br />
+            Доставка и оформление в Минске, Бресте, Гродно, Витебске, Могилёве и
+            Гомеле
+          </div>
+        </div>
+        <div class="home-modal__footer">
+          <p>Мы ответим вам в течение 30 минут в рабочее время</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Плавающая кнопка "Связаться с нами" -->
+    <button
+      class="floating-contact-btn"
+      id="floatingContactBtn"
+      aria-label="Связаться с нами"
+    >
+      <span class="btn-content">
+        <span class="btn-icon">💬</span>
+        <span class="btn-text">Связаться с нами</span>
+      </span>
+    </button>
+
+    <button
+      class="scroll-to-top"
+      id="scrollToTopBtn"
+      aria-label="Прокрутить наверх"
+    >
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 4l-8 8h6v8h4v-8h6z" />
+      </svg>
+    </button>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="home-footer">
+      <div class="home-footer__container">
+        <div class="home-footer__col">
+          <a href="home.html" class="home-footer__logo-link">
+            <svg
+              class="home-footer__logo-svg"
+              width="42"
+              height="36"
+              viewBox="0 0 48 42"
+              fill="none"
+            >
+              <path d="M6 32 L12 12 L36 12 L42 32 Z" fill="#e74c3c" />
+              <rect
+                x="10"
+                y="24"
+                width="28"
+                height="10"
+                rx="2"
+                fill="#2c3e50"
+              />
+              <circle cx="16" cy="34" r="7" fill="#f1c40f" />
+              <circle cx="32" cy="34" r="7" fill="#f1c40f" />
+            </svg>
+            <span class="home-footer__logo-text">KACHOW</span>
+          </a>
+          <p class="home-footer__desc">
+            Авто на заказ из любой страны мира с полной доставкой и растаможкой
+            в Беларуси.
+          </p>
+        </div>
+        <div class="home-footer__col">
+          <h3>Навигация</h3>
+          <ul class="home-footer__nav-list">
+            <li><a href="home.html#inventory">Готовые авто</a></li>
+            <li><a href="home.html#calculator">Калькулятор</a></li>
+            <li><a href="home.html#service">О нас</a></li>
+            <li><a href="home.html#services">Услуги</a></li>
+          </ul>
+        </div>
+        <div class="home-footer__col home-footer__contacts">
+          <h3>Контакты</h3>
+          <a href="tel:+375291234567">+375 29 123-45-67</a>
+          <a href="mailto:info@illustrationcars.by">info@illustrationcars.by</a>
+          <span>Минск • Брест • Гродно • Витебск • Могилёв • Гомель</span>
+        </div>
+        <div class="home-footer__col">
+          <h3>Документы</h3>
+          <ul class="home-footer__nav-list">
+            <li>
+              <a href="privacy-policy.html">Политика конфиденциальности</a>
+            </li>
+            <li><a href="terms-conditions.html">Условия сотрудничества</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="home-footer__bottom">
+        <p>© 2026 Kachow Cars Беларусь. Все права защищены.</p>
+        <p>Профессиональный импорт автомобилей под ключ</p>
+      </div>
+    </footer>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
