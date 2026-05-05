@@ -28,19 +28,38 @@
 
   // ====================== ОСНОВНАЯ ИНИЦИАЛИЗАЦИЯ ======================
   document.addEventListener("DOMContentLoaded", function () {
-    // --------------------------------------------------------------
-    // 1. MOBILE BURGER MENU — мобильное меню (бургер)
-    // --------------------------------------------------------------
+    // MOBILE BURGER MENU
     const burger = document.getElementById("home-burger-toggle");
     const navMenu = document.getElementById("home-nav-menu");
+    const headerContacts = document.querySelector(".header-contacts");
+
+    // Функция клонирования контактов в мобильное меню
+    function cloneContactsToMobile() {
+      const mobileContainer = document.querySelector(".mobile-contacts-block");
+      if (!mobileContainer || !headerContacts) return;
+
+      const clone = headerContacts.cloneNode(true);
+      clone.classList.add("mobile-contacts-clone");
+      clone.style.display = "flex";
+      clone.style.flexDirection = "column";
+      clone.style.width = "100%";
+      clone.style.background = "transparent";
+      clone.style.backdropFilter = "none";
+      clone.style.border = "none";
+      clone.style.padding = "0";
+      clone.style.gap = "15px";
+
+      mobileContainer.innerHTML = "";
+      mobileContainer.appendChild(clone);
+    }
 
     if (burger && navMenu) {
       burger.addEventListener("click", () => {
         burger.classList.toggle("active");
         navMenu.classList.toggle("active");
 
-        // Добавляем/удаляем класс на body для блокировки скролла
         if (navMenu.classList.contains("active")) {
+          cloneContactsToMobile();
           document.body.classList.add("no-scroll");
         } else {
           document.body.classList.remove("no-scroll");
@@ -49,14 +68,27 @@
 
       document.querySelectorAll(".home-nav__link").forEach((link) => {
         link.addEventListener("click", () => {
-          if (window.innerWidth < 993) {
+          if (window.innerWidth <= 768) {
             burger.classList.remove("active");
             navMenu.classList.remove("active");
-            document.body.classList.remove("no-scroll"); // Удаляем класс
+            document.body.classList.remove("no-scroll");
           }
         });
       });
     }
+
+    // При ресайзе закрываем меню если стало больше 768px
+    window.addEventListener("resize", () => {
+      if (
+        window.innerWidth > 768 &&
+        navMenu &&
+        navMenu.classList.contains("active")
+      ) {
+        navMenu.classList.remove("active");
+        if (burger) burger.classList.remove("active");
+        document.body.classList.remove("no-scroll");
+      }
+    });
 
     // --------------------------------------------------------------
     // 2. АККОРДЕОН ДЛЯ WHY SECTION — плавный без дёрганий (с мобильной оптимизацией)
