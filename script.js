@@ -59,13 +59,26 @@
     }
 
     // --------------------------------------------------------------
-    // 2. АККОРДЕОН ДЛЯ WHY SECTION — плавный без дёрганий (рекомендуемый)
+    // 2. АККОРДЕОН ДЛЯ WHY SECTION — плавный без дёрганий (с мобильной оптимизацией)
     // --------------------------------------------------------------
     const accordionItems = document.querySelectorAll(".home-why__item");
 
     if (accordionItems.length) {
       let isAnimating = false;
       let activeItem = null;
+
+      // Определяем мобильное устройство
+      const isMobile = () => window.innerWidth <= 992;
+
+      // Функция для определения высоты хедера (если есть фиксированный хедер)
+      const getHeaderOffset = () => {
+        const header = document.querySelector("header, .header, .home-header");
+        if (header) {
+          const headerHeight = header.offsetHeight;
+          return headerHeight + 20; // Хедер + дополнительный отступ
+        }
+        return 90; // Стандартный отступ для мобильных
+      };
 
       const closeAllAccordionItems = () => {
         accordionItems.forEach((item) => {
@@ -76,15 +89,51 @@
         activeItem = null;
       };
 
-      // Функция для плавного скролла к элементу
-      const scrollToElement = (element, offset = 100) => {
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - offset;
+      // Функция для плавного скролла к элементу с учетом устройства
+      const scrollToElement = (element, options = {}) => {
+        const { offset = null, behavior = "smooth", block = "start" } = options;
+
+        let offsetPosition;
+
+        if (isMobile()) {
+          // Для мобильных: скроллим к началу карточки с небольшим отступом
+          const headerOffset = getHeaderOffset();
+          const elementPosition = element.getBoundingClientRect().top;
+          offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        } else {
+          // Для десктопа: используем переданный offset или стандартный
+          const customOffset = offset !== null ? offset : 100;
+          const elementPosition = element.getBoundingClientRect().top;
+          offsetPosition = elementPosition + window.pageYOffset - customOffset;
+        }
 
         window.scrollTo({
           top: offsetPosition,
-          behavior: "smooth",
+          behavior: behavior,
         });
+      };
+
+      // Функция для мобильного скролла к контенту
+      const scrollToContentOnMobile = (item) => {
+        if (!isMobile()) return;
+
+        // Небольшая задержка для завершения анимации открытия
+        setTimeout(() => {
+          const content = item.querySelector(".home-why__item-content");
+          if (content && content.scrollHeight > 0) {
+            // Получаем позицию карточки
+            const rect = item.getBoundingClientRect();
+            const headerOffset = getHeaderOffset();
+
+            // Скроллим к началу карточки (не к контенту, а к началу карточки)
+            const offsetPosition = rect.top + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: "smooth",
+            });
+          }
+        }, 150); // Задержка 150ms для завершения CSS transition
       };
 
       accordionItems.forEach((item) => {
@@ -103,7 +152,7 @@
           const isActive = item.classList.contains("active");
 
           if (isActive) {
-            // Просто закрываем без скролла
+            // Закрываем аккордеон
             isAnimating = true;
             item.classList.remove("active");
             activeItem = null;
@@ -112,42 +161,81 @@
               isAnimating = false;
             }, 400);
           } else {
-            // Закрываем все и открываем новый
+            // Открываем новый аккордеон
             isAnimating = true;
             closeAllAccordionItems();
             item.classList.add("active");
             activeItem = item;
 
-            // Небольшая задержка перед скроллом для завершения CSS transition
-            setTimeout(() => {
-              // Проверяем, видна ли карточка полностью
-              const rect = item.getBoundingClientRect();
-              const isFullyVisible =
-                rect.top >= 80 && rect.bottom <= window.innerHeight - 80;
+            // Для мобильных: скроллим к началу карточки
+            if (isMobile()) {
+              scrollToContentOnMobile(item);
+            } else {
+              // Для десктопа: проверяем видимость
+              setTimeout(() => {
+                const rect = item.getBoundingClientRect();
+                const isFullyVisible =
+                  rect.top >= 80 && rect.bottom <= window.innerHeight - 80;
 
-              if (!isFullyVisible) {
-                scrollToElement(item, 90);
-              }
+                if (!isFullyVisible) {
+                  scrollToElement(item, { offset: 90 });
+                }
 
+                setTimeout(() => {
+                  isAnimating = false;
+                }, 500);
+              }, 100);
+            }
+
+            // Для мобильных снимаем блокировку анимации позже
+            if (isMobile()) {
               setTimeout(() => {
                 isAnimating = false;
-              }, 500);
-            }, 100);
+              }, 600);
+            }
           }
         });
       });
 
       // При изменении размера окна проверяем активный элемент
       window.addEventListener("resize", () => {
-        if (activeItem && window.innerWidth <= 992) {
+        if (activeItem && isMobile()) {
           setTimeout(() => {
             const rect = activeItem.getBoundingClientRect();
-            if (rect.bottom > window.innerHeight || rect.top < 0) {
-              scrollToElement(activeItem, 90);
+            const headerOffset = getHeaderOffset();
+
+            // Если активная карточка не видна полностью на мобильном
+            if (rect.top < headerOffset || rect.bottom > window.innerHeight) {
+              scrollToElement(activeItem, { offset: headerOffset });
             }
           }, 100);
         }
       });
+
+      // Дополнительно для touch устройств: обрабатываем свайпы
+      if (isMobile()) {
+        let touchStartY = 0;
+        document.addEventListener("touchstart", (e) => {
+          touchStartY = e.touches[0].clientY;
+        });
+
+        document.addEventListener("touchend", (e) => {
+          const touchEndY = e.changedTouches[0].clientY;
+          const deltaY = touchEndY - touchStartY;
+
+          // Если свайп вверх и есть активный элемент, проверяем видимость
+          if (deltaY < -50 && activeItem && isMobile()) {
+            setTimeout(() => {
+              const rect = activeItem.getBoundingClientRect();
+              const headerOffset = getHeaderOffset();
+
+              if (rect.top < headerOffset) {
+                scrollToElement(activeItem, { offset: headerOffset });
+              }
+            }, 50);
+          }
+        });
+      }
     }
 
     // --------------------------------------------------------------
