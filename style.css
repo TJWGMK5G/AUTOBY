@@ -1152,6 +1152,65 @@ body::before {
   }
 }
 
+/* Добавьте в конец вашего CSS файла */
+
+/* Оптимизация для предотвращения дёрганий */
+.home-why__grid {
+  /* Стабилизация сетки */
+  contain: layout style;
+}
+
+.home-why__item {
+  /* Включаем аппаратное ускорение */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
+  /* Оптимизация для анимации */
+  will-change: transform, margin, padding;
+}
+
+.home-why__item-content {
+  /* Оптимизация для плавного открытия */
+  will-change: max-height;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* Плавное появление контента */
+.home-why__item.active .home-why__item-content {
+  animation: contentFadeIn 0.3s ease-out 0.2s both;
+}
+
+@keyframes contentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Для мобильных устройств - фиксируем позицию */
+@media (max-width: 992px) {
+  .home-why__container {
+    overflow-anchor: none; /* Отключаем авто-скролл в Safari */
+  }
+
+  .home-why__item.active {
+    scroll-margin-top: 80px; /* Отступ при скролле */
+  }
+}
+
+/* Плавный переход для всех элементов */
+.home-why__item,
+.home-why__item * {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* ==================== TESTIMONIALS - СТИЛЬ "ТАЧКИ" ==================== */
 .home-testimonials {
   padding: 80px 20px;
@@ -3892,4 +3951,10 @@ body::before {
     width: 24px;
     height: 24px;
   }
+}
+
+body.no-scroll {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
 }

@@ -38,6 +38,13 @@
       burger.addEventListener("click", () => {
         burger.classList.toggle("active");
         navMenu.classList.toggle("active");
+
+        // Добавляем/удаляем класс на body для блокировки скролла
+        if (navMenu.classList.contains("active")) {
+          document.body.classList.add("no-scroll");
+        } else {
+          document.body.classList.remove("no-scroll");
+        }
       });
 
       document.querySelectorAll(".home-nav__link").forEach((link) => {
@@ -45,31 +52,101 @@
           if (window.innerWidth < 993) {
             burger.classList.remove("active");
             navMenu.classList.remove("active");
+            document.body.classList.remove("no-scroll"); // Удаляем класс
           }
         });
       });
     }
 
     // --------------------------------------------------------------
-    // 2. АККОРДЕОН ДЛЯ WHY SECTION — раскрывающиеся блоки услуг
+    // 2. АККОРДЕОН ДЛЯ WHY SECTION — плавный без дёрганий (рекомендуемый)
     // --------------------------------------------------------------
     const accordionItems = document.querySelectorAll(".home-why__item");
 
     if (accordionItems.length) {
+      let isAnimating = false;
+      let activeItem = null;
+
       const closeAllAccordionItems = () => {
-        accordionItems.forEach((item) => item.classList.remove("active"));
+        accordionItems.forEach((item) => {
+          if (item.classList.contains("active")) {
+            item.classList.remove("active");
+          }
+        });
+        activeItem = null;
+      };
+
+      // Функция для плавного скролла к элементу
+      const scrollToElement = (element, offset = 100) => {
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
       };
 
       accordionItems.forEach((item) => {
         item.addEventListener("click", (e) => {
-          e.stopPropagation();
-          if (item.classList.contains("active")) {
+          // Игнорируем клики по внутреннему контенту
+          if (
+            e.target.closest(".home-why__item-list li") ||
+            e.target.closest(".home-why__item-note") ||
+            e.target.closest("h4")
+          ) {
+            return;
+          }
+
+          if (isAnimating) return;
+
+          const isActive = item.classList.contains("active");
+
+          if (isActive) {
+            // Просто закрываем без скролла
+            isAnimating = true;
             item.classList.remove("active");
+            activeItem = null;
+
+            setTimeout(() => {
+              isAnimating = false;
+            }, 400);
           } else {
+            // Закрываем все и открываем новый
+            isAnimating = true;
             closeAllAccordionItems();
             item.classList.add("active");
+            activeItem = item;
+
+            // Небольшая задержка перед скроллом для завершения CSS transition
+            setTimeout(() => {
+              // Проверяем, видна ли карточка полностью
+              const rect = item.getBoundingClientRect();
+              const isFullyVisible =
+                rect.top >= 80 && rect.bottom <= window.innerHeight - 80;
+
+              if (!isFullyVisible) {
+                scrollToElement(item, 90);
+              }
+
+              setTimeout(() => {
+                isAnimating = false;
+              }, 500);
+            }, 100);
           }
         });
+      });
+
+      // При изменении размера окна проверяем активный элемент
+      window.addEventListener("resize", () => {
+        if (activeItem && window.innerWidth <= 992) {
+          setTimeout(() => {
+            const rect = activeItem.getBoundingClientRect();
+            if (rect.bottom > window.innerHeight || rect.top < 0) {
+              scrollToElement(activeItem, 90);
+            }
+          }, 100);
+        }
       });
     }
 
@@ -156,17 +233,66 @@
         'a[href*="contact"], a[href="#contact"], .home-nav__link[href*="contact"]'
       );
 
+      // Функция для безопасной блокировки скролла (учитывая другие блокировки)
+      let scrollBlockCounter = 0;
+
+      function lockBodyScroll() {
+        const burgerMenu = document.getElementById("home-nav-menu");
+        const isBurgerOpen = burgerMenu?.classList.contains("active");
+
+        // Если бургер уже открыт, не перезаписываем его стили
+        if (!isBurgerOpen) {
+          // Сохраняем текущий scroll position
+          const scrollY = window.scrollY;
+          document.body.style.position = "fixed";
+          document.body.style.top = `-${scrollY}px`;
+          document.body.style.width = "100%";
+          document.body.style.overflow = "hidden";
+
+          // Сохраняем позицию для восстановления
+          document.body.dataset.scrollY = scrollY;
+        } else {
+          document.body.style.overflow = "hidden";
+        }
+        scrollBlockCounter++;
+      }
+
+      function unlockBodyScroll() {
+        scrollBlockCounter--;
+
+        if (scrollBlockCounter === 0) {
+          const burgerMenu = document.getElementById("home-nav-menu");
+          const isBurgerOpen = burgerMenu?.classList.contains("active");
+
+          if (!isBurgerOpen) {
+            // Восстанавливаем позицию скролла
+            const scrollY = document.body.dataset.scrollY;
+            document.body.style.position = "";
+            document.body.style.top = "";
+            document.body.style.width = "";
+            document.body.style.overflow = "";
+
+            if (scrollY) {
+              window.scrollTo(0, parseInt(scrollY));
+              delete document.body.dataset.scrollY;
+            }
+          } else {
+            document.body.style.overflow = "";
+          }
+        }
+      }
+
       function openModal() {
         modal.style.display = "flex";
         setTimeout(() => modal.classList.add("active"), 20);
-        document.body.style.overflow = "hidden";
+        lockBodyScroll(); // Используем улучшенную блокировку
       }
 
       function closeModal() {
         modal.classList.remove("active");
         setTimeout(() => {
           modal.style.display = "none";
-          document.body.style.overflow = "";
+          unlockBodyScroll(); // Используем улучшенную разблокировку
         }, 400);
       }
 
