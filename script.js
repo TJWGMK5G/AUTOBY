@@ -40,15 +40,6 @@
 
       const clone = headerContacts.cloneNode(true);
       clone.classList.add("mobile-contacts-clone");
-      clone.style.display = "flex";
-      clone.style.flexDirection = "column";
-      clone.style.width = "100%";
-      clone.style.background = "transparent";
-      clone.style.backdropFilter = "none";
-      clone.style.border = "none";
-      clone.style.padding = "0";
-      clone.style.gap = "15px";
-
       mobileContainer.innerHTML = "";
       mobileContainer.appendChild(clone);
     }
@@ -91,7 +82,7 @@
     });
 
     // --------------------------------------------------------------
-    // 2. АККОРДЕОН ДЛЯ WHY SECTION — плавный без дёрганий (с мобильной оптимизацией)
+    // 2. АККОРДЕОН ДЛЯ WHY SECTION
     // --------------------------------------------------------------
     const accordionItems = document.querySelectorAll(".home-why__item");
 
@@ -99,17 +90,14 @@
       let isAnimating = false;
       let activeItem = null;
 
-      // Определяем мобильное устройство
       const isMobile = () => window.innerWidth <= 992;
 
-      // Функция для определения высоты хедера (если есть фиксированный хедер)
       const getHeaderOffset = () => {
         const header = document.querySelector("header, .header, .home-header");
         if (header) {
-          const headerHeight = header.offsetHeight;
-          return headerHeight + 20; // Хедер + дополнительный отступ
+          return header.offsetHeight + 20;
         }
-        return 90; // Стандартный отступ для мобильных
+        return 90;
       };
 
       const closeAllAccordionItems = () => {
@@ -121,19 +109,15 @@
         activeItem = null;
       };
 
-      // Функция для плавного скролла к элементу с учетом устройства
       const scrollToElement = (element, options = {}) => {
-        const { offset = null, behavior = "smooth", block = "start" } = options;
-
+        const { offset = null, behavior = "smooth" } = options;
         let offsetPosition;
 
         if (isMobile()) {
-          // Для мобильных: скроллим к началу карточки с небольшим отступом
           const headerOffset = getHeaderOffset();
           const elementPosition = element.getBoundingClientRect().top;
           offsetPosition = elementPosition + window.pageYOffset - headerOffset;
         } else {
-          // Для десктопа: используем переданный offset или стандартный
           const customOffset = offset !== null ? offset : 100;
           const elementPosition = element.getBoundingClientRect().top;
           offsetPosition = elementPosition + window.pageYOffset - customOffset;
@@ -145,32 +129,21 @@
         });
       };
 
-      // Функция для мобильного скролла к контенту
       const scrollToContentOnMobile = (item) => {
         if (!isMobile()) return;
-
-        // Небольшая задержка для завершения анимации открытия
         setTimeout(() => {
-          const content = item.querySelector(".home-why__item-content");
-          if (content && content.scrollHeight > 0) {
-            // Получаем позицию карточки
-            const rect = item.getBoundingClientRect();
-            const headerOffset = getHeaderOffset();
-
-            // Скроллим к началу карточки (не к контенту, а к началу карточки)
-            const offsetPosition = rect.top + window.pageYOffset - headerOffset;
-
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: "smooth",
-            });
-          }
-        }, 150); // Задержка 150ms для завершения CSS transition
+          const rect = item.getBoundingClientRect();
+          const headerOffset = getHeaderOffset();
+          const offsetPosition = rect.top + window.pageYOffset - headerOffset;
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
+        }, 150);
       };
 
       accordionItems.forEach((item) => {
         item.addEventListener("click", (e) => {
-          // Игнорируем клики по внутреннему контенту
           if (
             e.target.closest(".home-why__item-list li") ||
             e.target.closest(".home-why__item-note") ||
@@ -184,42 +157,34 @@
           const isActive = item.classList.contains("active");
 
           if (isActive) {
-            // Закрываем аккордеон
             isAnimating = true;
             item.classList.remove("active");
             activeItem = null;
-
             setTimeout(() => {
               isAnimating = false;
             }, 400);
           } else {
-            // Открываем новый аккордеон
             isAnimating = true;
             closeAllAccordionItems();
             item.classList.add("active");
             activeItem = item;
 
-            // Для мобильных: скроллим к началу карточки
             if (isMobile()) {
               scrollToContentOnMobile(item);
             } else {
-              // Для десктопа: проверяем видимость
               setTimeout(() => {
                 const rect = item.getBoundingClientRect();
                 const isFullyVisible =
                   rect.top >= 80 && rect.bottom <= window.innerHeight - 80;
-
                 if (!isFullyVisible) {
                   scrollToElement(item, { offset: 90 });
                 }
-
                 setTimeout(() => {
                   isAnimating = false;
                 }, 500);
               }, 100);
             }
 
-            // Для мобильных снимаем блокировку анимации позже
             if (isMobile()) {
               setTimeout(() => {
                 isAnimating = false;
@@ -229,14 +194,11 @@
         });
       });
 
-      // При изменении размера окна проверяем активный элемент
       window.addEventListener("resize", () => {
         if (activeItem && isMobile()) {
           setTimeout(() => {
             const rect = activeItem.getBoundingClientRect();
             const headerOffset = getHeaderOffset();
-
-            // Если активная карточка не видна полностью на мобильном
             if (rect.top < headerOffset || rect.bottom > window.innerHeight) {
               scrollToElement(activeItem, { offset: headerOffset });
             }
@@ -244,23 +206,18 @@
         }
       });
 
-      // Дополнительно для touch устройств: обрабатываем свайпы
       if (isMobile()) {
         let touchStartY = 0;
         document.addEventListener("touchstart", (e) => {
           touchStartY = e.touches[0].clientY;
         });
-
         document.addEventListener("touchend", (e) => {
           const touchEndY = e.changedTouches[0].clientY;
           const deltaY = touchEndY - touchStartY;
-
-          // Если свайп вверх и есть активный элемент, проверяем видимость
           if (deltaY < -50 && activeItem && isMobile()) {
             setTimeout(() => {
               const rect = activeItem.getBoundingClientRect();
               const headerOffset = getHeaderOffset();
-
               if (rect.top < headerOffset) {
                 scrollToElement(activeItem, { offset: headerOffset });
               }
@@ -271,7 +228,7 @@
     }
 
     // --------------------------------------------------------------
-    // 3. COMPARISON SLIDER (Before / After) — слайдер сравнения
+    // 3. COMPARISON SLIDER (Before / After)
     // --------------------------------------------------------------
     const comparisonContainer = document.getElementById("comparisonContainer");
     const divider = document.getElementById("divider");
@@ -350,26 +307,21 @@
       const floatingContactBtn = document.getElementById("floatingContactBtn");
 
       const contactLinks = document.querySelectorAll(
-        'a[href*="contact"], a[href="#contact"], .home-nav__link[href*="contact"]'
+        'a[href="#contact"], .home-nav__link[href*="contact"]'
       );
 
-      // Функция для безопасной блокировки скролла (учитывая другие блокировки)
       let scrollBlockCounter = 0;
 
       function lockBodyScroll() {
         const burgerMenu = document.getElementById("home-nav-menu");
         const isBurgerOpen = burgerMenu?.classList.contains("active");
 
-        // Если бургер уже открыт, не перезаписываем его стили
         if (!isBurgerOpen) {
-          // Сохраняем текущий scroll position
           const scrollY = window.scrollY;
           document.body.style.position = "fixed";
           document.body.style.top = `-${scrollY}px`;
           document.body.style.width = "100%";
           document.body.style.overflow = "hidden";
-
-          // Сохраняем позицию для восстановления
           document.body.dataset.scrollY = scrollY;
         } else {
           document.body.style.overflow = "hidden";
@@ -379,19 +331,15 @@
 
       function unlockBodyScroll() {
         scrollBlockCounter--;
-
         if (scrollBlockCounter === 0) {
           const burgerMenu = document.getElementById("home-nav-menu");
           const isBurgerOpen = burgerMenu?.classList.contains("active");
-
           if (!isBurgerOpen) {
-            // Восстанавливаем позицию скролла
             const scrollY = document.body.dataset.scrollY;
             document.body.style.position = "";
             document.body.style.top = "";
             document.body.style.width = "";
             document.body.style.overflow = "";
-
             if (scrollY) {
               window.scrollTo(0, parseInt(scrollY));
               delete document.body.dataset.scrollY;
@@ -405,14 +353,14 @@
       function openModal() {
         modal.style.display = "flex";
         setTimeout(() => modal.classList.add("active"), 20);
-        lockBodyScroll(); // Используем улучшенную блокировку
+        lockBodyScroll();
       }
 
       function closeModal() {
         modal.classList.remove("active");
         setTimeout(() => {
           modal.style.display = "none";
-          unlockBodyScroll(); // Используем улучшенную разблокировку
+          unlockBodyScroll();
         }, 400);
       }
 
@@ -442,7 +390,7 @@
     }
 
     // --------------------------------------------------------------
-    // 5. КАЛЬКУЛЯТОР АВТО — расчёт стоимости под ключ
+    // 5. КАЛЬКУЛЯТОР АВТО
     // --------------------------------------------------------------
     const calculatorExists = document.getElementById("calculator");
 
@@ -473,13 +421,10 @@
             "https://api.nbrb.by/exrates/rates?periodicity=0"
           );
           const data = await res.json();
-
           const eurObj = data.find((item) => item.Cur_Abbreviation === "EUR");
           const usdObj = data.find((item) => item.Cur_Abbreviation === "USD");
-
           if (eurObj) eurRate = eurObj.Cur_OfficialRate;
           if (usdObj) usdRate = usdObj.Cur_OfficialRate;
-
           if (elements.liveEur)
             elements.liveEur.textContent = eurRate.toFixed(4);
           if (elements.rateInfo) {
@@ -487,7 +432,6 @@
               "ru-RU"
             )} • EUR ${eurRate.toFixed(4)} • USD ${usdRate.toFixed(4)}`;
           }
-
           calculate();
         } catch (e) {
           console.warn("API НБРБ недоступен — используем резервный курс");
@@ -498,17 +442,7 @@
       function calculate() {
         if (calculationTimeout) clearTimeout(calculationTimeout);
         calculationTimeout = setTimeout(() => {
-          if (
-            !elements.country ||
-            !elements.price ||
-            !elements.currency ||
-            !elements.year ||
-            !elements.volume ||
-            !elements.engineType
-          ) {
-            return;
-          }
-
+          if (!elements.country || !elements.price) return;
           const country = elements.country.value;
           let priceInput = parseFloat(elements.price.value) || 0;
           const inputCurrency = elements.currency.value;
@@ -517,13 +451,10 @@
           const engineType = elements.engineType.value;
           const isEV = elements.evQuota?.checked && engineType === "electric";
           const has50Discount = elements.discount50?.checked;
-
           const age = Math.max(0, 2026 - year);
-
           let priceByn = priceInput;
           if (inputCurrency === "EUR") priceByn = priceInput * eurRate;
           else if (inputCurrency === "USD") priceByn = priceInput * usdRate;
-
           const deliveryRates = {
             europe: 1800 * eurRate,
             usa: 3400 * eurRate,
@@ -531,7 +462,6 @@
             korea: 2100 * eurRate,
           };
           let deliveryByn = deliveryRates[country] || 2600 * eurRate;
-
           let dutyEur = 0;
           if (!isEV) {
             const priceEur = priceByn / eurRate;
@@ -561,23 +491,18 @@
               else dutyEur = volume * 5.7;
             }
           }
-
           if (has50Discount) dutyEur *= 0.5;
-
           const dutyByn = dutyEur * eurRate;
           const ndsByn = (priceByn + dutyByn) * 0.2;
           const utilByn = age < 3 ? 544.5 : 1089;
           const customsByn = 120;
-
           const totalByn = Math.round(
             priceByn + deliveryByn + dutyByn + ndsByn + utilByn + customsByn
           );
           const formattedTotal = totalByn.toLocaleString("ru-RU") + " BYN";
-
           if (elements.totalByn) elements.totalByn.textContent = formattedTotal;
           if (elements.finalTotal)
             elements.finalTotal.textContent = formattedTotal;
-
           if (elements.breakdown) {
             elements.breakdown.innerHTML = `
               <div class="breakdown-row"><span>Стоимость автомобиля</span><span>${priceByn.toLocaleString(
@@ -606,27 +531,21 @@
       const calculator = document.getElementById("calculator");
       if (calculator) {
         calculator.addEventListener("input", (e) => {
-          if (e.target.matches("input, select")) {
-            calculate();
-          }
+          if (e.target.matches("input, select")) calculate();
         });
       }
-
       loadRates();
     }
 
     // --------------------------------------------------------------
-    // 6. KACHOW CAR SLIDER — полностью новый слайдер автомобилей
+    // 6. KACHOW CAR SLIDER
     // --------------------------------------------------------------
     (function () {
       const track = document.getElementById("illustrationTrack");
       const prevBtn = document.getElementById("illustrationPrevBtn");
       const nextBtn = document.getElementById("illustrationNextBtn");
       const dotsContainer = document.getElementById("illustrationDots");
-
-      // Если слайдера нет на странице — выходим
       if (!track) return;
-
       const slides = Array.from(track.children);
       const slideCount = slides.length;
       let currentIndex = 0;
@@ -634,28 +553,20 @@
       let startX = 0;
       let isDragging = false;
       let currentTranslate = 0;
-
-      // Настройки
       const GAP = 24;
       const AUTO_DELAY = 4000;
-
-      // Получаем количество видимых слайдов
       function getVisibleSlides() {
         const width = window.innerWidth;
         if (width <= 480) return 1;
         if (width <= 768) return 2;
         return 3;
       }
-
-      // Вычисляем ширину одного слайда
       function getSlideWidth() {
         const container = track.parentElement;
-        const containerWidth = container.clientWidth - 20; // отступы
+        const containerWidth = container.clientWidth - 20;
         const visible = getVisibleSlides();
         return (containerWidth - GAP * (visible - 1)) / visible;
       }
-
-      // Устанавливаем ширину слайдов
       function setSlidesWidth() {
         const slideWidth = getSlideWidth();
         slides.forEach((slide) => {
@@ -663,64 +574,40 @@
           slide.style.flex = `0 0 ${slideWidth}px`;
         });
       }
-
-      // Перемещение к определённому слайду
       function goToSlide(index, smooth = true) {
         const visible = getVisibleSlides();
         const maxIndex = Math.max(0, slideCount - visible);
-
-        // Ограничиваем индекс
         if (index < 0) index = 0;
         if (index > maxIndex) index = maxIndex;
-
         currentIndex = index;
         const slideWidth = getSlideWidth();
         const newPosition = -(index * (slideWidth + GAP));
-
-        if (smooth) {
-          track.style.transition =
-            "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
-        } else {
-          track.style.transition = "none";
-        }
-
+        track.style.transition = smooth
+          ? "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
+          : "none";
         track.style.transform = `translateX(${newPosition}px)`;
         updateDots();
       }
-
-      // Следующий слайд
       function nextSlide() {
         const visible = getVisibleSlides();
         const maxIndex = Math.max(0, slideCount - visible);
-
-        if (currentIndex < maxIndex) {
-          goToSlide(currentIndex + 1);
-        } else {
-          goToSlide(0);
-        }
+        if (currentIndex < maxIndex) goToSlide(currentIndex + 1);
+        else goToSlide(0);
       }
-
-      // Предыдущий слайд
       function prevSlide() {
-        if (currentIndex > 0) {
-          goToSlide(currentIndex - 1);
-        } else {
+        if (currentIndex > 0) goToSlide(currentIndex - 1);
+        else {
           const visible = getVisibleSlides();
           const maxIndex = Math.max(0, slideCount - visible);
           goToSlide(maxIndex);
         }
       }
-
-      // Обновляем индикаторы (dots)
       function updateDots() {
         if (!dotsContainer) return;
-
         const visible = getVisibleSlides();
         const dotsCount = Math.ceil(slideCount / visible);
         const activeDotIndex = Math.floor(currentIndex / visible);
-
         dotsContainer.innerHTML = "";
-
         for (let i = 0; i < dotsCount; i++) {
           const dot = document.createElement("button");
           dot.className = "illustration-cars__dot";
@@ -733,25 +620,18 @@
           dotsContainer.appendChild(dot);
         }
       }
-
-      // Автопрокрутка
       function startAutoPlay() {
         stopAutoPlay();
         autoTimer = setInterval(() => {
-          if (!isDragging) {
-            nextSlide();
-          }
+          if (!isDragging) nextSlide();
         }, AUTO_DELAY);
       }
-
       function stopAutoPlay() {
         if (autoTimer) {
           clearInterval(autoTimer);
           autoTimer = null;
         }
       }
-
-      // Drag and drop для мобильных и ПК
       function onDragStart(e) {
         stopAutoPlay();
         isDragging = true;
@@ -759,7 +639,6 @@
         currentTranslate = currentIndex * (getSlideWidth() + GAP);
         track.style.transition = "none";
       }
-
       function onDragMove(e) {
         if (!isDragging) return;
         e.preventDefault();
@@ -769,28 +648,22 @@
         const newTranslate = currentTranslate - diff;
         track.style.transform = `translateX(${-newTranslate}px)`;
       }
-
       function onDragEnd(e) {
         if (!isDragging) return;
         isDragging = false;
-
         const endX =
           e.type === "mouseup"
             ? e.pageX
             : e.changedTouches?.[0]?.clientX || startX;
         const diff = endX - startX;
         const movedSlides = Math.round(diff / (getSlideWidth() + GAP));
-
         let newIndex = currentIndex - movedSlides;
         const visible = getVisibleSlides();
         const maxIndex = Math.max(0, slideCount - visible);
         newIndex = Math.max(0, Math.min(newIndex, maxIndex));
-
         goToSlide(newIndex, true);
         startAutoPlay();
       }
-
-      // Обработчик изменения размера окна
       let resizeTimer;
       function handleResize() {
         clearTimeout(resizeTimer);
@@ -800,23 +673,18 @@
           updateDots();
         }, 200);
       }
-
-      // Обработчики для кнопок
       function setupButtons() {
         if (prevBtn && nextBtn) {
-          // Убираем старые обработчики через клонирование
           const newPrev = prevBtn.cloneNode(true);
           const newNext = nextBtn.cloneNode(true);
           prevBtn.parentNode.replaceChild(newPrev, prevBtn);
           nextBtn.parentNode.replaceChild(newNext, nextBtn);
-
           newPrev.addEventListener("click", (e) => {
             e.preventDefault();
             stopAutoPlay();
             prevSlide();
             startAutoPlay();
           });
-
           newNext.addEventListener("click", (e) => {
             e.preventDefault();
             stopAutoPlay();
@@ -825,49 +693,35 @@
           });
         }
       }
-
-      // Инициализация
       function init() {
         setSlidesWidth();
         goToSlide(0, false);
         setupButtons();
         startAutoPlay();
-
-        // Drag and Drop события
         track.addEventListener("mousedown", onDragStart);
         track.addEventListener("mousemove", onDragMove);
         track.addEventListener("mouseup", onDragEnd);
         track.addEventListener("touchstart", onDragStart, { passive: false });
         track.addEventListener("touchmove", onDragMove, { passive: false });
         track.addEventListener("touchend", onDragEnd);
-
-        // Остановка автопрокрутки при наведении
         const slider = document.querySelector(".illustration-cars");
         if (slider) {
           slider.addEventListener("mouseenter", stopAutoPlay);
           slider.addEventListener("mouseleave", startAutoPlay);
         }
-
         window.addEventListener("resize", handleResize);
       }
-
-      // Ждём загрузки изображений
       const images = track.querySelectorAll("img");
-      if (images.length === 0) {
-        init();
-      } else {
+      if (images.length === 0) init();
+      else {
         let loaded = 0;
         const checkInit = () => {
           loaded++;
-          if (loaded === images.length) {
-            setTimeout(init, 100);
-          }
+          if (loaded === images.length) setTimeout(init, 100);
         };
-
         images.forEach((img) => {
-          if (img.complete && img.naturalWidth > 0) {
-            checkInit();
-          } else {
+          if (img.complete && img.naturalWidth > 0) checkInit();
+          else {
             img.addEventListener("load", checkInit);
             img.addEventListener("error", checkInit);
           }
@@ -876,7 +730,7 @@
     })();
 
     // --------------------------------------------------------------
-    // 7. TESTIMONIALS CAROUSEL — карусель отзывов
+    // 7. TESTIMONIALS CAROUSEL
     // --------------------------------------------------------------
     const testimonialsCarousel = document.getElementById(
       "testimonialsCarousel"
@@ -884,7 +738,6 @@
     const prevTestimonialBtn = document.getElementById("prevTestimonialBtn");
     const nextTestimonialBtn = document.getElementById("nextTestimonialBtn");
     const progressContainer = document.getElementById("progressDots");
-
     if (testimonialsCarousel && prevTestimonialBtn && nextTestimonialBtn) {
       let cards = Array.from(
         document.querySelectorAll(".home-testimonials__card")
@@ -892,14 +745,12 @@
       let currentIndex = 0;
       let autoPlayInterval;
       let isTransitioning = false;
-
       function getCardsPerView() {
-        const width = window.innerWidth;
-        if (width <= 640) return 1;
-        if (width <= 992) return 2;
+        const w = window.innerWidth;
+        if (w <= 640) return 1;
+        if (w <= 992) return 2;
         return 3;
       }
-
       function getCardWidth() {
         const container = testimonialsCarousel.parentElement;
         const gap = 30;
@@ -907,21 +758,15 @@
         const containerWidth = container.clientWidth - 40;
         return (containerWidth - gap * (cardsPerView - 1)) / cardsPerView;
       }
-
       function updateCardWidths() {
-        const cardWidth = getCardWidth();
-        cards.forEach((card) => {
-          card.style.flex = `0 0 ${cardWidth}px`;
-        });
+        const w = getCardWidth();
+        cards.forEach((c) => (c.style.flex = `0 0 ${w}px`));
       }
-
       function updateCarousel(animate = true) {
         if (isTransitioning && animate) return;
-
         const cardWidth = getCardWidth();
         const gap = 30;
         const offset = currentIndex * (cardWidth + gap);
-
         if (animate) {
           isTransitioning = true;
           testimonialsCarousel.style.transition =
@@ -938,16 +783,12 @@
               "transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
           }, 50);
         }
-
         updateProgressDots();
       }
-
       function nextSlide() {
         if (isTransitioning) return;
-
         const cardsPerView = getCardsPerView();
         const maxIndex = cards.length - cardsPerView;
-
         if (currentIndex < maxIndex) {
           currentIndex++;
           updateCarousel(true);
@@ -957,10 +798,8 @@
           setTimeout(() => updateCarousel(true), 50);
         }
       }
-
       function prevSlide() {
         if (isTransitioning) return;
-
         if (currentIndex > 0) {
           currentIndex--;
           updateCarousel(true);
@@ -972,14 +811,11 @@
           setTimeout(() => updateCarousel(true), 50);
         }
       }
-
       function updateProgressDots() {
         if (!progressContainer) return;
-
         const cardsPerView = getCardsPerView();
         const totalDots = Math.ceil(cards.length / cardsPerView);
         const activeDot = Math.floor(currentIndex / cardsPerView);
-
         progressContainer.innerHTML = "";
         for (let i = 0; i < totalDots; i++) {
           const dot = document.createElement("div");
@@ -994,31 +830,24 @@
           progressContainer.appendChild(dot);
         }
       }
-
       function startAutoPlay() {
         if (autoPlayInterval) clearInterval(autoPlayInterval);
-        autoPlayInterval = setInterval(() => {
-          nextSlide();
-        }, 5000);
+        autoPlayInterval = setInterval(() => nextSlide(), 5000);
       }
-
       function stopAutoPlay() {
         if (autoPlayInterval) {
           clearInterval(autoPlayInterval);
           autoPlayInterval = null;
         }
       }
-
       function resetAutoPlay() {
         stopAutoPlay();
         startAutoPlay();
       }
-
       function initTestimonialsCarousel() {
         updateCardWidths();
         updateCarousel(false);
         startAutoPlay();
-
         let resizeTimer;
         window.addEventListener("resize", () => {
           stopAutoPlay();
@@ -1029,7 +858,6 @@
             startAutoPlay();
           }, 200);
         });
-
         const wrapper = document.querySelector(
           ".home-testimonials__carousel-wrapper"
         );
@@ -1037,14 +865,12 @@
           wrapper.addEventListener("mouseenter", stopAutoPlay);
           wrapper.addEventListener("mouseleave", startAutoPlay);
         }
-
         prevTestimonialBtn.addEventListener("click", (e) => {
           e.preventDefault();
           stopAutoPlay();
           prevSlide();
           startAutoPlay();
         });
-
         nextTestimonialBtn.addEventListener("click", (e) => {
           e.preventDefault();
           stopAutoPlay();
@@ -1052,18 +878,13 @@
           startAutoPlay();
         });
       }
-
       initTestimonialsCarousel();
     }
 
     // --------------------------------------------------------------
-    // 8. АНИМАЦИЯ ПОЯВЛЕНИЯ КАРТОЧЕК ПРИ СКРОЛЛЕ
+    // 8. АНИМАЦИЯ ПОЯВЛЕНИЯ КАРТОЧЕК ПРИ СКРОЛЛЕ (стили в CSS)
     // --------------------------------------------------------------
-    const observerOptions = {
-      threshold: 0.2,
-      rootMargin: "50px",
-    };
-
+    const observerOptions = { threshold: 0.2, rootMargin: "50px" };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -1073,11 +894,7 @@
         }
       });
     }, observerOptions);
-
     document.querySelectorAll(".why-choose__card").forEach((card) => {
-      card.style.opacity = "0";
-      card.style.transform = "translateY(50px) rotateX(-10deg)";
-      card.style.transition = "all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1)";
       observer.observe(card);
     });
 
@@ -1085,26 +902,21 @@
     // 9. ПАРАЛЛАКС ЭФФЕКТ ДЛЯ КАРТОЧЕК
     // --------------------------------------------------------------
     const cards = document.querySelectorAll(".why-choose__card");
-
     if (cards.length) {
       const handleMouseMove = throttle((card, e) => {
         if (!card.isConnected) return;
-
         const rect = card.getBoundingClientRect();
         if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
         const rotateX = (y - centerY) / 20;
         const rotateY = (centerX - x) / 20;
-
         requestAnimationFrame(() => {
           card.style.transform = `translateY(-8px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         });
       }, 30);
-
       cards.forEach((card) => {
         card.addEventListener("mousemove", (e) => handleMouseMove(card, e));
         card.addEventListener("mouseleave", () => {
@@ -1123,115 +935,187 @@
   });
 
   // --------------------------------------------------------------
-  // 11. КНОПКА СКРОЛЛА НАВЕРХ (левый нижний угол)
+  // 11. КНОПКА СКРОЛЛА НАВЕРХ (стили в CSS)
   // --------------------------------------------------------------
   (function initScrollToTop() {
-    // Функция для создания кнопки, если её нет
     function createScrollButton() {
       const btn = document.createElement("button");
       btn.id = "scrollToTopBtn";
       btn.className = "scroll-to-top";
       btn.setAttribute("aria-label", "Прокрутить наверх");
-      btn.innerHTML = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 4l-8 8h6v8h4v-8h6z"/></svg>`;
+      btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 4l-8 8h6v8h4v-8h6z"/></svg>`;
       document.body.appendChild(btn);
-
-      // Добавляем стили, если их нет
-      if (!document.querySelector("#scrollToTopStyles")) {
-        const style = document.createElement("style");
-        style.id = "scrollToTopStyles";
-        style.textContent = `
-          .scroll-to-top {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            width: 52px;
-            height: 52px;
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(2px);
-          }
-          .scroll-to-top:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
-            background: linear-gradient(135deg, #c0392b, #a93226);
-          }
-          .scroll-to-top:active {
-            transform: translateY(-2px);
-          }
-          .scroll-to-top svg {
-            width: 26px;
-            height: 26px;
-            fill: white;
-            transition: transform 0.2s;
-          }
-          .scroll-to-top:hover svg {
-            transform: translateY(-3px);
-          }
-          .scroll-to-top.show {
-            opacity: 1;
-            visibility: visible;
-          }
-          @media (max-width: 768px) {
-            .scroll-to-top {
-              width: 48px;
-              height: 48px;
-              bottom: 20px;
-              left: 20px;
-            }
-            .scroll-to-top svg {
-              width: 24px;
-              height: 24px;
-            }
-          }
-        `;
-        document.head.appendChild(style);
-      }
     }
-
-    // Получаем или создаём кнопку
     let scrollBtn = document.getElementById("scrollToTopBtn");
     if (!scrollBtn) {
       createScrollButton();
       scrollBtn = document.getElementById("scrollToTopBtn");
     }
-
     const headerElement = document.querySelector(".home-header");
-
     function scrollToHeader() {
-      if (headerElement) {
-        headerElement.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      } else {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
+      if (headerElement)
+        headerElement.scrollIntoView({ behavior: "smooth", block: "start" });
+      else window.scrollTo({ top: 0, behavior: "smooth" });
     }
-
     function toggleButtonVisibility() {
       if (scrollBtn) {
-        if (window.scrollY > 400) {
-          scrollBtn.classList.add("show");
-        } else {
-          scrollBtn.classList.remove("show");
-        }
+        if (window.scrollY > 400) scrollBtn.classList.add("show");
+        else scrollBtn.classList.remove("show");
       }
     }
-
-    if (scrollBtn) {
-      scrollBtn.addEventListener("click", scrollToHeader);
-    }
+    if (scrollBtn) scrollBtn.addEventListener("click", scrollToHeader);
     window.addEventListener("scroll", toggleButtonVisibility);
     toggleButtonVisibility();
   })();
+
+  // ====================== ФУНКЦИИ ДЛЯ МОДАЛЬНОГО ОКНА ФОРМЫ ======================
+  function attachFormHandler(form) {
+    if (!form) return;
+    const oldHandler = form._submitHandler;
+    if (oldHandler) form.removeEventListener("submit", oldHandler);
+    const submitHandler = async function (e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const submitButton = form.querySelector(".send-button");
+      if (!submitButton) return;
+      const originalButtonHTML = submitButton.innerHTML;
+      const name = form.querySelector('input[name="name"]')?.value.trim() || "";
+      const phone =
+        form.querySelector('input[name="phone"]')?.value.trim() || "";
+      const email =
+        form.querySelector('input[name="email"]')?.value.trim() || "";
+      if (!name || name.length < 2) {
+        alert("👤 Пожалуйста, введите корректное имя (минимум 2 символа)");
+        return;
+      }
+      if (!phone || phone.length < 10) {
+        alert("📞 Пожалуйста, введите корректный номер телефона");
+        return;
+      }
+      if (!email || !email.includes("@") || !email.includes(".")) {
+        alert("✉️ Пожалуйста, введите корректный Email");
+        return;
+      }
+      submitButton.disabled = true;
+      submitButton.innerHTML = "⏳ ОТПРАВКА... 🏁";
+      try {
+        const response = await fetch("telegram.php", {
+          method: "POST",
+          body: formData,
+        });
+        if (!response.ok) throw new Error(`HTTP ошибка: ${response.status}`);
+        const result = await response.json();
+        if (result.success) {
+          form.style.display = "none";
+          const thanksBlock = form.parentElement?.querySelector("#thanksBlock");
+          if (thanksBlock) thanksBlock.style.display = "block";
+          form.reset();
+          setTimeout(() => {
+            const modal = document.getElementById("modalForm");
+            if (modal && modal.style.display === "block") {
+              modal.style.display = "none";
+              document.body.style.overflow = "auto";
+            }
+          }, 3000);
+        } else {
+          const errorMsg = result.errors
+            ? result.errors.join("\n")
+            : "Произошла ошибка";
+          alert("❌ Ошибка:\n" + errorMsg);
+          submitButton.disabled = false;
+          submitButton.innerHTML = originalButtonHTML;
+        }
+      } catch (error) {
+        console.error("Ошибка:", error);
+        let errorMessage = "⚠️ Ошибка соединения. ";
+        if (error.message.includes("405"))
+          errorMessage +=
+            "Сервер не отвечает. Убедитесь, что PHP сервер запущен.";
+        else if (error.message.includes("Failed to fetch"))
+          errorMessage += "Не удалось соединиться с сервером.";
+        else errorMessage += "Попробуйте позже.";
+        alert(errorMessage);
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalButtonHTML;
+      }
+    };
+    form._submitHandler = submitHandler;
+    form.addEventListener("submit", submitHandler);
+  }
+
+  // Открытие модального окна с формой
+  document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("modalForm");
+    const modalContainer = document.getElementById("modalFormContainer");
+    const ctaButton = document.querySelectorAll(".home-hero__cta");
+    const closeBtn = document.querySelector(".modal-close");
+
+    // Убираем селектор originalForm, так как форма скрыта
+
+    // Привязываем обработчик к оригинальной форме (если она есть на странице)
+    const originalFormElement = document.getElementById("feedbackForm");
+    if (originalFormElement) attachFormHandler(originalFormElement);
+
+    if (ctaButton && modal && modalContainer) {
+      ctaButton.forEach((btn) => {
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          // Каждый раз при клике создаем свежую копию формы
+          // Ищем оригинальную форму (она скрыта на странице)
+          const sourceForm = document.getElementById("formFeedbackContainer");
+          if (sourceForm) {
+            modalContainer.innerHTML = "";
+            const formClone = sourceForm.cloneNode(true);
+            modalContainer.appendChild(formClone);
+
+            // Делаем клон видимым
+            const clonedFormContainer =
+              modalContainer.querySelector(".form-feedback");
+            if (clonedFormContainer) {
+              clonedFormContainer.style.display = "block";
+            }
+
+            // Привязываем обработчик к клонированной форме
+            const clonedForm = modalContainer.querySelector("#feedbackForm");
+            if (clonedForm) attachFormHandler(clonedForm);
+          }
+
+          modal.style.display = "block";
+          document.body.style.overflow = "hidden";
+        });
+      });
+    }
+
+    if (closeBtn) {
+      closeBtn.addEventListener("click", function () {
+        const modalElem = document.getElementById("modalForm");
+        if (modalElem) {
+          modalElem.style.display = "none";
+          document.body.style.overflow = "auto";
+        }
+      });
+    }
+
+    if (modal) {
+      modal.addEventListener("click", function (e) {
+        if (e.target === modal) {
+          modal.style.display = "none";
+          document.body.style.overflow = "auto";
+        }
+      });
+    }
+
+    document.addEventListener("keydown", function (e) {
+      const modalElem = document.getElementById("modalForm");
+      if (
+        e.key === "Escape" &&
+        modalElem &&
+        modalElem.style.display === "block"
+      ) {
+        modalElem.style.display = "none";
+        document.body.style.overflow = "auto";
+      }
+    });
+  });
 })();
