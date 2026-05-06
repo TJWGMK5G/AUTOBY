@@ -4671,12 +4671,6 @@ body.no-scroll {
   justify-content: center;
 }
 
-.modal-close:hover {
-  color: var(--primary-red, #e74c3c);
-  transform: translateX(-50%) rotate(90deg);
-  background: rgba(255, 255, 255, 0.2);
-}
-
 @media (max-width: 768px) {
   .modal-content {
     margin: 10px auto;
