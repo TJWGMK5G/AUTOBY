@@ -2997,18 +2997,30 @@ body::before {
 }
 
 .calculator-info {
-  max-width: 1180px;
-  margin: 50px auto;
-  padding: 40px 10px;
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
     url("image/bg5.webp");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   backdrop-filter: blur(8px);
-  border-radius: 40px 12px 40px 12px;
-  border: 2px solid #ffd700;
+
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+
+  margin: 50px 0;
+  padding: 40px 0;
+
+  border-top: 2px solid #ffd700;
+  border-bottom: 2px solid #ffd700;
   box-shadow: 0 12px 0 #9b1f2c, inset 0 0 30px #e6394633;
+}
+
+.calculator-info__container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .calculator-info h3 {
