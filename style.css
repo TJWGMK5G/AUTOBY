@@ -1201,6 +1201,80 @@ body::before {
   }
 }
 
+/* СТРЕЛОЧКА-ИНДИКАТОР ДЛЯ АККОРДЕОНА */
+.home-why__item .accordion-arrow {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 215, 0, 0.2);
+  border: 1px solid var(--primary-red);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 999;
+  pointer-events: none;
+}
+
+.home-why__item .accordion-arrow::before {
+  content: "▼";
+  font-size: 14px;
+  color: var(--primary-red);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.home-why__item:hover .accordion-arrow {
+  background: rgba(255, 215, 0, 0.4);
+  transform: translateX(-50%) scale(1.1);
+}
+
+.home-why__item:hover .accordion-arrow::before {
+  transform: translateY(2px);
+}
+
+.home-why__item.active .accordion-arrow::before {
+  content: "▲";
+  transform: translateY(-2px);
+}
+
+.home-why__item.active .accordion-arrow {
+  background: rgba(255, 215, 0, 0.5);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+@keyframes bounceArrow {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(5px);
+  }
+}
+
+.home-why__item:not(.active) .accordion-arrow {
+  animation: bounceArrow 1.5s ease-in-out infinite;
+}
+
+/* Адаптив для стрелочки */
+@media (max-width: 768px) {
+  .home-why__item .accordion-arrow {
+    width: 28px;
+    height: 28px;
+    bottom: 12px;
+  }
+
+  .home-why__item .accordion-arrow::before {
+    font-size: 12px;
+  }
+}
+
 .home-why__icon {
   width: 50px;
   height: 50px;
@@ -1295,6 +1369,7 @@ body::before {
   font-size: 13px;
   font-style: italic;
   margin-top: 15px;
+  margin-bottom: 30px;
   padding: 12px 15px;
   background: rgba(230, 57, 70, 0.1);
   border-radius: 12px;
@@ -1345,9 +1420,79 @@ body::before {
   }
 }
 
-/* Добавьте в конец вашего CSS файла */
+.accordion-arrow {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 34px;
+  height: 34px;
+  background: rgba(255, 215, 0, 0.85);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
 
-/* Оптимизация для предотвращения дёрганий */
+.accordion-arrow::before {
+  content: "▼";
+  font-size: 14px;
+  color: #9b1f2c;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.home-why__item:hover .accordion-arrow {
+  background: #ffd700;
+  transform: translateX(-50%) scale(1.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.home-why__item:hover .accordion-arrow::before {
+  transform: translateY(2px);
+}
+
+.home-why__item.active .accordion-arrow::before {
+  content: "▲";
+  transform: translateY(-2px);
+}
+
+.home-why__item.active .accordion-arrow {
+  background: #ffd700;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.8);
+}
+
+@keyframes bounceArrow {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(6px);
+  }
+}
+
+.home-why__item:not(.active) .accordion-arrow {
+  animation: bounceArrow 1.2s ease-in-out infinite;
+}
+
+/* Адаптив для стрелочки */
+@media (max-width: 768px) {
+  .accordion-arrow {
+    width: 30px;
+    height: 30px;
+    bottom: 12px;
+  }
+  .accordion-arrow::before {
+    font-size: 12px;
+  }
+}
+
 .home-why__grid {
   /* Стабилизация сетки */
   contain: layout style;
@@ -2855,7 +3000,11 @@ body::before {
   max-width: 1180px;
   margin: 50px auto;
   padding: 40px 10px;
-  background: rgba(0, 0, 0, 0.5);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
+    url("image/bg5.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   backdrop-filter: blur(8px);
   border-radius: 40px 12px 40px 12px;
   border: 2px solid #ffd700;
@@ -2876,8 +3025,14 @@ body::before {
 
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (max-width: 550px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .info-grid > div {
