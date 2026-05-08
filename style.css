@@ -2597,7 +2597,7 @@ body::before {
 }
 
 /* ============================================================
-   PIXAR "CARS" THEME — КАЛЬКУЛЯТОР 
+    КАЛЬКУЛЯТОР 
    ============================================================ */
 .home-calculator {
   padding: 120px 10px 140px;
@@ -2968,6 +2968,10 @@ body::before {
   border: 1px solid #e63946;
 }
 
+.rate-info {
+  color: #000;
+}
+
 .home-hero__cta {
   display: inline-block;
   background: #e63946;
@@ -3310,6 +3314,12 @@ body::before {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.checkbox-label .checkbox-hint {
+  font-size: 12px;
+  color: #95a5a6;
+  margin-left: 4px;
 }
 
 .home-calculator__cta {

@@ -956,9 +956,9 @@
       </section>
 
       <!-- ==================== КАЛЬКУЛЯТОР ПОД КЛЮЧ ==================== -->
-      <section class="home-calculator" id="calculator">
+      <!-- <section class="home-calculator" id="calculator">
         <div class="home-calculator__container">
-          <!-- Предупреждение -->
+        
           <div class="calculator-warning">
             <strong>Внимание!</strong> Все расчёты в калькуляторе являются
             <strong>ориентировочными</strong>.<br />
@@ -978,7 +978,7 @@
           </div>
 
           <div class="home-calculator__grid">
-            <!-- Форма -->
+        
             <div class="home-calculator__form">
               <div class="form-group">
                 <label for="country">Страна ввоза</label>
@@ -1057,7 +1057,7 @@
               </p>
             </div>
 
-            <!-- Результат -->
+          
             <div class="home-calculator__result">
               <h3>Итоговая стоимость под ключ</h3>
               <div class="result-total" id="totalByn" aria-live="polite">
@@ -1079,6 +1079,150 @@
               </div>
               <a href="/#contact" class="home-hero__cta home-calculator__cta"
                 >ЗАКАЗАТЬ АВТО ПО ЭТОЙ ЦЕНЕ →</a
+              >
+            </div>
+          </div>
+        </div>
+      </section> -->
+      <!-- ==================== КАЛЬКУЛЯТОР ЛОГИСТИКИ АВТО ИЗ США/КАНАДЫ ==================== -->
+      <section class="home-calculator" id="calculator">
+        <div class="home-calculator__container">
+          <!-- Предупреждение -->
+          <div class="calculator-warning">
+            <strong>Внимание!</strong> Все расчёты в калькуляторе являются
+            <strong>ориентировочными</strong>.<br />
+            Точная стоимость зависит от конкретного места стоянки, типа
+            автомобиля, текущего курса валют и других факторов.<br />
+            Для получения точного расчёта под ваш запрос — обратитесь к нашему
+            специалисту.
+          </div>
+
+          <div class="home-calculator__header">
+            <div class="home-featured__pretitle">РАССЧИТАЙТЕ СТОИМОСТЬ</div>
+            <h2>Калькулятор доставки авто из США/Канады</h2>
+            <p>
+              Автоперевозка до портов Европы • Инленд по США • Расчёт за 15
+              секунд
+            </p>
+          </div>
+
+          <div class="home-calculator__grid">
+            <!-- Форма -->
+            <div class="home-calculator__form">
+              <div class="form-group">
+                <label for="location">Место стоянки / Аукцион</label>
+                <select id="location" class="form-control">
+                  <option value="">-- Выберите город или аукцион --</option>
+                </select>
+                <span class="form-hint">Или начните вводить название</span>
+              </div>
+
+              <div class="form-group">
+                <label for="carType">Тип автомобиля</label>
+                <select id="carType" class="form-control">
+                  <option value="sedan">Седан / Хэтчбек</option>
+                  <option value="suv">SUV / Кроссовер</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="port">Порт назначения в Европе</label>
+                <select id="port" class="form-control">
+                  <option value="klaipeda">Клайпеда (Литва) — Европа</option>
+                  <option value="poti">Поти / Батуми (Грузия)</option>
+                </select>
+              </div>
+
+              <div class="form-group checkbox-group-inline">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="isOversize" />
+                  <span>Негабаритный автомобиль</span>
+                  <span class="checkbox-hint"
+                    >(коэф. 1.5, только через Грузию)</span
+                  >
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" id="isHybrid" />
+                  <span>Гибрид / Электромобиль</span>
+                  <span class="checkbox-hint">(доп. сбор $150)</span>
+                </label>
+              </div>
+
+              <div class="form-group">
+                <label for="seaFreight">Морской фрахт (опционально)</label>
+                <div class="price-input-wrapper">
+                  <input
+                    type="number"
+                    id="seaFreight"
+                    value="0"
+                    class="form-control price-input"
+                    placeholder="0"
+                  />
+                  <select
+                    id="seaFreightCurrency"
+                    class="form-control currency-select"
+                  >
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                  </select>
+                </div>
+                <span class="form-hint"
+                  >Если не знаете — оставьте 0, мы подскажем</span
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="customDuty">Таможенная пошлина (для РБ)</label>
+                <div class="price-input-wrapper">
+                  <input
+                    type="number"
+                    id="customDuty"
+                    value="0"
+                    class="form-control price-input"
+                    placeholder="0"
+                  />
+                  <select
+                    id="customDutyCurrency"
+                    class="form-control currency-select"
+                  >
+                    <option value="EUR">EUR</option>
+                    <option value="USD">USD</option>
+                  </select>
+                </div>
+                <span class="form-hint"
+                  >Введите примерную сумму пошлины или оставьте 0</span
+                >
+              </div>
+
+              <p class="calculator-note">
+                * Расчёт справочный. Точная сумма — после уточнения места
+                стоянки и комплектации авто.
+              </p>
+            </div>
+
+            <!-- Результат -->
+            <div class="home-calculator__result">
+              <h3>Стоимость логистики</h3>
+              <div class="result-total" id="logisticsTotal" aria-live="polite">
+                — USD
+              </div>
+              <div
+                class="result-breakdown"
+                id="breakdown"
+                aria-live="polite"
+              ></div>
+              <div class="result-footer">
+                <strong>Итого к оплате:</strong>
+                <div id="finalTotal" class="final-price" aria-live="polite">
+                  — USD
+                </div>
+                <span class="rate-info"
+                  >* Все цены указаны в USD. Морской фрахт и пошлина могут быть
+                  добавлены отдельно.</span
+                >
+              </div>
+              <a href="/#contact" class="home-hero__cta home-calculator__cta"
+                >ЗАКАЗАТЬ РАСЧЁТ ПОД ВАШЕ АВТО →</a
               >
             </div>
           </div>

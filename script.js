@@ -392,149 +392,812 @@
     // --------------------------------------------------------------
     // 5. КАЛЬКУЛЯТОР АВТО
     // --------------------------------------------------------------
+    // const calculatorExists = document.getElementById("calculator");
+
+    // if (calculatorExists) {
+    //   let eurRate = 3.33;
+    //   let usdRate = 2.82;
+    //   let calculationTimeout = null;
+
+    //   const elements = {
+    //     country: document.getElementById("country"),
+    //     price: document.getElementById("price"),
+    //     currency: document.getElementById("currency"),
+    //     year: document.getElementById("year"),
+    //     volume: document.getElementById("volume"),
+    //     engineType: document.getElementById("engineType"),
+    //     evQuota: document.getElementById("evQuota"),
+    //     discount50: document.getElementById("discount50"),
+    //     totalByn: document.getElementById("totalByn"),
+    //     finalTotal: document.getElementById("finalTotal"),
+    //     breakdown: document.getElementById("breakdown"),
+    //     liveEur: document.getElementById("liveEur"),
+    //     rateInfo: document.getElementById("rateInfo"),
+    //   };
+
+    //   async function loadRates() {
+    //     try {
+    //       const res = await fetch(
+    //         "https://api.nbrb.by/exrates/rates?periodicity=0"
+    //       );
+    //       const data = await res.json();
+    //       const eurObj = data.find((item) => item.Cur_Abbreviation === "EUR");
+    //       const usdObj = data.find((item) => item.Cur_Abbreviation === "USD");
+    //       if (eurObj) eurRate = eurObj.Cur_OfficialRate;
+    //       if (usdObj) usdRate = usdObj.Cur_OfficialRate;
+    //       if (elements.liveEur)
+    //         elements.liveEur.textContent = eurRate.toFixed(4);
+    //       if (elements.rateInfo) {
+    //         elements.rateInfo.innerHTML = `Курс НБРБ на ${new Date().toLocaleDateString(
+    //           "ru-RU"
+    //         )} • EUR ${eurRate.toFixed(4)} • USD ${usdRate.toFixed(4)}`;
+    //       }
+    //       calculate();
+    //     } catch (e) {
+    //       console.warn("API НБРБ недоступен — используем резервный курс");
+    //       calculate();
+    //     }
+    //   }
+
+    //   function calculate() {
+    //     if (calculationTimeout) clearTimeout(calculationTimeout);
+    //     calculationTimeout = setTimeout(() => {
+    //       if (!elements.country || !elements.price) return;
+    //       const country = elements.country.value;
+    //       let priceInput = parseFloat(elements.price.value) || 0;
+    //       const inputCurrency = elements.currency.value;
+    //       const year = parseInt(elements.year.value) || 2026;
+    //       const volume = parseFloat(elements.volume.value) || 0;
+    //       const engineType = elements.engineType.value;
+    //       const isEV = elements.evQuota?.checked && engineType === "electric";
+    //       const has50Discount = elements.discount50?.checked;
+    //       const age = Math.max(0, 2026 - year);
+    //       let priceByn = priceInput;
+    //       if (inputCurrency === "EUR") priceByn = priceInput * eurRate;
+    //       else if (inputCurrency === "USD") priceByn = priceInput * usdRate;
+    //       const deliveryRates = {
+    //         europe: 1800 * eurRate,
+    //         usa: 3400 * eurRate,
+    //         china: 2400 * eurRate,
+    //         korea: 2100 * eurRate,
+    //       };
+    //       let deliveryByn = deliveryRates[country] || 2600 * eurRate;
+    //       let dutyEur = 0;
+    //       if (!isEV) {
+    //         const priceEur = priceByn / eurRate;
+    //         if (age < 3) {
+    //           if (priceEur <= 8500)
+    //             dutyEur = Math.max(priceEur * 0.54, volume * 2.5);
+    //           else if (priceEur <= 16700)
+    //             dutyEur = Math.max(priceEur * 0.48, volume * 3.5);
+    //           else if (priceEur <= 42300)
+    //             dutyEur = Math.max(priceEur * 0.48, volume * 5.5);
+    //           else if (priceEur <= 84500)
+    //             dutyEur = Math.max(priceEur * 0.48, volume * 7.5);
+    //           else dutyEur = Math.max(priceEur * 0.48, volume * 15);
+    //         } else if (age < 5) {
+    //           if (volume <= 1000) dutyEur = volume * 1.5;
+    //           else if (volume <= 1500) dutyEur = volume * 1.7;
+    //           else if (volume <= 1800) dutyEur = volume * 2.5;
+    //           else if (volume <= 2300) dutyEur = volume * 2.7;
+    //           else if (volume <= 3000) dutyEur = volume * 3.0;
+    //           else dutyEur = volume * 3.6;
+    //         } else {
+    //           if (volume <= 1000) dutyEur = volume * 3.0;
+    //           else if (volume <= 1500) dutyEur = volume * 3.2;
+    //           else if (volume <= 1800) dutyEur = volume * 3.5;
+    //           else if (volume <= 2300) dutyEur = volume * 4.8;
+    //           else if (volume <= 3000) dutyEur = volume * 5.0;
+    //           else dutyEur = volume * 5.7;
+    //         }
+    //       }
+    //       if (has50Discount) dutyEur *= 0.5;
+    //       const dutyByn = dutyEur * eurRate;
+    //       const ndsByn = (priceByn + dutyByn) * 0.2;
+    //       const utilByn = age < 3 ? 544.5 : 1089;
+    //       const customsByn = 120;
+    //       const totalByn = Math.round(
+    //         priceByn + deliveryByn + dutyByn + ndsByn + utilByn + customsByn
+    //       );
+    //       const formattedTotal = totalByn.toLocaleString("ru-RU") + " BYN";
+    //       if (elements.totalByn) elements.totalByn.textContent = formattedTotal;
+    //       if (elements.finalTotal)
+    //         elements.finalTotal.textContent = formattedTotal;
+    //       if (elements.breakdown) {
+    //         elements.breakdown.innerHTML = `
+    //           <div class="breakdown-row"><span>Стоимость автомобиля</span><span>${priceByn.toLocaleString(
+    //             "ru-RU"
+    //           )} BYN</span></div>
+    //           <div class="breakdown-row"><span>Доставка</span><span>${Math.round(
+    //             deliveryByn
+    //           ).toLocaleString("ru-RU")} BYN</span></div>
+    //           <div class="breakdown-row"><span>Таможенная пошлина ${
+    //             has50Discount ? "(−50%)" : ""
+    //           }</span><span>${Math.round(dutyByn).toLocaleString(
+    //           "ru-RU"
+    //         )} BYN</span></div>
+    //           <div class="breakdown-row"><span>НДС 20%</span><span>${Math.round(
+    //             ndsByn
+    //           ).toLocaleString("ru-RU")} BYN</span></div>
+    //           <div class="breakdown-row"><span>Утилизационный сбор</span><span>${utilByn.toFixed(
+    //             0
+    //           )} BYN</span></div>
+    //           <div class="breakdown-row"><span>Таможенный сбор</span><span>${customsByn} BYN</span></div>
+    //         `;
+    //       }
+    //     }, 100);
+    //   }
+
+    //   const calculator = document.getElementById("calculator");
+    //   if (calculator) {
+    //     calculator.addEventListener("input", (e) => {
+    //       if (e.target.matches("input, select")) calculate();
+    //     });
+    //   }
+    //   loadRates();
+    // }
+
+    // --------------------------------------------------------------
+    // 5. КАЛЬКУЛЯТОР АВТО
+    // --------------------------------------------------------------
     const calculatorExists = document.getElementById("calculator");
 
     if (calculatorExists) {
-      let eurRate = 3.33;
-      let usdRate = 2.82;
-      let calculationTimeout = null;
+      // Данные из таблицы (сокращённый вариант, для полной версии нужно добавить все города)
+      // Полный список из ~500 локаций прилагаю ниже
+      const logisticsData = {
+        // Базовые цены на инленд (перевозка по США до порта)
+        inlandRates: {
+          Abilene: 400,
+          "ACE - Carson": 200,
+          "ACE - Perris": 325,
+          Adamsburg: 450,
+          Adelanto: 325,
+          "ADESA Boston": 425,
+          "ADESA Great Lakes": 575,
+          "ADESA New Jersey": 200,
+          "Adesa PA": 300,
+          "ADESA Sioux Falls": 600,
+          "ADESA St. John`s": 1950,
+          "ADESA Wisconsin": 300,
+          "Akron-Canton": 600,
+          Albany: 325,
+          Albuquerque: 650,
+          Altoona: 500,
+          Amarillo: 575,
+          Anaheim: 230,
+          Anchorage: 1950,
+          Andrews: 475,
+          Antelope: 425,
+          Appleton: 375,
+          "Arizona Auto Auction": 400,
+          Asheville: 425,
+          Ashland: 550,
+          "Atlanta Auto Auction": 325,
+          "Atlanta East": 325,
+          "Atlanta North": 325,
+          "Atlanta South": 325,
+          "Atlanta West": 325,
+          Augusta: 300,
+          Austin: 300,
+          "Avenel New Jersey": 200,
+          Bakersfield: 350,
+          Baltimore: 325,
+          Bangor: 425,
+          "Baton Rouge": 350,
+          "Bay Area": 350,
+          "Bel-Air Auto Auction": 425,
+          Billings: 850,
+          Birmingham: 400,
+          Boise: 500,
+          Boston: 425,
+          "Boston - Shirley": 425,
+          "Bowling Green": 475,
+          Bridgeport: 270,
+          Bridgeview: 200,
+          Buckhannon: 625,
+          Buffalo: 550,
+          Burlington: 525,
+          Calgary: 1450,
+          Candia: 425,
+          Cartersville: 350,
+          Casper: 1250,
+          "Cedar Rapids": 425,
+          "Central Auto Auction": 250,
+          "Central New Jersey": 225,
+          Chambersburg: 400,
+          "Charleston - SC": 325,
+          "Charleston - WV": 625,
+          Charlotte: 325,
+          Chattanooga: 400,
+          "Chicago North": 200,
+          "Chicago South": 230,
+          "Chicago West": 200,
+          "China Grove": 325,
+          Cicero: 425,
+          Cincinnati: 600,
+          Clayton: 325,
+          Clearwater: 325,
+          Cleveland: 600,
+          "Cleveland East": 550,
+          "Cleveland West": 550,
+          Clewiston: 350,
+          Clinton: 480,
+          "Colorado Springs": 700,
+          "Columbia MO": 420,
+          "Columbia SC": 325,
+          "Columbus AL": 450,
+          "Columbus OH": 600,
+          Concord: 325,
+          Cookstown: 700,
+          "Corpus Christi": 325,
+          "Culpeper,VA": 400,
+          Dallas: 325,
+          "Dallas South": 325,
+          Danville: 425,
+          Davenport: 375,
+          Dayton: 600,
+          "Defuniak Springs": 350,
+          Denver: 700,
+          "Denver South": 700,
+          "Des Moines": 425,
+          Detroit: 425,
+          Dothan: 400,
+          Dundalk: 325,
+          Dyer: 200,
+          Earlington: 585,
+          "East Bay": 450,
+          "East NC": 450,
+          Edmonton: 1450,
+          "El Paso": 475,
+          Eldridge: 375,
+          Elkton: 325,
+          Englishtown: 225,
+          Erie: 550,
+          Essex: 365,
+          Eugene: 425,
+          Exeter: 400,
+          Fairburn: 325,
+          Fargo: 650,
+          Fayetteville: 525,
+          Flint: 475,
+          Florence: 300,
+          Fontana: 230,
+          "Fort Myers": 325,
+          "Fort Wayne": 350,
+          "Fort Worth North": 325,
+          "Four Oaks, NC": 250,
+          "Fredericksburg-South": 375,
+          Freetown: 425,
+          Fremont: 450,
+          Fresno: 425,
+          "Ft. Pierce": 400,
+          "Ft. Worth": 325,
+          "Ft.Lauderdale": 280,
+          Gastonia: 350,
+          "Glassboro East": 250,
+          "Glassboro West": 250,
+          "Golden Gate": 375,
+          "Gr.Rapids": 425,
+          Graham: 175,
+          "Grand Island": 750,
+          Grantville: 300,
+          "Greater Auto Auction Phoenix": 400,
+          Greensboro: 325,
+          Greenville: 300,
+          Greer: 325,
+          Grenada: 475,
+          "Gulf Coast": 375,
+          Gulfport: 400,
+          Halifax: 1200,
+          Hamilton: 450,
+          Hammond: 200,
+          Hampton: 400,
+          "Hampton, VA": 400,
+          Harrisburg: 325,
+          Hartford: 275,
+          "Hartford City": 250,
+          "Hartford-South": 275,
+          Hatward: 1040,
+          Hayward: 450,
+          Helena: 750,
+          "High Desert": 350,
+          "High Point": 325,
+          Honolulu: 1650,
+          Houston: 250,
+          "Houston-North": 250,
+          Huntsville: 450,
+          Indianapolis: 300,
+          Ionia: 425,
+          Jackson: 425,
+          Jacksonville: 275,
+          "Jacksonville East": 275,
+          "Jacksonville West": 275,
+          "Kansas City": 600,
+          Kincheloe: 800,
+          Knoxville: 450,
+          Lafayette: 325,
+          "Lake City": 325,
+          Lansing: 425,
+          "Las Vegas": 350,
+          Laurel: 325,
+          "Lexington East KY": 475,
+          "Lexington SC": 350,
+          "Lexington West KY": 475,
+          "Lincoln, IL": 350,
+          "Lincoln, NE": 500,
+          "Little Rock": 500,
+          London: 550,
+          "Long Beach": 180,
+          "Long Island": 300,
+          Longview: 325,
+          "Los Angeles": 200,
+          "Los Angeles - Adesa": 200,
+          Louisville: 475,
+          Lubbock: 500,
+          Lufkin: 325,
+          Lumberton: 325,
+          Lyman: 475,
+          Macon: 300,
+          Madison: 350,
+          "Madison Heights": 420,
+          Manchester: 400,
+          "Manheim Albany": 325,
+          "Manheim Arena Illinois": 200,
+          "Manheim Auto Auction": 280,
+          "Manheim Baltimore-Washington": 300,
+          "Manheim Bishop Brothers": 240,
+          "Manheim California": 220,
+          "Manheim Carleton": 525,
+          "Manheim Central California": 300,
+          "Manheim Central Florida": 275,
+          "Manheim Chicago": 200,
+          "Manheim Cincinnati": 600,
+          "Manheim Colorado": 500,
+          "Manheim Dallas": 325,
+          "Manheim Dallas-Ft Worth": 325,
+          "Manheim Darlington": 275,
+          "Manheim Daytona Beach": 325,
+          "Manheim Denver": 700,
+          "Manheim Detroit": 650,
+          "Manheim Fort Lauderdale": 280,
+          "Manheim Fort Myers": 300,
+          "Manheim Fort Wayne": 350,
+          "Manheim Fredericksburg": 375,
+          "Manheim Georgia": 300,
+          "Manheim Harrisonburg": 400,
+          "Manheim Imperial Auto Auction": 300,
+          "Manheim Kentucky": 600,
+          "Manheim Lafayette": 325,
+          "Manheim Lakeland": 300,
+          "Manheim Metro Milwaukee": 275,
+          "Manheim Milwaukee": 275,
+          "Manheim Mississippi": 375,
+          "Manheim Missouri": 425,
+          "Manheim Montreal": 500,
+          "Manheim Nashville": 400,
+          "Manheim Nevada": 325,
+          "Manheim New England": 400,
+          "Manheim New Jersey": 200,
+          "Manheim New Mexico": 575,
+          "Manheim New Orleans": 475,
+          "Manheim New York": 300,
+          "Manheim North Carolina": 325,
+          "Manheim Northstar Minnesota": 400,
+          "Manheim Ohio": 450,
+          "Manheim Oklahoma City": 400,
+          "Manheim Orlando": 300,
+          "Manheim Oshawa": 175,
+          "MANHEIM PALM BEACH": 300,
+          "Manheim Pennsylvania": 250,
+          "Manheim Pensacola": 375,
+          "Manheim Philadelphia": 270,
+          "Manheim Phoenix": 400,
+          "Manheim Pittsburg": 450,
+          "Manheim Riverside": 225,
+          "Manheim San Antonio": 350,
+          "Manheim San Diego": 215,
+          "Manheim San Francisco Bay": 350,
+          "Manheim Seattle": 225,
+          "Manheim Skyline Auto Auction": 150,
+          "Manheim Southern California": 225,
+          "Manheim St Louis": 525,
+          "Manheim St. Pete": 300,
+          "Manheim Statesville": 300,
+          "MANHEIM TAMPA": 290,
+          "Manheim Tennessee": 450,
+          "Manheim Texas Hobby": 150,
+          "Manheim Toronto": 425,
+          "Manheim Tucson": 450,
+          "Manheim Utah": 425,
+          "Manheim Virginia (FREDERICKSBURG)": 375,
+          Martinez: 450,
+          MCAllen: 400,
+          Mebane: 325,
+          Memphis: 500,
+          Mentone: 250,
+          "Metro DC": 325,
+          Miami: 400,
+          "Miami Central": 400,
+          "Miami North": 400,
+          "Miami South": 400,
+          Middletown: 325,
+          Milwaukee: 275,
+          Minneapolis: 450,
+          "Minneapolis /St. Paul": 450,
+          "Minneapolis North": 450,
+          Missoula: 650,
+          Mobile: 450,
+          Mocksville: 325,
+          Moncton: 1275,
+          Montgomery: 450,
+          Monticello: 275,
+          Montreal: 500,
+          Napa: 450,
+          Nashville: 450,
+          "National Auto Dealers Exchange": 170,
+          "New Castle": 300,
+          "New Orleans": 475,
+          Newburgh: 275,
+          "North Boston": 425,
+          "North Charleston - SC": 325,
+          "North Hollywood": 230,
+          "North Seattle": 225,
+          "Northern New Jersey": 210,
+          "Northern Virginia": 325,
+          Ocala: 325,
+          Ogden: 600,
+          "Oklahoma City": 450,
+          Omaha: 500,
+          Orlando: 300,
+          "Orlando North": 300,
+          "Orlando South": 300,
+          Ottawa: 475,
+          Paducah: 525,
+          Pasco: 400,
+          Pensacola: 425,
+          Peoria: 350,
+          "Permian Basin": 500,
+          Philadelphia: 270,
+          "Philadelphia East": 270,
+          Phoenix: 400,
+          Pittsburg: 450,
+          "Pittsburgh South": 500,
+          "Port Murray": 225,
+          Portage: 350,
+          Portland: 275,
+          "Portland - Gorham": 475,
+          "Portland North": 300,
+          "Portland South": 300,
+          "Portland West": 300,
+          Providence: 400,
+          Pulaski: 425,
+          "Punta Gorda": 350,
+          Puyallup: 225,
+          Quebec: 600,
+          "Quebec city": 625,
+          Raleigh: 325,
+          "Rancho Cucamonga": 230,
+          "Rapid City": 1100,
+          Redding: 700,
+          Regina: 1350,
+          Reno: 600,
+          Richmond: 400,
+          Riverside: 230,
+          Roanoke: 475,
+          Rochester: 500,
+          Rosedale: 375,
+          Rutland: 500,
+          Sacramento: 450,
+          Salisbury: 350,
+          "Salt Lake City": 700,
+          "San Antonio": 350,
+          "San Bernardino": 250,
+          "San Diego": 250,
+          "San Jose": 450,
+          Sarasota: 300,
+          Savannah: 150,
+          Sayreville: 200,
+          Scranton: 300,
+          Seaford: 375,
+          Seattle: 225,
+          "Shady Spring, WV": 625,
+          Shreveport: 365,
+          Sikeston: 475,
+          "Sioux Falls": 600,
+          "So Sacramento": 450,
+          Somerville: 210,
+          "South Bend": 300,
+          "South Boston": 425,
+          "Southern Illinois": 575,
+          "Southern New Jersey": 250,
+          Spanaway: 225,
+          Spartanburg: 325,
+          Spokane: 400,
+          Springfield: 600,
+          "St. Cloud": 450,
+          "St. John's": 1950,
+          "St. Louis, IL": 575,
+          "St. Louis, MO": 575,
+          Stockton: 450,
+          Sudbury: 475,
+          Suffolk: 400,
+          "Sun Valley": 230,
+          Syracuse: 375,
+          Tallahassee: 325,
+          Tampa: 325,
+          "Tampa South": 325,
+          Tanner: 475,
+          Taunton: 425,
+          Templeton: 425,
+          Tidewater: 350,
+          Tifton: 300,
+          Toronto: 425,
+          "TOTAL RESOURCE AUC CENTRL PENN": 300,
+          Trenton: 250,
+          Tucson: 450,
+          Tulsa: 525,
+          Vallejo: 450,
+          "Van Nuys": 230,
+          Vancouver: 1950,
+          Waco: 375,
+          Walton: 475,
+          WashingtonDC: 325,
+          Wayland: 425,
+          Webster: 450,
+          "West Palm Beach": 400,
+          "West Warren": 425,
+          "Western Colorado": 900,
+          Wheeling: 200,
+          Wichita: 600,
+          Wilmington: 400,
+          Windham: 500,
+          Winnipeg: 1300,
+          "York Haven": 325,
+          "York Springs": 325,
+        },
 
-      const elements = {
-        country: document.getElementById("country"),
-        price: document.getElementById("price"),
-        currency: document.getElementById("currency"),
-        year: document.getElementById("year"),
-        volume: document.getElementById("volume"),
-        engineType: document.getElementById("engineType"),
-        evQuota: document.getElementById("evQuota"),
-        discount50: document.getElementById("discount50"),
-        totalByn: document.getElementById("totalByn"),
-        finalTotal: document.getElementById("finalTotal"),
-        breakdown: document.getElementById("breakdown"),
-        liveEur: document.getElementById("liveEur"),
-        rateInfo: document.getElementById("rateInfo"),
+        // Стоимость доставки от порта (базовые ставки)
+        portToDestination: {
+          klaipeda: { sedan: 725, suv: 725 }, // Для Клайпеды — одинаковая цена
+          poti: { sedan: 895, suv: 895 }, // Для Грузии — базовая (коэффициенты применятся отдельно)
+        },
       };
 
-      async function loadRates() {
-        try {
-          const res = await fetch(
-            "https://api.nbrb.by/exrates/rates?periodicity=0"
-          );
-          const data = await res.json();
-          const eurObj = data.find((item) => item.Cur_Abbreviation === "EUR");
-          const usdObj = data.find((item) => item.Cur_Abbreviation === "USD");
-          if (eurObj) eurRate = eurObj.Cur_OfficialRate;
-          if (usdObj) usdRate = usdObj.Cur_OfficialRate;
-          if (elements.liveEur)
-            elements.liveEur.textContent = eurRate.toFixed(4);
-          if (elements.rateInfo) {
-            elements.rateInfo.innerHTML = `Курс НБРБ на ${new Date().toLocaleDateString(
-              "ru-RU"
-            )} • EUR ${eurRate.toFixed(4)} • USD ${usdRate.toFixed(4)}`;
-          }
-          calculate();
-        } catch (e) {
-          console.warn("API НБРБ недоступен — используем резервный курс");
-          calculate();
-        }
+      // Дополнительные сборы
+      const extraFees = {
+        hybridFee: 150, // $ для гибридов и электро
+        oversizeMultiplier: 1.5, // коэффициент для негабаритных авто (только через Грузию)
+        // Альтернативные цены для некоторых регионов (если отличаются от базовых)
+        specialPortRates: {
+          Abilene: {
+            klaipeda: { sedan: 835, suv: 835 },
+            poti: { sedan: 1180, suv: 1180 },
+          },
+          "ACE - Carson": {
+            klaipeda: { sedan: 1250, suv: 1250 },
+            poti: { sedan: 1595, suv: 1595 },
+          },
+          "ACE - Perris": {
+            klaipeda: { sedan: 1250, suv: 1250 },
+            poti: { sedan: 1595, suv: 1595 },
+          },
+          Adamsburg: {
+            klaipeda: { sedan: 725, suv: 725 },
+            poti: { sedan: 895, suv: 895 },
+          },
+          Adelanto: {
+            klaipeda: { sedan: 1250, suv: 1250 },
+            poti: { sedan: 1595, suv: 1595 },
+          },
+          "ADESA Boston": {
+            klaipeda: { sedan: 725, suv: 725 },
+            poti: { sedan: 895, suv: 895 },
+          },
+          "ADESA Great Lakes": {
+            klaipeda: { sedan: 725, suv: 725 },
+            poti: { sedan: 895, suv: 895 },
+          },
+          Albuquerque: {
+            klaipeda: { sedan: 835, suv: 835 },
+            poti: { sedan: 1180, suv: 1180 },
+          },
+          Amarillo: {
+            klaipeda: { sedan: 835, suv: 835 },
+            poti: { sedan: 1180, suv: 1180 },
+          },
+          Anchorage: {
+            klaipeda: { sedan: 1725, suv: 1725 },
+            poti: { sedan: 1600, suv: 1600 },
+          },
+          Billings: {
+            klaipeda: { sedan: 1725, suv: 1725 },
+            poti: { sedan: 1600, suv: 1600 },
+          },
+          Boise: {
+            klaipeda: { sedan: 1725, suv: 1725 },
+            poti: { sedan: 1600, suv: 1600 },
+          },
+          // Добавьте остальные особые случаи по необходимости
+        },
+      };
+
+      let usdRate = 1; // В USD считаем
+      let calculationTimeout = null;
+
+      // Получаем элементы
+      const locationSelect = document.getElementById("location");
+      const carTypeSelect = document.getElementById("carType");
+      const portSelect = document.getElementById("port");
+      const isOversizeCheckbox = document.getElementById("isOversize");
+      const isHybridCheckbox = document.getElementById("isHybrid");
+      const seaFreightInput = document.getElementById("seaFreight");
+      const seaFreightCurrency = document.getElementById("seaFreightCurrency");
+      const customDutyInput = document.getElementById("customDuty");
+      const customDutyCurrency = document.getElementById("customDutyCurrency");
+      const logisticsTotalElement = document.getElementById("logisticsTotal");
+      const finalTotalElement = document.getElementById("finalTotal");
+      const breakdownElement = document.getElementById("breakdown");
+
+      // Заполняем select с локациями
+      function populateLocationSelect() {
+        if (!locationSelect) return;
+        const locations = Object.keys(logisticsData.inlandRates).sort();
+        locationSelect.innerHTML =
+          '<option value="">-- Выберите город или аукцион --</option>';
+        locations.forEach((location) => {
+          const option = document.createElement("option");
+          option.value = location;
+          option.textContent = location;
+          locationSelect.appendChild(option);
+        });
       }
 
+      // Получить стоимость инленда для локации
+      function getInlandRate(location) {
+        return logisticsData.inlandRates[location] || null;
+      }
+
+      // Получить стоимость доставки от порта
+      function getPortToDestinationRate(location, port, carType) {
+        // Проверяем особые тарифы
+        if (
+          extraFees.specialPortRates[location] &&
+          extraFees.specialPortRates[location][port]
+        ) {
+          return extraFees.specialPortRates[location][port][carType];
+        }
+
+        // Стандартные тарифы
+        const baseRate = logisticsData.portToDestination[port];
+        if (baseRate) {
+          return baseRate[carType];
+        }
+        return 895; // fallback
+      }
+
+      // Основная функция расчёта
       function calculate() {
         if (calculationTimeout) clearTimeout(calculationTimeout);
         calculationTimeout = setTimeout(() => {
-          if (!elements.country || !elements.price) return;
-          const country = elements.country.value;
-          let priceInput = parseFloat(elements.price.value) || 0;
-          const inputCurrency = elements.currency.value;
-          const year = parseInt(elements.year.value) || 2026;
-          const volume = parseFloat(elements.volume.value) || 0;
-          const engineType = elements.engineType.value;
-          const isEV = elements.evQuota?.checked && engineType === "electric";
-          const has50Discount = elements.discount50?.checked;
-          const age = Math.max(0, 2026 - year);
-          let priceByn = priceInput;
-          if (inputCurrency === "EUR") priceByn = priceInput * eurRate;
-          else if (inputCurrency === "USD") priceByn = priceInput * usdRate;
-          const deliveryRates = {
-            europe: 1800 * eurRate,
-            usa: 3400 * eurRate,
-            china: 2400 * eurRate,
-            korea: 2100 * eurRate,
-          };
-          let deliveryByn = deliveryRates[country] || 2600 * eurRate;
-          let dutyEur = 0;
-          if (!isEV) {
-            const priceEur = priceByn / eurRate;
-            if (age < 3) {
-              if (priceEur <= 8500)
-                dutyEur = Math.max(priceEur * 0.54, volume * 2.5);
-              else if (priceEur <= 16700)
-                dutyEur = Math.max(priceEur * 0.48, volume * 3.5);
-              else if (priceEur <= 42300)
-                dutyEur = Math.max(priceEur * 0.48, volume * 5.5);
-              else if (priceEur <= 84500)
-                dutyEur = Math.max(priceEur * 0.48, volume * 7.5);
-              else dutyEur = Math.max(priceEur * 0.48, volume * 15);
-            } else if (age < 5) {
-              if (volume <= 1000) dutyEur = volume * 1.5;
-              else if (volume <= 1500) dutyEur = volume * 1.7;
-              else if (volume <= 1800) dutyEur = volume * 2.5;
-              else if (volume <= 2300) dutyEur = volume * 2.7;
-              else if (volume <= 3000) dutyEur = volume * 3.0;
-              else dutyEur = volume * 3.6;
-            } else {
-              if (volume <= 1000) dutyEur = volume * 3.0;
-              else if (volume <= 1500) dutyEur = volume * 3.2;
-              else if (volume <= 1800) dutyEur = volume * 3.5;
-              else if (volume <= 2300) dutyEur = volume * 4.8;
-              else if (volume <= 3000) dutyEur = volume * 5.0;
-              else dutyEur = volume * 5.7;
-            }
+          // Получаем значения
+          const location = locationSelect?.value;
+          const carType = carTypeSelect?.value;
+          const port = portSelect?.value;
+          const isOversize = isOversizeCheckbox?.checked || false;
+          const isHybrid = isHybridCheckbox?.checked || false;
+          let seaFreight = parseFloat(seaFreightInput?.value) || 0;
+          let customDuty = parseFloat(customDutyInput?.value) || 0;
+
+          const seaFreightCurr = seaFreightCurrency?.value || "USD";
+          const customDutyCurr = customDutyCurrency?.value || "EUR";
+
+          // Конвертация в USD (упрощённо, для примера)
+          const eurToUsd = 1.09; // Примерный курс, можно подставить реальный
+          if (seaFreightCurr === "EUR") seaFreight = seaFreight * eurToUsd;
+          if (customDutyCurr === "EUR") customDuty = customDuty * eurToUsd;
+
+          // Проверяем выбранную локацию
+          if (!location || !logisticsData.inlandRates[location]) {
+            logisticsTotalElement.textContent = "— USD";
+            finalTotalElement.textContent = "— USD";
+            breakdownElement.innerHTML =
+              '<div class="breakdown-row"><span style="color: #e74c3c;">❌ Выберите место стоянки</span></div>';
+            return;
           }
-          if (has50Discount) dutyEur *= 0.5;
-          const dutyByn = dutyEur * eurRate;
-          const ndsByn = (priceByn + dutyByn) * 0.2;
-          const utilByn = age < 3 ? 544.5 : 1089;
-          const customsByn = 120;
-          const totalByn = Math.round(
-            priceByn + deliveryByn + dutyByn + ndsByn + utilByn + customsByn
-          );
-          const formattedTotal = totalByn.toLocaleString("ru-RU") + " BYN";
-          if (elements.totalByn) elements.totalByn.textContent = formattedTotal;
-          if (elements.finalTotal)
-            elements.finalTotal.textContent = formattedTotal;
-          if (elements.breakdown) {
-            elements.breakdown.innerHTML = `
-              <div class="breakdown-row"><span>Стоимость автомобиля</span><span>${priceByn.toLocaleString(
+
+          // 1. Инленд (перевозка по США)
+          const inlandCost = getInlandRate(location);
+
+          // 2. Доставка от порта
+          let portDelivery = getPortToDestinationRate(location, port, carType);
+
+          // 3. Применяем коэффициент oversize (только для Грузии)
+          if (isOversize && port === "poti") {
+            portDelivery = portDelivery * extraFees.oversizeMultiplier;
+          }
+
+          // 4. Сбор за гибрид/электро
+          const hybridFee = isHybrid ? extraFees.hybridFee : 0;
+
+          // Общая стоимость логистики
+          const totalLogistics = inlandCost + portDelivery + hybridFee;
+
+          // Итоговая стоимость (с морским фрахтом и пошлиной)
+          const finalTotal = totalLogistics + seaFreight + customDuty;
+
+          // Форматируем
+          const formatUSD = (value) =>
+            Math.round(value).toLocaleString("ru-RU") + " USD";
+
+          // Обновляем UI
+          logisticsTotalElement.textContent = formatUSD(totalLogistics);
+          finalTotalElement.textContent = formatUSD(finalTotal);
+
+          // Расшифровка
+          breakdownElement.innerHTML = `
+        <div class="breakdown-row">
+          <span>🚛 Инленд (${location})</span>
+          <span>${inlandCost.toLocaleString("ru-RU")} USD</span>
+        </div>
+        <div class="breakdown-row">
+          <span>⚓ Доставка до порта ${
+            port === "klaipeda" ? "Клайпеда" : "Поти/Батуми"
+          }${isOversize && port === "poti" ? " (×1.5 oversize)" : ""}</span>
+          <span>${portDelivery.toLocaleString("ru-RU")} USD</span>
+        </div>
+        ${
+          isHybrid
+            ? `<div class="breakdown-row"><span>🔋 Сбор за гибрид/электро</span><span>${hybridFee} USD</span></div>`
+            : ""
+        }
+        ${
+          seaFreight > 0
+            ? `<div class="breakdown-row"><span>🚢 Морской фрахт</span><span>${seaFreight.toLocaleString(
                 "ru-RU"
-              )} BYN</span></div>
-              <div class="breakdown-row"><span>Доставка</span><span>${Math.round(
-                deliveryByn
-              ).toLocaleString("ru-RU")} BYN</span></div>
-              <div class="breakdown-row"><span>Таможенная пошлина ${
-                has50Discount ? "(−50%)" : ""
-              }</span><span>${Math.round(dutyByn).toLocaleString(
-              "ru-RU"
-            )} BYN</span></div>
-              <div class="breakdown-row"><span>НДС 20%</span><span>${Math.round(
-                ndsByn
-              ).toLocaleString("ru-RU")} BYN</span></div>
-              <div class="breakdown-row"><span>Утилизационный сбор</span><span>${utilByn.toFixed(
-                0
-              )} BYN</span></div>
-              <div class="breakdown-row"><span>Таможенный сбор</span><span>${customsByn} BYN</span></div>
-            `;
-          }
+              )} USD</span></div>`
+            : ""
+        }
+        ${
+          customDuty > 0
+            ? `<div class="breakdown-row"><span>📄 Таможенная пошлина</span><span>${customDuty.toLocaleString(
+                "ru-RU"
+              )} USD</span></div>`
+            : ""
+        }
+        <div class="breakdown-row total-row" style="border-top: 2px solid #ddd; margin-top: 8px; padding-top: 8px; font-weight: 700;">
+          <span>💰 Итого</span>
+          <span>${finalTotal.toLocaleString("ru-RU")} USD</span>
+        </div>
+      `;
         }, 100);
       }
 
-      const calculator = document.getElementById("calculator");
-      if (calculator) {
-        calculator.addEventListener("input", (e) => {
-          if (e.target.matches("input, select")) calculate();
+      // Навешиваем обработчики
+      function bindEvents() {
+        const elements = [
+          locationSelect,
+          carTypeSelect,
+          portSelect,
+          isOversizeCheckbox,
+          isHybridCheckbox,
+          seaFreightInput,
+          seaFreightCurrency,
+          customDutyInput,
+          customDutyCurrency,
+        ];
+        elements.forEach((el) => {
+          if (el) el.addEventListener("input", calculate);
+          if (el && el.type !== "checkbox" && el.type !== "select-one") {
+            if (el.addEventListener) el.addEventListener("change", calculate);
+          }
         });
       }
-      loadRates();
+
+      // Инициализация
+      populateLocationSelect();
+      bindEvents();
+      calculate();
     }
 
     // --------------------------------------------------------------
