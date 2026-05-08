@@ -538,13 +538,12 @@
     // }
 
     // --------------------------------------------------------------
-    // 5. КАЛЬКУЛЯТОР АВТО
+    // 5. КАЛЬКУЛЯТОР АВТО (ОБНОВЛЁННЫЙ - убрана двойная цена)
     // --------------------------------------------------------------
     const calculatorExists = document.getElementById("calculator");
 
     if (calculatorExists) {
       // Данные из таблицы (сокращённый вариант, для полной версии нужно добавить все города)
-      // Полный список из ~500 локаций прилагаю ниже
       const logisticsData = {
         // Базовые цены на инленд (перевозка по США до порта)
         inlandRates: {
@@ -967,7 +966,18 @@
       // Дополнительные сборы
       const extraFees = {
         hybridFee: 150, // $ для гибридов и электро
-        oversizeMultiplier: 1.5, // коэффициент для негабаритных авто (только через Грузию)
+        oversizeMultiplier: 1.5, // коэффициент для SUV/кроссоверов через Грузию
+        // Стоимость автовоза по направлениям (привязана к порту)
+        autoTransporter: {
+          klaipeda: 1000, // Литва
+          poti: 2000, // Грузия
+        },
+        // Стоимость дополнительных услуг
+        additionalServices: {
+          service1: 100, // Доступ 1
+          service2: 250, // Доступ 2
+          service3: 450, // Доступ 3
+        },
         // Альтернативные цены для некоторых регионов (если отличаются от базовых)
         specialPortRates: {
           Abilene: {
@@ -1018,24 +1028,19 @@
             klaipeda: { sedan: 1725, suv: 1725 },
             poti: { sedan: 1600, suv: 1600 },
           },
-          // Добавьте остальные особые случаи по необходимости
         },
       };
 
-      let usdRate = 1; // В USD считаем
       let calculationTimeout = null;
 
       // Получаем элементы
       const locationSelect = document.getElementById("location");
       const carTypeSelect = document.getElementById("carType");
       const portSelect = document.getElementById("port");
-      const isOversizeCheckbox = document.getElementById("isOversize");
       const isHybridCheckbox = document.getElementById("isHybrid");
-      const seaFreightInput = document.getElementById("seaFreight");
-      const seaFreightCurrency = document.getElementById("seaFreightCurrency");
-      const customDutyInput = document.getElementById("customDuty");
-      const customDutyCurrency = document.getElementById("customDutyCurrency");
-      const logisticsTotalElement = document.getElementById("logisticsTotal");
+      const additionalServiceSelect =
+        document.getElementById("additionalService");
+
       const finalTotalElement = document.getElementById("finalTotal");
       const breakdownElement = document.getElementById("breakdown");
 
@@ -1058,22 +1063,60 @@
         return logisticsData.inlandRates[location] || null;
       }
 
-      // Получить стоимость доставки от порта
+      // Получить стоимость доставки от порта с учётом oversize для SUV через Грузию
       function getPortToDestinationRate(location, port, carType) {
         // Проверяем особые тарифы
+        let baseRate;
         if (
           extraFees.specialPortRates[location] &&
           extraFees.specialPortRates[location][port]
         ) {
-          return extraFees.specialPortRates[location][port][carType];
+          baseRate = extraFees.specialPortRates[location][port][carType];
+        } else {
+          // Стандартные тарифы
+          const standardRate = logisticsData.portToDestination[port];
+          baseRate = standardRate ? standardRate[carType] : 895;
         }
 
-        // Стандартные тарифы
-        const baseRate = logisticsData.portToDestination[port];
-        if (baseRate) {
-          return baseRate[carType];
+        // Применяем коэффициент oversize (1.5) для SUV/кроссоверов только через порт Грузии (poti)
+        if (port === "poti" && carType === "suv") {
+          return baseRate * extraFees.oversizeMultiplier;
         }
-        return 895; // fallback
+
+        return baseRate;
+      }
+
+      // Получить стоимость автовоза (привязана к порту)
+      function getAutoTransporterRate(port) {
+        return extraFees.autoTransporter[port] || 0;
+      }
+
+      // Получить стоимость дополнительной услуги
+      function getAdditionalServiceRate(serviceValue) {
+        switch (serviceValue) {
+          case "service1":
+            return extraFees.additionalServices.service1;
+          case "service2":
+            return extraFees.additionalServices.service2;
+          case "service3":
+            return extraFees.additionalServices.service3;
+          default:
+            return 0;
+        }
+      }
+
+      // Получить название дополнительной услуги
+      function getAdditionalServiceName(serviceValue) {
+        switch (serviceValue) {
+          case "service1":
+            return "Доступ 1";
+          case "service2":
+            return "Доступ 2";
+          case "service3":
+            return "Доступ 3";
+          default:
+            return "";
+        }
       }
 
       // Основная функция расчёта
@@ -1084,22 +1127,12 @@
           const location = locationSelect?.value;
           const carType = carTypeSelect?.value;
           const port = portSelect?.value;
-          const isOversize = isOversizeCheckbox?.checked || false;
           const isHybrid = isHybridCheckbox?.checked || false;
-          let seaFreight = parseFloat(seaFreightInput?.value) || 0;
-          let customDuty = parseFloat(customDutyInput?.value) || 0;
-
-          const seaFreightCurr = seaFreightCurrency?.value || "USD";
-          const customDutyCurr = customDutyCurrency?.value || "EUR";
-
-          // Конвертация в USD (упрощённо, для примера)
-          const eurToUsd = 1.09; // Примерный курс, можно подставить реальный
-          if (seaFreightCurr === "EUR") seaFreight = seaFreight * eurToUsd;
-          if (customDutyCurr === "EUR") customDuty = customDuty * eurToUsd;
+          const additionalServiceValue =
+            additionalServiceSelect?.value || "none";
 
           // Проверяем выбранную локацию
           if (!location || !logisticsData.inlandRates[location]) {
-            logisticsTotalElement.textContent = "— USD";
             finalTotalElement.textContent = "— USD";
             breakdownElement.innerHTML =
               '<div class="breakdown-row"><span style="color: #e74c3c;">❌ Выберите место стоянки</span></div>';
@@ -1109,67 +1142,90 @@
           // 1. Инленд (перевозка по США)
           const inlandCost = getInlandRate(location);
 
-          // 2. Доставка от порта
+          // 2. Доставка от порта (с учётом oversize для SUV через Грузию)
           let portDelivery = getPortToDestinationRate(location, port, carType);
 
-          // 3. Применяем коэффициент oversize (только для Грузии)
-          if (isOversize && port === "poti") {
-            portDelivery = portDelivery * extraFees.oversizeMultiplier;
-          }
-
-          // 4. Сбор за гибрид/электро
+          // 3. Сбор за гибрид/электро
           const hybridFee = isHybrid ? extraFees.hybridFee : 0;
 
-          // Общая стоимость логистики
-          const totalLogistics = inlandCost + portDelivery + hybridFee;
+          // 4. Стоимость автовоза (привязана к порту)
+          const autoTransporterCost = getAutoTransporterRate(port);
 
-          // Итоговая стоимость (с морским фрахтом и пошлиной)
-          const finalTotal = totalLogistics + seaFreight + customDuty;
+          // 5. Стоимость дополнительной услуги
+          const additionalServiceCost = getAdditionalServiceRate(
+            additionalServiceValue
+          );
+          const additionalServiceName = getAdditionalServiceName(
+            additionalServiceValue
+          );
+
+          // Итоговая стоимость (все услуги включены)
+          const finalTotal =
+            inlandCost +
+            portDelivery +
+            hybridFee +
+            autoTransporterCost +
+            additionalServiceCost;
 
           // Форматируем
           const formatUSD = (value) =>
             Math.round(value).toLocaleString("ru-RU") + " USD";
 
+          // Определяем название типа авто для отображения
+          const carTypeName =
+            carType === "sedan" ? "Седан/Хэтчбек" : "SUV/Кроссовер";
+
+          // Определяем был ли применён oversize
+          const isOversizeApplied = port === "poti" && carType === "suv";
+
+          // Название порта
+          const portName =
+            port === "klaipeda" ? "Клайпеда (Литва)" : "Поти/Батуми (Грузия)";
+
           // Обновляем UI
-          logisticsTotalElement.textContent = formatUSD(totalLogistics);
           finalTotalElement.textContent = formatUSD(finalTotal);
 
           // Расшифровка
-          breakdownElement.innerHTML = `
-        <div class="breakdown-row">
-          <span>🚛 Инленд (${location})</span>
-          <span>${inlandCost.toLocaleString("ru-RU")} USD</span>
-        </div>
-        <div class="breakdown-row">
-          <span>⚓ Доставка до порта ${
-            port === "klaipeda" ? "Клайпеда" : "Поти/Батуми"
-          }${isOversize && port === "poti" ? " (×1.5 oversize)" : ""}</span>
-          <span>${portDelivery.toLocaleString("ru-RU")} USD</span>
-        </div>
-        ${
-          isHybrid
-            ? `<div class="breakdown-row"><span>🔋 Сбор за гибрид/электро</span><span>${hybridFee} USD</span></div>`
-            : ""
-        }
-        ${
-          seaFreight > 0
-            ? `<div class="breakdown-row"><span>🚢 Морской фрахт</span><span>${seaFreight.toLocaleString(
-                "ru-RU"
-              )} USD</span></div>`
-            : ""
-        }
-        ${
-          customDuty > 0
-            ? `<div class="breakdown-row"><span>📄 Таможенная пошлина</span><span>${customDuty.toLocaleString(
-                "ru-RU"
-              )} USD</span></div>`
-            : ""
-        }
-        <div class="breakdown-row total-row" style="border-top: 2px solid #ddd; margin-top: 8px; padding-top: 8px; font-weight: 700;">
-          <span>💰 Итого</span>
-          <span>${finalTotal.toLocaleString("ru-RU")} USD</span>
-        </div>
-      `;
+          let breakdownHTML = `
+            <div class="breakdown-row">
+              <span>🚛 Инленд (${location})</span>
+              <span>${inlandCost.toLocaleString("ru-RU")} USD</span>
+            </div>
+            <div class="breakdown-row">
+              <span>⚓ Морская доставка до ${portName} (${carTypeName})${
+            isOversizeApplied
+              ? " <span style='color:#e67e22;'>(×1.5 SUV коэф.)</span>"
+              : ""
+          }</span>
+              <span>${portDelivery.toLocaleString("ru-RU")} USD</span>
+            </div>`;
+
+          if (isHybrid) {
+            breakdownHTML += `<div class="breakdown-row"><span>🔋 Сбор за гибрид/электро</span><span>${hybridFee} USD</span></div>`;
+          }
+
+          breakdownHTML += `
+            <div class="breakdown-row">
+              <span>🚚 Автовоз (${
+                port === "klaipeda" ? "Литва" : "Грузия"
+              })</span>
+              <span>${autoTransporterCost.toLocaleString("ru-RU")} USD</span>
+            </div>`;
+
+          if (additionalServiceCost > 0) {
+            breakdownHTML += `<div class="breakdown-row"><span>🛠️ ${additionalServiceName}</span><span>${additionalServiceCost.toLocaleString(
+              "ru-RU"
+            )} USD</span></div>`;
+          }
+
+          breakdownHTML += `
+            <div class="breakdown-row total-row" style="border-top: 2px solid #ddd; margin-top: 8px; padding-top: 8px; font-weight: 700;">
+              <span>💰 Итого</span>
+              <span>${finalTotal.toLocaleString("ru-RU")} USD</span>
+            </div>
+          `;
+
+          breakdownElement.innerHTML = breakdownHTML;
         }, 100);
       }
 
@@ -1179,12 +1235,8 @@
           locationSelect,
           carTypeSelect,
           portSelect,
-          isOversizeCheckbox,
           isHybridCheckbox,
-          seaFreightInput,
-          seaFreightCurrency,
-          customDutyInput,
-          customDutyCurrency,
+          additionalServiceSelect,
         ];
         elements.forEach((el) => {
           if (el) el.addEventListener("input", calculate);

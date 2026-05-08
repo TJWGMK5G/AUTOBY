@@ -955,113 +955,97 @@
         </div>
       </section>
 
-      <!-- ==================== КАЛЬКУЛЯТОР ПОД КЛЮЧ ==================== -->
+      <!-- ==================== КАЛЬКУЛЯТОР ЛОГИСТИКИ АВТО ИЗ США/КАНАДЫ ==================== -->
       <!-- <section class="home-calculator" id="calculator">
         <div class="home-calculator__container">
-        
           <div class="calculator-warning">
             <strong>Внимание!</strong> Все расчёты в калькуляторе являются
             <strong>ориентировочными</strong>.<br />
-            Точная стоимость зависит от конкретной модели автомобиля, года
-            выпуска, комплектации, курса валют на день оформления и других
-            факторов.<br />
+            Точная стоимость зависит от конкретного места стоянки, типа
+            автомобиля, текущего курса валют и других факторов.<br />
             Для получения точного расчёта под ваш запрос — обратитесь к нашему
             специалисту.
           </div>
 
           <div class="home-calculator__header">
             <div class="home-featured__pretitle">РАССЧИТАЙТЕ СТОИМОСТЬ</div>
-            <h2>Калькулятор авто под ключ в Беларуси</h2>
+            <h2>Калькулятор доставки авто из США/Канады</h2>
             <p>
-              Реальный курс НБРБ • Актуальные ставки 2026 • Расчёт за 15 секунд
+              Автоперевозка до портов Европы • Инленд по США • Расчёт за 15
+              секунд
             </p>
           </div>
 
           <div class="home-calculator__grid">
-        
+           
             <div class="home-calculator__form">
               <div class="form-group">
-                <label for="country">Страна ввоза</label>
-                <select id="country" class="form-control">
-                  <option value="europe">Европа</option>
-                  <option value="usa">США</option>
-                  <option value="china">Китай</option>
-                  <option value="korea">Корея</option>
-                  <option value="japan">Япония</option>
+                <label for="location">Место стоянки / Аукцион</label>
+                <select id="location" class="form-control">
+                  <option value="">-- Выберите город или аукцион --</option>
+                </select>
+                <span class="form-hint">Или начните вводить название</span>
+              </div>
+
+              <div class="form-group">
+                <label for="carType">Тип автомобиля</label>
+                <select id="carType" class="form-control">
+                  <option value="sedan">Седан / Хэтчбек</option>
+                  <option value="suv">SUV / Кроссовер</option>
                 </select>
               </div>
 
               <div class="form-group">
-                <label for="price">Стоимость автомобиля</label>
-                <div class="price-input-wrapper">
-                  <input
-                    type="number"
-                    id="price"
-                    value="85000"
-                    class="form-control price-input"
-                    placeholder="85000"
-                  />
-                  <label for="currency" class="visually-hidden">Валюта</label>
-                  <select id="currency" class="form-control currency-select">
-                    <option value="BYN">BYN</option>
-                    <option value="EUR">EUR €</option>
-                    <option value="USD">USD $</option>
-                  </select>
-                </div>
+                <label for="port">Порт назначения в Европе</label>
+                <select id="port" class="form-control">
+                  <option value="klaipeda">Клайпеда (Литва) — Европа</option>
+                  <option value="poti">Поти / Батуми (Грузия)</option>
+                </select>
               </div>
 
               <div class="form-group">
-                <label for="year">Год выпуска</label>
-                <input
-                  type="number"
-                  id="year"
-                  value="2024"
-                  class="form-control"
-                />
+                <label for="autoTransporter">Автовоз</label>
+                <select id="autoTransporter" class="form-control">
+                  <option value="klaipeda">Литва — $1000</option>
+                  <option value="poti">Грузия — $2000</option>
+                </select>
               </div>
 
               <div class="form-group">
-                <label for="volume">Объём двигателя (см³)</label>
-                <input
-                  type="number"
-                  id="volume"
-                  value="1995"
-                  class="form-control"
-                />
-              </div>
-
-              <div class="form-group">
-                <label for="engineType">Тип двигателя</label>
-                <select id="engineType" class="form-control">
-                  <option value="petrol">Бензин</option>
-                  <option value="diesel">Дизель</option>
-                  <option value="hybrid">Гибрид</option>
-                  <option value="electric">Электро</option>
+                <label for="additionalService">Дополнительные услуги</label>
+                <select id="additionalService" class="form-control">
+                  <option value="none">— Без услуг —</option>
+                  <option value="service1">Доступ 1 — $100</option>
+                  <option value="service2">Доступ 2 — $250</option>
+                  <option value="service3">Доступ 3 — $450</option>
                 </select>
               </div>
 
               <div class="form-group checkbox-group-inline">
                 <label class="checkbox-label">
-                  <input type="checkbox" id="evQuota" checked /> Электромобиль
-                  (квота 2026)
+                  <input type="checkbox" id="isOversize" />
+                  <span>Негабаритный автомобиль</span>
+                  <span class="checkbox-hint"
+                    >(коэф. 1.5, только через Грузию)</span
+                  >
                 </label>
                 <label class="checkbox-label">
-                  <input type="checkbox" id="discount50" /> Льгота 50%
-                  (многодетные / инвалиды)
+                  <input type="checkbox" id="isHybrid" />
+                  <span>Гибрид / Электромобиль</span>
+                  <span class="checkbox-hint">(доп. сбор $150)</span>
                 </label>
               </div>
 
               <p class="calculator-note">
-                * Расчёт справочный. Точная сумма — после проверки VIN и
-                документов.
+                * Расчёт справочный. Точная сумма — после уточнения места
+                стоянки и комплектации авто.
               </p>
             </div>
 
-          
             <div class="home-calculator__result">
-              <h3>Итоговая стоимость под ключ</h3>
-              <div class="result-total" id="totalByn" aria-live="polite">
-                — BYN
+              <h3>Стоимость логистики</h3>
+              <div class="result-total" id="logisticsTotal" aria-live="polite">
+                — USD
               </div>
               <div
                 class="result-breakdown"
@@ -1071,14 +1055,15 @@
               <div class="result-footer">
                 <strong>Итого к оплате:</strong>
                 <div id="finalTotal" class="final-price" aria-live="polite">
-                  — BYN
+                  — USD
                 </div>
-                <small id="rateInfo"
-                  >Курс НБРБ на 16.04.2026 • EUR 3.3209 • USD 2.8193</small
+                <span class="rate-info"
+                  >* Все цены указаны в USD. Морской фрахт и пошлина могут быть
+                  добавлены отдельно.</span
                 >
               </div>
               <a href="/#contact" class="home-hero__cta home-calculator__cta"
-                >ЗАКАЗАТЬ АВТО ПО ЭТОЙ ЦЕНЕ →</a
+                >ЗАКАЗАТЬ РАСЧЁТ ПОД ВАШЕ АВТО →</a
               >
             </div>
           </div>
@@ -1087,7 +1072,6 @@
       <!-- ==================== КАЛЬКУЛЯТОР ЛОГИСТИКИ АВТО ИЗ США/КАНАДЫ ==================== -->
       <section class="home-calculator" id="calculator">
         <div class="home-calculator__container">
-          <!-- Предупреждение -->
           <div class="calculator-warning">
             <strong>Внимание!</strong> Все расчёты в калькуляторе являются
             <strong>ориентировочными</strong>.<br />
@@ -1121,77 +1105,38 @@
                 <label for="carType">Тип автомобиля</label>
                 <select id="carType" class="form-control">
                   <option value="sedan">Седан / Хэтчбек</option>
-                  <option value="suv">SUV / Кроссовер</option>
+                  <option value="suv">SUV / Кроссовер / Минивэн</option>
                 </select>
               </div>
 
               <div class="form-group">
                 <label for="port">Порт назначения в Европе</label>
                 <select id="port" class="form-control">
-                  <option value="klaipeda">Клайпеда (Литва) — Европа</option>
-                  <option value="poti">Поти / Батуми (Грузия)</option>
+                  <option value="klaipeda">
+                    Клайпеда (Литва) — $1000 автовоз
+                  </option>
+                  <option value="poti">
+                    Поти / Батуми (Грузия) — $2000 автовоз
+                  </option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="additionalService">Дополнительные услуги</label>
+                <select id="additionalService" class="form-control">
+                  <option value="none">— Без услуг —</option>
+                  <option value="service1">Доступ 1 — $100</option>
+                  <option value="service2">Доступ 2 — $250</option>
+                  <option value="service3">Доступ 3 — $450</option>
                 </select>
               </div>
 
               <div class="form-group checkbox-group-inline">
                 <label class="checkbox-label">
-                  <input type="checkbox" id="isOversize" />
-                  <span>Негабаритный автомобиль</span>
-                  <span class="checkbox-hint"
-                    >(коэф. 1.5, только через Грузию)</span
-                  >
-                </label>
-                <label class="checkbox-label">
                   <input type="checkbox" id="isHybrid" />
                   <span>Гибрид / Электромобиль</span>
                   <span class="checkbox-hint">(доп. сбор $150)</span>
                 </label>
-              </div>
-
-              <div class="form-group">
-                <label for="seaFreight">Морской фрахт (опционально)</label>
-                <div class="price-input-wrapper">
-                  <input
-                    type="number"
-                    id="seaFreight"
-                    value="0"
-                    class="form-control price-input"
-                    placeholder="0"
-                  />
-                  <select
-                    id="seaFreightCurrency"
-                    class="form-control currency-select"
-                  >
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                  </select>
-                </div>
-                <span class="form-hint"
-                  >Если не знаете — оставьте 0, мы подскажем</span
-                >
-              </div>
-
-              <div class="form-group">
-                <label for="customDuty">Таможенная пошлина (для РБ)</label>
-                <div class="price-input-wrapper">
-                  <input
-                    type="number"
-                    id="customDuty"
-                    value="0"
-                    class="form-control price-input"
-                    placeholder="0"
-                  />
-                  <select
-                    id="customDutyCurrency"
-                    class="form-control currency-select"
-                  >
-                    <option value="EUR">EUR</option>
-                    <option value="USD">USD</option>
-                  </select>
-                </div>
-                <span class="form-hint"
-                  >Введите примерную сумму пошлины или оставьте 0</span
-                >
               </div>
 
               <p class="calculator-note">
@@ -1200,12 +1145,8 @@
               </p>
             </div>
 
-            <!-- Результат -->
             <div class="home-calculator__result">
               <h3>Стоимость логистики</h3>
-              <div class="result-total" id="logisticsTotal" aria-live="polite">
-                — USD
-              </div>
               <div
                 class="result-breakdown"
                 id="breakdown"
@@ -1217,8 +1158,8 @@
                   — USD
                 </div>
                 <span class="rate-info"
-                  >* Все цены указаны в USD. Морской фрахт и пошлина могут быть
-                  добавлены отдельно.</span
+                  >* Все цены указаны в USD. Стоимость автовоза включена в
+                  расчёт.</span
                 >
               </div>
               <a href="/#contact" class="home-hero__cta home-calculator__cta"
