@@ -956,120 +956,6 @@
       </section>
 
       <!-- ==================== КАЛЬКУЛЯТОР ЛОГИСТИКИ АВТО ИЗ США/КАНАДЫ ==================== -->
-      <!-- <section class="home-calculator" id="calculator">
-        <div class="home-calculator__container">
-          <div class="calculator-warning">
-            <strong>Внимание!</strong> Все расчёты в калькуляторе являются
-            <strong>ориентировочными</strong>.<br />
-            Точная стоимость зависит от конкретного места стоянки, типа
-            автомобиля, текущего курса валют и других факторов.<br />
-            Для получения точного расчёта под ваш запрос — обратитесь к нашему
-            специалисту.
-          </div>
-
-          <div class="home-calculator__header">
-            <div class="home-featured__pretitle">РАССЧИТАЙТЕ СТОИМОСТЬ</div>
-            <h2>Калькулятор доставки авто из США/Канады</h2>
-            <p>
-              Автоперевозка до портов Европы • Инленд по США • Расчёт за 15
-              секунд
-            </p>
-          </div>
-
-          <div class="home-calculator__grid">
-           
-            <div class="home-calculator__form">
-              <div class="form-group">
-                <label for="location">Место стоянки / Аукцион</label>
-                <select id="location" class="form-control">
-                  <option value="">-- Выберите город или аукцион --</option>
-                </select>
-                <span class="form-hint">Или начните вводить название</span>
-              </div>
-
-              <div class="form-group">
-                <label for="carType">Тип автомобиля</label>
-                <select id="carType" class="form-control">
-                  <option value="sedan">Седан / Хэтчбек</option>
-                  <option value="suv">SUV / Кроссовер</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="port">Порт назначения в Европе</label>
-                <select id="port" class="form-control">
-                  <option value="klaipeda">Клайпеда (Литва) — Европа</option>
-                  <option value="poti">Поти / Батуми (Грузия)</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="autoTransporter">Автовоз</label>
-                <select id="autoTransporter" class="form-control">
-                  <option value="klaipeda">Литва — $1000</option>
-                  <option value="poti">Грузия — $2000</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="additionalService">Дополнительные услуги</label>
-                <select id="additionalService" class="form-control">
-                  <option value="none">— Без услуг —</option>
-                  <option value="service1">Доступ 1 — $100</option>
-                  <option value="service2">Доступ 2 — $250</option>
-                  <option value="service3">Доступ 3 — $450</option>
-                </select>
-              </div>
-
-              <div class="form-group checkbox-group-inline">
-                <label class="checkbox-label">
-                  <input type="checkbox" id="isOversize" />
-                  <span>Негабаритный автомобиль</span>
-                  <span class="checkbox-hint"
-                    >(коэф. 1.5, только через Грузию)</span
-                  >
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" id="isHybrid" />
-                  <span>Гибрид / Электромобиль</span>
-                  <span class="checkbox-hint">(доп. сбор $150)</span>
-                </label>
-              </div>
-
-              <p class="calculator-note">
-                * Расчёт справочный. Точная сумма — после уточнения места
-                стоянки и комплектации авто.
-              </p>
-            </div>
-
-            <div class="home-calculator__result">
-              <h3>Стоимость логистики</h3>
-              <div class="result-total" id="logisticsTotal" aria-live="polite">
-                — USD
-              </div>
-              <div
-                class="result-breakdown"
-                id="breakdown"
-                aria-live="polite"
-              ></div>
-              <div class="result-footer">
-                <strong>Итого к оплате:</strong>
-                <div id="finalTotal" class="final-price" aria-live="polite">
-                  — USD
-                </div>
-                <span class="rate-info"
-                  >* Все цены указаны в USD. Морской фрахт и пошлина могут быть
-                  добавлены отдельно.</span
-                >
-              </div>
-              <a href="/#contact" class="home-hero__cta home-calculator__cta"
-                >ЗАКАЗАТЬ РАСЧЁТ ПОД ВАШЕ АВТО →</a
-              >
-            </div>
-          </div>
-        </div>
-      </section> -->
-      <!-- ==================== КАЛЬКУЛЯТОР ЛОГИСТИКИ АВТО ИЗ США/КАНАДЫ ==================== -->
       <section class="home-calculator" id="calculator">
         <div class="home-calculator__container">
           <div class="calculator-warning">
@@ -1104,24 +990,20 @@
               <div class="form-group">
                 <label for="carType">Тип автомобиля</label>
                 <select id="carType" class="form-control">
-                  <option value="sedan">Седан / Хэтчбек</option>
-                  <option value="suv">SUV / Кроссовер / Минивэн</option>
+                  <option value="sedan">Седан</option>
+                  <option value="suv">SUV</option>
                 </select>
               </div>
 
               <div class="form-group">
                 <label for="port">Порт назначения в Европе</label>
                 <select id="port" class="form-control">
-                  <option value="klaipeda">
-                    Клайпеда (Литва) — $1000 автовоз
-                  </option>
-                  <option value="poti">
-                    Поти / Батуми (Грузия) — $2000 автовоз
-                  </option>
+                  <option value="klaipeda">Клайпеда (Литва)</option>
+                  <option value="poti">Поти / Батуми (Грузия)</option>
                 </select>
               </div>
 
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label for="additionalService">Дополнительные услуги</label>
                 <select id="additionalService" class="form-control">
                   <option value="none">— Без услуг —</option>
@@ -1129,7 +1011,7 @@
                   <option value="service2">Доступ 2 — $250</option>
                   <option value="service3">Доступ 3 — $450</option>
                 </select>
-              </div>
+              </div> -->
 
               <div class="form-group checkbox-group-inline">
                 <label class="checkbox-label">
@@ -1175,20 +1057,16 @@
         <div class="calculator-info__container">
           <h3>Полезная информация</h3>
           <div class="info-grid">
-            <div>
-              <strong>Курс НБРБ:</strong> <span id="liveEur">—</span> BYN за 1
-              EUR
+            <div class="currency-widget">
+              <strong>Курсы НБРБ:</strong>
+              <div id="liveEur"></div>
             </div>
             <div>
-              <strong>Утильсбор:</strong> 544,5 BYN (до 3 лет) / 1089 BYN
-              (старше 3 лет)
+              <strong>Для физлиц (легковые авто в личное пользование): </strong>
+              до 3 лет: 624,92 руб. (было 544,5 руб.); старше 3 лет: 1282,02
+              руб. (было 1089 руб.).
             </div>
             <div><strong>Таможенный сбор:</strong> 120 BYN (фиксировано)</div>
-            <div><strong>НДС:</strong> 20 % (от стоимости авто + пошлины)</div>
-            <div>
-              <strong>Электромобили:</strong> 0 % пошлина (квота 20 000 шт. в
-              2026)
-            </div>
           </div>
           <p class="calculator-info__note">
             Официальные источники:

@@ -3071,6 +3071,107 @@ body::before {
   background: #222;
 }
 
+/* Стили для виджета курсов валют */
+.currency-widget {
+  margin-top: 15px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.currency-widget strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+.currency-rates {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.currency-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 4px 0;
+}
+
+.currency-label {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.currency-value {
+  font-size: 16px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.currency-date {
+  font-size: 11px;
+  color: #adb5bd;
+  text-align: center;
+  padding-top: 8px;
+  margin-top: 5px;
+  border-top: 1px solid #e9ecef;
+}
+
+.currency-error {
+  color: #e74c3c;
+  font-size: 13px;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+  .currency-widget {
+    margin-top: 10px;
+    padding: 8px;
+  }
+
+  .currency-label {
+    font-size: 12px;
+  }
+
+  .currency-value {
+    font-size: 14px;
+  }
+
+  .currency-date {
+    font-size: 10px;
+  }
+}
+
+/* Темная тема (если есть) */
+@media (prefers-color-scheme: dark) {
+  .currency-widget {
+    background: #2c2c2c;
+    border-color: #404040;
+  }
+
+  .currency-widget strong {
+    color: #e0e0e0;
+  }
+
+  .currency-label {
+    color: #a0a0a0;
+  }
+
+  .currency-value {
+    color: #ffffff;
+  }
+
+  .currency-date {
+    color: #808080;
+    border-top-color: #404040;
+  }
+}
+
 .calculator-info a {
   color: #ffd966;
   font-weight: 700;

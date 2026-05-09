@@ -390,160 +390,12 @@
     }
 
     // --------------------------------------------------------------
-    // 5. КАЛЬКУЛЯТОР АВТО
-    // --------------------------------------------------------------
-    // const calculatorExists = document.getElementById("calculator");
-
-    // if (calculatorExists) {
-    //   let eurRate = 3.33;
-    //   let usdRate = 2.82;
-    //   let calculationTimeout = null;
-
-    //   const elements = {
-    //     country: document.getElementById("country"),
-    //     price: document.getElementById("price"),
-    //     currency: document.getElementById("currency"),
-    //     year: document.getElementById("year"),
-    //     volume: document.getElementById("volume"),
-    //     engineType: document.getElementById("engineType"),
-    //     evQuota: document.getElementById("evQuota"),
-    //     discount50: document.getElementById("discount50"),
-    //     totalByn: document.getElementById("totalByn"),
-    //     finalTotal: document.getElementById("finalTotal"),
-    //     breakdown: document.getElementById("breakdown"),
-    //     liveEur: document.getElementById("liveEur"),
-    //     rateInfo: document.getElementById("rateInfo"),
-    //   };
-
-    //   async function loadRates() {
-    //     try {
-    //       const res = await fetch(
-    //         "https://api.nbrb.by/exrates/rates?periodicity=0"
-    //       );
-    //       const data = await res.json();
-    //       const eurObj = data.find((item) => item.Cur_Abbreviation === "EUR");
-    //       const usdObj = data.find((item) => item.Cur_Abbreviation === "USD");
-    //       if (eurObj) eurRate = eurObj.Cur_OfficialRate;
-    //       if (usdObj) usdRate = usdObj.Cur_OfficialRate;
-    //       if (elements.liveEur)
-    //         elements.liveEur.textContent = eurRate.toFixed(4);
-    //       if (elements.rateInfo) {
-    //         elements.rateInfo.innerHTML = `Курс НБРБ на ${new Date().toLocaleDateString(
-    //           "ru-RU"
-    //         )} • EUR ${eurRate.toFixed(4)} • USD ${usdRate.toFixed(4)}`;
-    //       }
-    //       calculate();
-    //     } catch (e) {
-    //       console.warn("API НБРБ недоступен — используем резервный курс");
-    //       calculate();
-    //     }
-    //   }
-
-    //   function calculate() {
-    //     if (calculationTimeout) clearTimeout(calculationTimeout);
-    //     calculationTimeout = setTimeout(() => {
-    //       if (!elements.country || !elements.price) return;
-    //       const country = elements.country.value;
-    //       let priceInput = parseFloat(elements.price.value) || 0;
-    //       const inputCurrency = elements.currency.value;
-    //       const year = parseInt(elements.year.value) || 2026;
-    //       const volume = parseFloat(elements.volume.value) || 0;
-    //       const engineType = elements.engineType.value;
-    //       const isEV = elements.evQuota?.checked && engineType === "electric";
-    //       const has50Discount = elements.discount50?.checked;
-    //       const age = Math.max(0, 2026 - year);
-    //       let priceByn = priceInput;
-    //       if (inputCurrency === "EUR") priceByn = priceInput * eurRate;
-    //       else if (inputCurrency === "USD") priceByn = priceInput * usdRate;
-    //       const deliveryRates = {
-    //         europe: 1800 * eurRate,
-    //         usa: 3400 * eurRate,
-    //         china: 2400 * eurRate,
-    //         korea: 2100 * eurRate,
-    //       };
-    //       let deliveryByn = deliveryRates[country] || 2600 * eurRate;
-    //       let dutyEur = 0;
-    //       if (!isEV) {
-    //         const priceEur = priceByn / eurRate;
-    //         if (age < 3) {
-    //           if (priceEur <= 8500)
-    //             dutyEur = Math.max(priceEur * 0.54, volume * 2.5);
-    //           else if (priceEur <= 16700)
-    //             dutyEur = Math.max(priceEur * 0.48, volume * 3.5);
-    //           else if (priceEur <= 42300)
-    //             dutyEur = Math.max(priceEur * 0.48, volume * 5.5);
-    //           else if (priceEur <= 84500)
-    //             dutyEur = Math.max(priceEur * 0.48, volume * 7.5);
-    //           else dutyEur = Math.max(priceEur * 0.48, volume * 15);
-    //         } else if (age < 5) {
-    //           if (volume <= 1000) dutyEur = volume * 1.5;
-    //           else if (volume <= 1500) dutyEur = volume * 1.7;
-    //           else if (volume <= 1800) dutyEur = volume * 2.5;
-    //           else if (volume <= 2300) dutyEur = volume * 2.7;
-    //           else if (volume <= 3000) dutyEur = volume * 3.0;
-    //           else dutyEur = volume * 3.6;
-    //         } else {
-    //           if (volume <= 1000) dutyEur = volume * 3.0;
-    //           else if (volume <= 1500) dutyEur = volume * 3.2;
-    //           else if (volume <= 1800) dutyEur = volume * 3.5;
-    //           else if (volume <= 2300) dutyEur = volume * 4.8;
-    //           else if (volume <= 3000) dutyEur = volume * 5.0;
-    //           else dutyEur = volume * 5.7;
-    //         }
-    //       }
-    //       if (has50Discount) dutyEur *= 0.5;
-    //       const dutyByn = dutyEur * eurRate;
-    //       const ndsByn = (priceByn + dutyByn) * 0.2;
-    //       const utilByn = age < 3 ? 544.5 : 1089;
-    //       const customsByn = 120;
-    //       const totalByn = Math.round(
-    //         priceByn + deliveryByn + dutyByn + ndsByn + utilByn + customsByn
-    //       );
-    //       const formattedTotal = totalByn.toLocaleString("ru-RU") + " BYN";
-    //       if (elements.totalByn) elements.totalByn.textContent = formattedTotal;
-    //       if (elements.finalTotal)
-    //         elements.finalTotal.textContent = formattedTotal;
-    //       if (elements.breakdown) {
-    //         elements.breakdown.innerHTML = `
-    //           <div class="breakdown-row"><span>Стоимость автомобиля</span><span>${priceByn.toLocaleString(
-    //             "ru-RU"
-    //           )} BYN</span></div>
-    //           <div class="breakdown-row"><span>Доставка</span><span>${Math.round(
-    //             deliveryByn
-    //           ).toLocaleString("ru-RU")} BYN</span></div>
-    //           <div class="breakdown-row"><span>Таможенная пошлина ${
-    //             has50Discount ? "(−50%)" : ""
-    //           }</span><span>${Math.round(dutyByn).toLocaleString(
-    //           "ru-RU"
-    //         )} BYN</span></div>
-    //           <div class="breakdown-row"><span>НДС 20%</span><span>${Math.round(
-    //             ndsByn
-    //           ).toLocaleString("ru-RU")} BYN</span></div>
-    //           <div class="breakdown-row"><span>Утилизационный сбор</span><span>${utilByn.toFixed(
-    //             0
-    //           )} BYN</span></div>
-    //           <div class="breakdown-row"><span>Таможенный сбор</span><span>${customsByn} BYN</span></div>
-    //         `;
-    //       }
-    //     }, 100);
-    //   }
-
-    //   const calculator = document.getElementById("calculator");
-    //   if (calculator) {
-    //     calculator.addEventListener("input", (e) => {
-    //       if (e.target.matches("input, select")) calculate();
-    //     });
-    //   }
-    //   loadRates();
-    // }
-
-    // --------------------------------------------------------------
-    // 5. КАЛЬКУЛЯТОР АВТО (ОБНОВЛЁННЫЙ - убрана двойная цена)
+    // 5. КАЛЬКУЛЯТОР АВТО (ОБНОВЛЁННЫЙ)
     // --------------------------------------------------------------
     const calculatorExists = document.getElementById("calculator");
 
     if (calculatorExists) {
-      // Данные из таблицы (сокращённый вариант, для полной версии нужно добавить все города)
+      // Данные из таблицы
       const logisticsData = {
         // Базовые цены на инленд (перевозка по США до порта)
         inlandRates: {
@@ -959,26 +811,27 @@
         // Стоимость доставки от порта (базовые ставки)
         portToDestination: {
           klaipeda: { sedan: 725, suv: 725 }, // Для Клайпеды — одинаковая цена
-          poti: { sedan: 895, suv: 895 }, // Для Грузии — базовая (коэффициенты применятся отдельно)
+          poti: { sedan: 895, suv: 895 }, // Для Грузии — базовая
         },
       };
 
       // Дополнительные сборы
       const extraFees = {
         hybridFee: 150, // $ для гибридов и электро
-        oversizeMultiplier: 1.5, // коэффициент для SUV/кроссоверов через Грузию
-        // Стоимость автовоза по направлениям (привязана к порту)
+        oversizeMultiplier: 1.5, // коэффициент для оверсайз (седан * 1.5)
+        suvMultiplier: 1.0, // коэффициент для SUV (без изменений)
+        // Стоимость автовоза по направлениям
         autoTransporter: {
           klaipeda: 1000, // Литва
           poti: 2000, // Грузия
         },
-        // Стоимость дополнительных услуг
+        // Стоимость дополнительных услуг (все три доступа суммируются)
         additionalServices: {
           service1: 100, // Доступ 1
           service2: 250, // Доступ 2
           service3: 450, // Доступ 3
         },
-        // Альтернативные цены для некоторых регионов (если отличаются от базовых)
+        // Альтернативные цены для некоторых регионов
         specialPortRates: {
           Abilene: {
             klaipeda: { sedan: 835, suv: 835 },
@@ -1038,11 +891,8 @@
       const carTypeSelect = document.getElementById("carType");
       const portSelect = document.getElementById("port");
       const isHybridCheckbox = document.getElementById("isHybrid");
-      const additionalServiceSelect =
-        document.getElementById("additionalService");
 
       const finalTotalElement = document.getElementById("finalTotal");
-      const breakdownElement = document.getElementById("breakdown");
 
       // Заполняем select с локациями
       function populateLocationSelect() {
@@ -1063,60 +913,55 @@
         return logisticsData.inlandRates[location] || null;
       }
 
-      // Получить стоимость доставки от порта с учётом oversize для SUV через Грузию
+      // Получить стоимость доставки от порта с учётом типа автомобиля
       function getPortToDestinationRate(location, port, carType) {
-        // Проверяем особые тарифы
+        // Определяем базовую ставку в зависимости от типа авто
         let baseRate;
+
+        // Проверяем особые тарифы
         if (
           extraFees.specialPortRates[location] &&
           extraFees.specialPortRates[location][port]
         ) {
-          baseRate = extraFees.specialPortRates[location][port][carType];
+          // Для оверсайз используем ставку седана из особых тарифов
+          if (carType === "oversize") {
+            baseRate = extraFees.specialPortRates[location][port].sedan;
+          } else {
+            baseRate = extraFees.specialPortRates[location][port][carType];
+          }
         } else {
           // Стандартные тарифы
           const standardRate = logisticsData.portToDestination[port];
-          baseRate = standardRate ? standardRate[carType] : 895;
+          if (carType === "oversize") {
+            baseRate = standardRate ? standardRate.sedan : 895;
+          } else {
+            baseRate = standardRate ? standardRate[carType] : 895;
+          }
         }
 
-        // Применяем коэффициент oversize (1.5) для SUV/кроссоверов только через порт Грузии (poti)
-        if (port === "poti" && carType === "suv") {
+        // Применяем коэффициенты для разных типов авто
+        if (carType === "oversize") {
           return baseRate * extraFees.oversizeMultiplier;
+        } else if (carType === "suv") {
+          return baseRate * extraFees.suvMultiplier;
         }
 
         return baseRate;
       }
 
-      // Получить стоимость автовоза (привязана к порту)
+      // Получить стоимость автовоза
       function getAutoTransporterRate(port) {
         return extraFees.autoTransporter[port] || 0;
       }
 
-      // Получить стоимость дополнительной услуги
-      function getAdditionalServiceRate(serviceValue) {
-        switch (serviceValue) {
-          case "service1":
-            return extraFees.additionalServices.service1;
-          case "service2":
-            return extraFees.additionalServices.service2;
-          case "service3":
-            return extraFees.additionalServices.service3;
-          default:
-            return 0;
-        }
-      }
-
-      // Получить название дополнительной услуги
-      function getAdditionalServiceName(serviceValue) {
-        switch (serviceValue) {
-          case "service1":
-            return "Доступ 1";
-          case "service2":
-            return "Доступ 2";
-          case "service3":
-            return "Доступ 3";
-          default:
-            return "";
-        }
+      // Получить общую стоимость всех дополнительных услуг
+      function getTotalAdditionalServicesRate() {
+        // Все три услуги всегда включены
+        return (
+          extraFees.additionalServices.service1 +
+          extraFees.additionalServices.service2 +
+          extraFees.additionalServices.service3
+        );
       }
 
       // Основная функция расчёта
@@ -1128,105 +973,53 @@
           const carType = carTypeSelect?.value;
           const port = portSelect?.value;
           const isHybrid = isHybridCheckbox?.checked || false;
-          const additionalServiceValue =
-            additionalServiceSelect?.value || "none";
 
           // Проверяем выбранную локацию
           if (!location || !logisticsData.inlandRates[location]) {
             finalTotalElement.textContent = "— USD";
-            breakdownElement.innerHTML =
-              '<div class="breakdown-row"><span style="color: #e74c3c;">❌ Выберите место стоянки</span></div>';
             return;
           }
 
           // 1. Инленд (перевозка по США)
           const inlandCost = getInlandRate(location);
 
-          // 2. Доставка от порта (с учётом oversize для SUV через Грузию)
+          // 2. Доставка от порта (с учётом типа авто)
           let portDelivery = getPortToDestinationRate(location, port, carType);
 
           // 3. Сбор за гибрид/электро
           const hybridFee = isHybrid ? extraFees.hybridFee : 0;
 
-          // 4. Стоимость автовоза (привязана к порту)
+          // 4. Стоимость автовоза
           const autoTransporterCost = getAutoTransporterRate(port);
 
-          // 5. Стоимость дополнительной услуги
-          const additionalServiceCost = getAdditionalServiceRate(
-            additionalServiceValue
-          );
-          const additionalServiceName = getAdditionalServiceName(
-            additionalServiceValue
-          );
+          // 5. Стоимость всех дополнительных услуг (все три сразу)
+          const additionalServicesTotal = getTotalAdditionalServicesRate();
 
-          // Итоговая стоимость (все услуги включены)
+          // Итоговая стоимость
           const finalTotal =
             inlandCost +
             portDelivery +
             hybridFee +
             autoTransporterCost +
-            additionalServiceCost;
+            additionalServicesTotal;
 
           // Форматируем
           const formatUSD = (value) =>
             Math.round(value).toLocaleString("ru-RU") + " USD";
 
-          // Определяем название типа авто для отображения
-          const carTypeName =
-            carType === "sedan" ? "Седан/Хэтчбек" : "SUV/Кроссовер";
-
-          // Определяем был ли применён oversize
-          const isOversizeApplied = port === "poti" && carType === "suv";
-
-          // Название порта
-          const portName =
-            port === "klaipeda" ? "Клайпеда (Литва)" : "Поти/Батуми (Грузия)";
-
           // Обновляем UI
           finalTotalElement.textContent = formatUSD(finalTotal);
-
-          // Расшифровка
-          let breakdownHTML = `
-            <div class="breakdown-row">
-              <span>🚛 Инленд (${location})</span>
-              <span>${inlandCost.toLocaleString("ru-RU")} USD</span>
-            </div>
-            <div class="breakdown-row">
-              <span>⚓ Морская доставка до ${portName} (${carTypeName})${
-            isOversizeApplied
-              ? " <span style='color:#e67e22;'>(×1.5 SUV коэф.)</span>"
-              : ""
-          }</span>
-              <span>${portDelivery.toLocaleString("ru-RU")} USD</span>
-            </div>`;
-
-          if (isHybrid) {
-            breakdownHTML += `<div class="breakdown-row"><span>🔋 Сбор за гибрид/электро</span><span>${hybridFee} USD</span></div>`;
-          }
-
-          breakdownHTML += `
-            <div class="breakdown-row">
-              <span>🚚 Автовоз (${
-                port === "klaipeda" ? "Литва" : "Грузия"
-              })</span>
-              <span>${autoTransporterCost.toLocaleString("ru-RU")} USD</span>
-            </div>`;
-
-          if (additionalServiceCost > 0) {
-            breakdownHTML += `<div class="breakdown-row"><span>🛠️ ${additionalServiceName}</span><span>${additionalServiceCost.toLocaleString(
-              "ru-RU"
-            )} USD</span></div>`;
-          }
-
-          breakdownHTML += `
-            <div class="breakdown-row total-row" style="border-top: 2px solid #ddd; margin-top: 8px; padding-top: 8px; font-weight: 700;">
-              <span>💰 Итого</span>
-              <span>${finalTotal.toLocaleString("ru-RU")} USD</span>
-            </div>
-          `;
-
-          breakdownElement.innerHTML = breakdownHTML;
         }, 100);
+      }
+
+      // Обновляем option'ы для типа автомобиля
+      function updateCarTypeOptions() {
+        if (!carTypeSelect) return;
+        carTypeSelect.innerHTML = `
+          <option value="sedan">Седан</option>
+          <option value="suv">SUV </option>
+          <option value="oversize">Оверсайз (тяжёлый/большой автомобиль)</option>
+        `;
       }
 
       // Навешиваем обработчики
@@ -1236,19 +1029,28 @@
           carTypeSelect,
           portSelect,
           isHybridCheckbox,
-          additionalServiceSelect,
         ];
         elements.forEach((el) => {
           if (el) el.addEventListener("input", calculate);
-          if (el && el.type !== "checkbox" && el.type !== "select-one") {
+          if (el && el.type !== "checkbox") {
             if (el.addEventListener) el.addEventListener("change", calculate);
           }
         });
       }
 
+      // Скрываем блок с детальной разбивкой
+      function hideBreakdown() {
+        const breakdownElement = document.getElementById("breakdown");
+        if (breakdownElement) {
+          breakdownElement.style.display = "none";
+        }
+      }
+
       // Инициализация
       populateLocationSelect();
+      updateCarTypeOptions();
       bindEvents();
+      hideBreakdown();
       calculate();
     }
 
@@ -1683,7 +1485,10 @@
     toggleButtonVisibility();
   })();
 
-  // ====================== ФУНКЦИИ ДЛЯ МОДАЛЬНОГО ОКНА ФОРМЫ ======================
+  // --------------------------------------------------------------
+  // 12 ФУНКЦИИ ДЛЯ МОДАЛЬНОГО ОКНА ФОРМЫ
+  // --------------------------------------------------------------
+
   function attachFormHandler(form) {
     if (!form) return;
     const oldHandler = form._submitHandler;
@@ -1757,7 +1562,6 @@
     form._submitHandler = submitHandler;
     form.addEventListener("submit", submitHandler);
   }
-
   // Открытие модального окна с формой
   document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("modalForm");
@@ -1833,4 +1637,138 @@
       }
     });
   });
+
+  // --------------------------------------------------------------
+  // 13. КУРСЫ ВАЛЮТ (АВТОМАТИЧЕСКОЕ ОБНОВЛЕНИЕ)
+  // --------------------------------------------------------------
+  const currencyWidget = document.getElementById("liveEur");
+
+  if (currencyWidget) {
+    // Функция получения курсов с API НБРБ
+    async function fetchExchangeRates() {
+      try {
+        // Используем API Национального банка Республики Беларусь
+        const response = await fetch(
+          "https://api.nbrb.by/exrates/rates?periodicity=0"
+        );
+
+        if (!response.ok) {
+          throw new Error("Ошибка загрузки курсов");
+        }
+
+        const data = await response.json();
+
+        // Находим курсы EUR и USD
+        const eurRate = data.find((rate) => rate.Cur_Abbreviation === "EUR");
+        const usdRate = data.find((rate) => rate.Cur_Abbreviation === "USD");
+
+        if (eurRate && usdRate) {
+          // Обновляем виджет с курсами
+          updateCurrencyDisplay(
+            eurRate.Cur_OfficialRate,
+            usdRate.Cur_OfficialRate
+          );
+
+          // Сохраняем в localStorage для кэширования
+          const cacheData = {
+            eur: eurRate.Cur_OfficialRate,
+            usd: usdRate.Cur_OfficialRate,
+            date: new Date().toISOString(),
+            eurDate: eurRate.Date,
+            usdDate: usdRate.Date,
+          };
+          localStorage.setItem("currencyRates", JSON.stringify(cacheData));
+        } else {
+          throw new Error("Курсы не найдены");
+        }
+      } catch (error) {
+        console.error("Ошибка получения курсов:", error);
+
+        // Пытаемся загрузить из кэша
+        const cachedData = localStorage.getItem("currencyRates");
+        if (cachedData) {
+          const cache = JSON.parse(cachedData);
+          updateCurrencyDisplay(cache.eur, cache.usd, true);
+        } else {
+          // Если нет кэша, показываем заглушку
+          currencyWidget.innerHTML =
+            '<div class="currency-error">Данные временно недоступны</div>';
+        }
+      }
+    }
+
+    // Функция обновления отображения курсов
+    function updateCurrencyDisplay(eur, usd, isCached = false) {
+      // Форматируем числа (2 знака после запятой)
+      const eurFormatted = eur.toFixed(2);
+      const usdFormatted = usd.toFixed(2);
+
+      // Получаем текущую дату
+      const today = new Date();
+      const dateStr = today.toLocaleDateString("ru-RU", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+
+      // Создаем HTML структуру
+      const html = `
+          <div class="currency-rates">
+            <div class="currency-row">
+              <span class="currency-label">🇪🇺 EUR/BYN:</span>
+              <strong class="currency-value">${eurFormatted}</strong>
+            </div>
+            <div class="currency-row">
+              <span class="currency-label">🇺🇸 USD/BYN:</span>
+              <strong class="currency-value">${usdFormatted}</strong>
+            </div>
+            <div class="currency-date">
+              Актуально на ${dateStr}${isCached ? " (кэшированные данные)" : ""}
+            </div>
+          </div>
+        `;
+
+      currencyWidget.innerHTML = html;
+    }
+
+    // Функция проверки необходимости обновления (раз в день)
+    function shouldUpdateCache() {
+      const cachedData = localStorage.getItem("currencyRates");
+      if (!cachedData) return true;
+
+      const cache = JSON.parse(cachedData);
+      const cacheDate = new Date(cache.date);
+      const today = new Date();
+
+      // Сравниваем даты (игнорируя время)
+      return cacheDate.toDateString() !== today.toDateString();
+    }
+
+    // Основная функция загрузки с проверкой кэша
+    async function loadRates() {
+      // Проверяем, нужно ли обновлять данные
+      if (shouldUpdateCache()) {
+        await fetchExchangeRates();
+      } else {
+        // Загружаем из кэша
+        const cachedData = localStorage.getItem("currencyRates");
+        if (cachedData) {
+          const cache = JSON.parse(cachedData);
+          updateCurrencyDisplay(cache.eur, cache.usd, true);
+        } else {
+          await fetchExchangeRates();
+        }
+      }
+    }
+
+    // Загружаем курсы при загрузке страницы
+    loadRates();
+
+    // Устанавливаем интервал проверки каждый час
+    setInterval(() => {
+      if (shouldUpdateCache()) {
+        fetchExchangeRates();
+      }
+    }, 3600000); // 1 час
+  }
 })();
