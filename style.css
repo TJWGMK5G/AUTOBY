@@ -93,31 +93,48 @@ body::before {
 }
 
 /* Логотип */
+/* Logo Container */
 .home-logo {
   position: relative;
   z-index: 999;
   display: flex;
   align-items: center;
+  gap: 12px; /* Space between image and text */
   text-decoration: none;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
+
 .home-logo:hover {
-  transform: scale(1.06);
+  transform: scale(1.05);
 }
-.home-logo__svg {
-  margin-right: 12px;
-  filter: drop-shadow(0 0 8px var(--accent-yellow));
+
+/* Logo Image Styling */
+.home-logo img {
+  height: 60px; /* Fixed height for consistency */
+  width: auto; /* Maintain aspect ratio */
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  transition: filter 0.3s ease;
 }
-.home-logo__svg path {
-  fill: var(--accent-yellow);
+
+.home-logo:hover img {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
 }
+
+/* Logo Text Styling */
 .home-logo__text {
-  font-size: 27px;
-  font-weight: 400;
+  font-size: 28px;
+  font-weight: 700; /* Bolder for better readability */
+  letter-spacing: -0.5px; /* Slight tightening for a sporty feel */
   background: linear-gradient(135deg, var(--accent-yellow), #ff9f4a);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.home-logo:hover::after {
+  width: 100%;
 }
 
 /* Навигация (десктопная) */
@@ -3504,25 +3521,56 @@ body::before {
 }
 
 /* ---------- FOOTER ---------- */
+/* Logo Container in Footer */
 .home-footer__logo-link {
-  color: white;
-  font-size: 32px;
-  margin-bottom: 16px;
   display: inline-flex;
   align-items: center;
+  gap: 12px;
   text-decoration: none;
+
+  transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
 
-.home-footer__logo-svg {
-  margin-right: 12px;
+.home-footer__logo-link:hover {
+  transform: scale(1.05);
 }
 
+/* Logo Image Styling */
+.home-footer__logo-img {
+  height: 60px; /* Match previous SVG height */
+  width: auto;
+  display: block;
+
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+/* Logo Text Styling */
 .home-footer__logo-text {
-  color: white;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #fff, #e0e0e0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease;
+  @media (max-width: 550px) {
+    font-size: 22px;
+  }
 }
 
+.home-footer__logo-link:hover .home-footer__logo-text {
+  background: linear-gradient(135deg, var(--accent-yellow), #ff9f4a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Description text */
 .home-footer__desc {
   max-width: 280px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
 }
 
 /* ---------- PARALLAX ---------- */
@@ -3530,7 +3578,7 @@ body::before {
   background-image: url("image/bg3.webp");
 }
 
-/* ==================== KACHOW CAR SLIDER ==================== */
+/* ==================== RS-Motors CAR SLIDER ==================== */
 .illustration-cars {
   max-width: 1400px;
   margin: 60px auto;
