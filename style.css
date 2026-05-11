@@ -108,10 +108,9 @@ body::before {
   transform: scale(1.05);
 }
 
-/* Logo Image Styling */
 .home-logo img {
-  height: 60px; /* Fixed height for consistency */
-  width: auto; /* Maintain aspect ratio */
+  height: 60px;
+  width: auto;
   display: block;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
   transition: filter 0.3s ease;
