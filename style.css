@@ -1264,16 +1264,6 @@ body::before {
   box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
-@keyframes bounceArrow {
-  0%,
-  100% {
-    transform: translateX(-50%) translateY(0);
-  }
-  50% {
-    transform: translateX(-50%) translateY(5px);
-  }
-}
-
 .home-why__item:not(.active) .accordion-arrow {
   animation: bounceArrow 1.5s ease-in-out infinite;
 }
@@ -1283,7 +1273,7 @@ body::before {
   .home-why__item .accordion-arrow {
     width: 28px;
     height: 28px;
-    bottom: 12px;
+    bottom: 0;
   }
 
   .home-why__item .accordion-arrow::before {
@@ -1294,7 +1284,7 @@ body::before {
 .home-why__icon {
   width: 50px;
   height: 50px;
-  margin-bottom: 20px;
+
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
   transition: transform 0.3s;
 }
@@ -1324,6 +1314,10 @@ body::before {
   line-height: 1.5;
   font-weight: 400;
   margin-bottom: 20px;
+  min-height: 100px;
+  @media (max-width: 996px) {
+    min-height: auto;
+  }
 }
 
 .home-why__item.active .home-why__preview {
@@ -1429,7 +1423,6 @@ body::before {
   .home-why__icon {
     width: 30px;
     height: 30px;
-    margin-bottom: 15px;
   }
   .home-why__item-list li {
     font-size: 13px;
@@ -1481,16 +1474,6 @@ body::before {
 .home-why__item.active .accordion-arrow {
   background: #ffd700;
   box-shadow: 0 0 12px rgba(255, 215, 0, 0.8);
-}
-
-@keyframes bounceArrow {
-  0%,
-  100% {
-    transform: translateX(-50%) translateY(0);
-  }
-  50% {
-    transform: translateX(-50%) translateY(6px);
-  }
 }
 
 .home-why__item:not(.active) .accordion-arrow {
