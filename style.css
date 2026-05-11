@@ -60,8 +60,24 @@ body::before {
   background: transparent;
   z-index: 1000;
   transition: all 0.3s ease;
+
+  @media (max-width: 1024px) {
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(0px);
+    background-color: #8e282399;
+    position: fixed;
+  }
 }
 
+/* Добавляем класс для скролла */
+.home-header.scrolled {
+  background: rgba(10, 15, 28, 0.95);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+/* Стили для модифицированного хедера (на внутренних страницах) */
 .home-header__modify {
   position: relative;
   background: linear-gradient(
@@ -69,6 +85,10 @@ body::before {
     rgba(230, 57, 71, 0.9),
     rgba(230, 57, 70, 0.9)
   );
+}
+
+.home-header__modify.scrolled {
+  background: linear-gradient(125deg, rgb(230, 57, 71), rgb(230, 57, 70));
 }
 
 .home-header__container {
