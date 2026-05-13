@@ -395,7 +395,7 @@
     const calculatorExists = document.getElementById("calculator");
 
     if (calculatorExists) {
-      // Данные из таблицы
+      // Данные из таблицы (полностью обновлены)
       const logisticsData = {
         // Базовые цены на инленд (перевозка по США до порта)
         inlandRates: {
@@ -808,79 +808,864 @@
           "York Springs": 325,
         },
 
-        // Стоимость доставки от порта (базовые ставки)
-        portToDestination: {
-          klaipeda: { sedan: 725, suv: 725 }, // Для Клайпеды — одинаковая цена
-          poti: { sedan: 895, suv: 895 }, // Для Грузии — базовая
+        // Стоимость перевозки от порта (для каждого города)
+        portToDestinationRates: {
+          klaipeda: {
+            Abilene: { sedan: 835, suv: 835 },
+            "ACE - Carson": { sedan: 1250, suv: 1250 },
+            "ACE - Perris": { sedan: 1250, suv: 1250 },
+            Adamsburg: { sedan: 725, suv: 725 },
+            Adelanto: { sedan: 1250, suv: 1250 },
+            "ADESA Boston": { sedan: 725, suv: 725 },
+            "ADESA Great Lakes": { sedan: 725, suv: 725 },
+            "ADESA New Jersey": { sedan: 725, suv: 725 },
+            "Adesa PA": { sedan: 725, suv: 725 },
+            "ADESA Sioux Falls": { sedan: 875, suv: 975 },
+            "ADESA St. John`s": { sedan: 850, suv: 950 },
+            "ADESA Wisconsin": { sedan: 875, suv: 975 },
+            "Akron-Canton": { sedan: 725, suv: 725 },
+            Albany: { sedan: 725, suv: 725 },
+            Albuquerque: { sedan: 835, suv: 835 },
+            Altoona: { sedan: 725, suv: 725 },
+            Amarillo: { sedan: 835, suv: 835 },
+            Anaheim: { sedan: 1250, suv: 1250 },
+            Anchorage: { sedan: 1725, suv: 1725 },
+            Andrews: { sedan: 835, suv: 835 },
+            Antelope: { sedan: 1250, suv: 1250 },
+            Appleton: { sedan: 875, suv: 975 },
+            "Arizona Auto Auction": { sedan: 1250, suv: 1250 },
+            Asheville: { sedan: 695, suv: 695 },
+            Ashland: { sedan: 875, suv: 975 },
+            "Atlanta Auto Auction": { sedan: 695, suv: 695 },
+            "Atlanta East": { sedan: 695, suv: 695 },
+            "Atlanta North": { sedan: 695, suv: 695 },
+            "Atlanta South": { sedan: 695, suv: 695 },
+            "Atlanta West": { sedan: 695, suv: 695 },
+            Augusta: { sedan: 695, suv: 695 },
+            Austin: { sedan: 835, suv: 835 },
+            "Avenel New Jersey": { sedan: 725, suv: 725 },
+            Bakersfield: { sedan: 1250, suv: 1250 },
+            Baltimore: { sedan: 725, suv: 725 },
+            Bangor: { sedan: 725, suv: 725 },
+            "Baton Rouge": { sedan: 835, suv: 835 },
+            "Bay Area": { sedan: 1250, suv: 1250 },
+            "Bel-Air Auto Auction": { sedan: 725, suv: 725 },
+            Billings: { sedan: 1725, suv: 1725 },
+            Birmingham: { sedan: 695, suv: 695 },
+            Boise: { sedan: 1725, suv: 1725 },
+            Boston: { sedan: 725, suv: 725 },
+            "Boston - Shirley": { sedan: 725, suv: 725 },
+            "Bowling Green": { sedan: 875, suv: 975 },
+            Bridgeport: { sedan: 725, suv: 725 },
+            Bridgeview: { sedan: 875, suv: 975 },
+            Buckhannon: { sedan: 725, suv: 725 },
+            Buffalo: { sedan: 725, suv: 725 },
+            Burlington: { sedan: 725, suv: 725 },
+            Calgary: { sedan: 850, suv: 950 },
+            Candia: { sedan: 725, suv: 725 },
+            Cartersville: { sedan: 695, suv: 695 },
+            Casper: { sedan: 1725, suv: 1725 },
+            "Cedar Rapids": { sedan: 875, suv: 975 },
+            "Central Auto Auction": { sedan: 725, suv: 725 },
+            "Central New Jersey": { sedan: 725, suv: 725 },
+            Chambersburg: { sedan: 725, suv: 725 },
+            "Charleston - SC": { sedan: 695, suv: 695 },
+            "Charleston - WV": { sedan: 725, suv: 725 },
+            Charlotte: { sedan: 695, suv: 695 },
+            Chattanooga: { sedan: 695, suv: 695 },
+            "Chicago North": { sedan: 875, suv: 975 },
+            "Chicago South": { sedan: 875, suv: 975 },
+            "Chicago West": { sedan: 875, suv: 975 },
+            "China Grove": { sedan: 695, suv: 695 },
+            Cicero: { sedan: 875, suv: 975 },
+            Cincinnati: { sedan: 725, suv: 725 },
+            Clayton: { sedan: 695, suv: 695 },
+            Clearwater: { sedan: 695, suv: 695 },
+            Cleveland: { sedan: 725, suv: 725 },
+            "Cleveland East": { sedan: 725, suv: 725 },
+            "Cleveland West": { sedan: 725, suv: 725 },
+            Clewiston: { sedan: 695, suv: 695 },
+            Clinton: { sedan: 695, suv: 695 },
+            "Colorado Springs": { sedan: 1250, suv: 1250 },
+            "Columbia MO": { sedan: 875, suv: 975 },
+            "Columbia SC": { sedan: 695, suv: 695 },
+            "Columbus AL": { sedan: 695, suv: 695 },
+            "Columbus OH": { sedan: 725, suv: 725 },
+            Concord: { sedan: 695, suv: 695 },
+            Cookstown: { sedan: 850, suv: 950 },
+            "Corpus Christi": { sedan: 835, suv: 835 },
+            "Culpeper,VA": { sedan: 725, suv: 725 },
+            Dallas: { sedan: 835, suv: 835 },
+            "Dallas South": { sedan: 835, suv: 835 },
+            Danville: { sedan: 695, suv: 695 },
+            Davenport: { sedan: 875, suv: 975 },
+            Dayton: { sedan: 725, suv: 725 },
+            "Defuniak Springs": { sedan: 695, suv: 695 },
+            Denver: { sedan: 835, suv: 835 },
+            "Denver South": { sedan: 835, suv: 835 },
+            "Des Moines": { sedan: 875, suv: 975 },
+            Detroit: { sedan: 875, suv: 975 },
+            Dothan: { sedan: 695, suv: 695 },
+            Dundalk: { sedan: 725, suv: 725 },
+            Dyer: { sedan: 875, suv: 975 },
+            Earlington: { sedan: 695, suv: 695 },
+            "East Bay": { sedan: 1250, suv: 1250 },
+            "East NC": { sedan: 695, suv: 695 },
+            Edmonton: { sedan: 850, suv: 950 },
+            "El Paso": { sedan: 835, suv: 835 },
+            Eldridge: { sedan: 875, suv: 975 },
+            Elkton: { sedan: 725, suv: 725 },
+            Englishtown: { sedan: 725, suv: 725 },
+            Erie: { sedan: 725, suv: 725 },
+            Essex: { sedan: 725, suv: 725 },
+            Eugene: { sedan: 1725, suv: 1725 },
+            Exeter: { sedan: 725, suv: 725 },
+            Fairburn: { sedan: 695, suv: 695 },
+            Fargo: { sedan: 875, suv: 975 },
+            Fayetteville: { sedan: 835, suv: 835 },
+            Flint: { sedan: 875, suv: 975 },
+            Florence: { sedan: 695, suv: 695 },
+            Fontana: { sedan: 1250, suv: 1250 },
+            "Fort Myers": { sedan: 695, suv: 695 },
+            "Fort Wayne": { sedan: 875, suv: 975 },
+            "Fort Worth North": { sedan: 835, suv: 835 },
+            "Four Oaks, NC": { sedan: 695, suv: 695 },
+            "Fredericksburg-South": { sedan: 725, suv: 725 },
+            Freetown: { sedan: 725, suv: 725 },
+            Fremont: { sedan: 1250, suv: 1250 },
+            Fresno: { sedan: 1250, suv: 1250 },
+            "Ft. Pierce": { sedan: 695, suv: 695 },
+            "Ft. Worth": { sedan: 835, suv: 835 },
+            "Ft.Lauderdale": { sedan: 695, suv: 695 },
+            Gastonia: { sedan: 695, suv: 695 },
+            "Glassboro East": { sedan: 725, suv: 725 },
+            "Glassboro West": { sedan: 725, suv: 725 },
+            "Golden Gate": { sedan: 1250, suv: 1250 },
+            "Gr.Rapids": { sedan: 875, suv: 975 },
+            Graham: { sedan: 1725, suv: 1725 },
+            "Grand Island": { sedan: 725, suv: 725 },
+            Grantville: { sedan: 725, suv: 725 },
+            "Greater Auto Auction Phoenix": { sedan: 1250, suv: 1250 },
+            Greensboro: { sedan: 695, suv: 695 },
+            Greenville: { sedan: 695, suv: 695 },
+            Greer: { sedan: 695, suv: 695 },
+            Grenada: { sedan: 695, suv: 695 },
+            "Gulf Coast": { sedan: 695, suv: 695 },
+            Gulfport: { sedan: 695, suv: 695 },
+            Halifax: { sedan: 850, suv: 950 },
+            Hamilton: { sedan: 850, suv: 950 },
+            Hammond: { sedan: 875, suv: 975 },
+            Hampton: { sedan: 850, suv: 950 },
+            "Hampton, VA": { sedan: 725, suv: 725 },
+            Harrisburg: { sedan: 725, suv: 725 },
+            Hartford: { sedan: 725, suv: 725 },
+            "Hartford City": { sedan: 875, suv: 975 },
+            "Hartford-South": { sedan: 725, suv: 725 },
+            Hatward: { sedan: 875, suv: 975 },
+            Hayward: { sedan: 1250, suv: 1250 },
+            Helena: { sedan: 1725, suv: 1725 },
+            "High Desert": { sedan: 1250, suv: 1250 },
+            "High Point": { sedan: 695, suv: 695 },
+            Honolulu: { sedan: 1250, suv: 1250 },
+            Houston: { sedan: 835, suv: 835 },
+            "Houston-North": { sedan: 835, suv: 835 },
+            Huntsville: { sedan: 695, suv: 695 },
+            Indianapolis: { sedan: 875, suv: 975 },
+            Ionia: { sedan: 875, suv: 975 },
+            Jackson: { sedan: 695, suv: 695 },
+            Jacksonville: { sedan: 695, suv: 695 },
+            "Jacksonville East": { sedan: 695, suv: 695 },
+            "Jacksonville West": { sedan: 695, suv: 695 },
+            "Kansas City": { sedan: 695, suv: 695 },
+            Kincheloe: { sedan: 875, suv: 975 },
+            Knoxville: { sedan: 695, suv: 695 },
+            Lafayette: { sedan: 835, suv: 835 },
+            "Lake City": { sedan: 695, suv: 695 },
+            Lansing: { sedan: 875, suv: 975 },
+            "Las Vegas": { sedan: 1250, suv: 1250 },
+            Laurel: { sedan: 725, suv: 725 },
+            "Lexington East KY": { sedan: 875, suv: 975 },
+            "Lexington SC": { sedan: 695, suv: 695 },
+            "Lexington West KY": { sedan: 875, suv: 975 },
+            "Lincoln, IL": { sedan: 875, suv: 975 },
+            "Lincoln, NE": { sedan: 875, suv: 975 },
+            "Little Rock": { sedan: 835, suv: 835 },
+            London: { sedan: 850, suv: 950 },
+            "Long Beach": { sedan: 1250, suv: 1250 },
+            "Long Island": { sedan: 725, suv: 725 },
+            Longview: { sedan: 835, suv: 835 },
+            "Los Angeles": { sedan: 1250, suv: 1250 },
+            "Los Angeles - Adesa": { sedan: 1250, suv: 1250 },
+            Louisville: { sedan: 875, suv: 975 },
+            Lubbock: { sedan: 835, suv: 835 },
+            Lufkin: { sedan: 835, suv: 835 },
+            Lumberton: { sedan: 695, suv: 695 },
+            Lyman: { sedan: 725, suv: 725 },
+            Macon: { sedan: 695, suv: 695 },
+            Madison: { sedan: 875, suv: 975 },
+            "Madison Heights": { sedan: 725, suv: 725 },
+            Manchester: { sedan: 725, suv: 725 },
+            "Manheim Albany": { sedan: 725, suv: 725 },
+            "Manheim Arena Illinois": { sedan: 875, suv: 975 },
+            "Manheim Auto Auction": { sedan: 725, suv: 725 },
+            "Manheim Baltimore-Washington": { sedan: 725, suv: 725 },
+            "Manheim Bishop Brothers": { sedan: 695, suv: 695 },
+            "Manheim California": { sedan: 1250, suv: 1250 },
+            "Manheim Carleton": { sedan: 725, suv: 725 },
+            "Manheim Central California": { sedan: 1250, suv: 1250 },
+            "Manheim Central Florida": { sedan: 695, suv: 695 },
+            "Manheim Chicago": { sedan: 875, suv: 975 },
+            "Manheim Cincinnati": { sedan: 725, suv: 725 },
+            "Manheim Colorado": { sedan: 875, suv: 975 },
+            "Manheim Dallas": { sedan: 835, suv: 835 },
+            "Manheim Dallas-Ft Worth": { sedan: 835, suv: 835 },
+            "Manheim Darlington": { sedan: 695, suv: 695 },
+            "Manheim Daytona Beach": { sedan: 695, suv: 695 },
+            "Manheim Denver": { sedan: 835, suv: 835 },
+            "Manheim Detroit": { sedan: 725, suv: 725 },
+            "Manheim Fort Lauderdale": { sedan: 695, suv: 695 },
+            "Manheim Fort Myers": { sedan: 695, suv: 695 },
+            "Manheim Fort Wayne": { sedan: 875, suv: 975 },
+            "Manheim Fredericksburg": { sedan: 725, suv: 725 },
+            "Manheim Georgia": { sedan: 695, suv: 695 },
+            "Manheim Harrisonburg": { sedan: 725, suv: 725 },
+            "Manheim Imperial Auto Auction": { sedan: 695, suv: 695 },
+            "Manheim Kentucky": { sedan: 725, suv: 725 },
+            "Manheim Lafayette": { sedan: 835, suv: 835 },
+            "Manheim Lakeland": { sedan: 695, suv: 695 },
+            "Manheim Metro Milwaukee": { sedan: 875, suv: 975 },
+            "Manheim Milwaukee": { sedan: 875, suv: 975 },
+            "Manheim Mississippi": { sedan: 695, suv: 695 },
+            "Manheim Missouri": { sedan: 875, suv: 975 },
+            "Manheim Montreal": { sedan: 850, suv: 950 },
+            "Manheim Nashville": { sedan: 695, suv: 695 },
+            "Manheim Nevada": { sedan: 1250, suv: 1250 },
+            "Manheim New England": { sedan: 725, suv: 725 },
+            "Manheim New Jersey": { sedan: 725, suv: 725 },
+            "Manheim New Mexico": { sedan: 835, suv: 835 },
+            "Manheim New Orleans": { sedan: 695, suv: 695 },
+            "Manheim New York": { sedan: 725, suv: 725 },
+            "Manheim North Carolina": { sedan: 695, suv: 695 },
+            "Manheim Northstar Minnesota": { sedan: 875, suv: 975 },
+            "Manheim Ohio": { sedan: 725, suv: 725 },
+            "Manheim Oklahoma City": { sedan: 835, suv: 835 },
+            "Manheim Orlando": { sedan: 695, suv: 695 },
+            "Manheim Oshawa": { sedan: 850, suv: 950 },
+            "MANHEIM PALM BEACH": { sedan: 695, suv: 695 },
+            "Manheim Pennsylvania": { sedan: 725, suv: 725 },
+            "Manheim Pensacola": { sedan: 695, suv: 695 },
+            "Manheim Philadelphia": { sedan: 725, suv: 725 },
+            "Manheim Phoenix": { sedan: 1250, suv: 1250 },
+            "Manheim Pittsburg": { sedan: 725, suv: 725 },
+            "Manheim Riverside": { sedan: 1250, suv: 1250 },
+            "Manheim San Antonio": { sedan: 835, suv: 835 },
+            "Manheim San Diego": { sedan: 1250, suv: 1250 },
+            "Manheim San Francisco Bay": { sedan: 1250, suv: 1250 },
+            "Manheim Seattle": { sedan: 1725, suv: 1725 },
+            "Manheim Skyline Auto Auction": { sedan: 725, suv: 725 },
+            "Manheim Southern California": { sedan: 1250, suv: 1250 },
+            "Manheim St Louis": { sedan: 695, suv: 695 },
+            "Manheim St. Pete": { sedan: 695, suv: 695 },
+            "Manheim Statesville": { sedan: 700, suv: 695 },
+            "MANHEIM TAMPA": { sedan: 695, suv: 695 },
+            "Manheim Tennessee": { sedan: 695, suv: 695 },
+            "Manheim Texas Hobby": { sedan: 835, suv: 835 },
+            "Manheim Toronto": { sedan: 850, suv: 950 },
+            "Manheim Tucson": { sedan: 1250, suv: 1250 },
+            "Manheim Utah": { sedan: 1250, suv: 1250 },
+            "Manheim Virginia (FREDERICKSBURG)": { sedan: 725, suv: 725 },
+            Martinez: { sedan: 1250, suv: 1250 },
+            MCAllen: { sedan: 835, suv: 835 },
+            Mebane: { sedan: 695, suv: 695 },
+            Memphis: { sedan: 695, suv: 695 },
+            Mentone: { sedan: 1250, suv: 1250 },
+            "Metro DC": { sedan: 725, suv: 725 },
+            Miami: { sedan: 695, suv: 695 },
+            "Miami Central": { sedan: 695, suv: 695 },
+            "Miami North": { sedan: 695, suv: 695 },
+            "Miami South": { sedan: 695, suv: 695 },
+            Middletown: { sedan: 725, suv: 725 },
+            Milwaukee: { sedan: 875, suv: 975 },
+            Minneapolis: { sedan: 875, suv: 975 },
+            "Minneapolis /St. Paul": { sedan: 875, suv: 975 },
+            "Minneapolis North": { sedan: 875, suv: 975 },
+            Missoula: { sedan: 1725, suv: 1725 },
+            Mobile: { sedan: 695, suv: 695 },
+            Mocksville: { sedan: 695, suv: 695 },
+            Moncton: { sedan: 850, suv: 950 },
+            Montgomery: { sedan: 695, suv: 695 },
+            Monticello: { sedan: 725, suv: 725 },
+            Montreal: { sedan: 850, suv: 950 },
+            Napa: { sedan: 1250, suv: 1250 },
+            Nashville: { sedan: 695, suv: 695 },
+            "National Auto Dealers Exchange": { sedan: 725, suv: 725 },
+            "New Castle": { sedan: 725, suv: 725 },
+            "New Orleans": { sedan: 695, suv: 695 },
+            Newburgh: { sedan: 725, suv: 725 },
+            "North Boston": { sedan: 725, suv: 725 },
+            "North Charleston - SC": { sedan: 695, suv: 695 },
+            "North Hollywood": { sedan: 1250, suv: 1250 },
+            "North Seattle": { sedan: 1725, suv: 1725 },
+            "Northern New Jersey": { sedan: 725, suv: 725 },
+            "Northern Virginia": { sedan: 725, suv: 725 },
+            Ocala: { sedan: 695, suv: 695 },
+            Ogden: { sedan: 1250, suv: 1250 },
+            "Oklahoma City": { sedan: 835, suv: 835 },
+            Omaha: { sedan: 875, suv: 975 },
+            Orlando: { sedan: 695, suv: 695 },
+            "Orlando North": { sedan: 695, suv: 695 },
+            "Orlando South": { sedan: 695, suv: 695 },
+            Ottawa: { sedan: 850, suv: 950 },
+            Paducah: { sedan: 875, suv: 975 },
+            Pasco: { sedan: 1725, suv: 1725 },
+            Pensacola: { sedan: 695, suv: 695 },
+            Peoria: { sedan: 875, suv: 975 },
+            "Permian Basin": { sedan: 835, suv: 835 },
+            Philadelphia: { sedan: 725, suv: 725 },
+            "Philadelphia East": { sedan: 725, suv: 725 },
+            Phoenix: { sedan: 1250, suv: 1250 },
+            Pittsburg: { sedan: 725, suv: 725 },
+            "Pittsburgh South": { sedan: 725, suv: 725 },
+            "Port Murray": { sedan: 725, suv: 725 },
+            Portage: { sedan: 875, suv: 975 },
+            Portland: { sedan: 1725, suv: 1725 },
+            "Portland - Gorham": { sedan: 725, suv: 725 },
+            "Portland North": { sedan: 1725, suv: 1725 },
+            "Portland South": { sedan: 1725, suv: 1725 },
+            "Portland West": { sedan: 1725, suv: 1725 },
+            Providence: { sedan: 725, suv: 725 },
+            Pulaski: { sedan: 725, suv: 725 },
+            "Punta Gorda": { sedan: 695, suv: 695 },
+            Puyallup: { sedan: 1725, suv: 1725 },
+            Quebec: { sedan: 850, suv: 950 },
+            "Quebec city": { sedan: 850, suv: 950 },
+            Raleigh: { sedan: 695, suv: 695 },
+            "Rancho Cucamonga": { sedan: 1250, suv: 1250 },
+            "Rapid City": { sedan: 875, suv: 975 },
+            Redding: { sedan: 1250, suv: 1250 },
+            Regina: { sedan: 850, suv: 950 },
+            Reno: { sedan: 1250, suv: 1250 },
+            Richmond: { sedan: 725, suv: 725 },
+            Riverside: { sedan: 1250, suv: 1250 },
+            Roanoke: { sedan: 725, suv: 725 },
+            Rochester: { sedan: 725, suv: 725 },
+            Rosedale: { sedan: 725, suv: 725 },
+            Rutland: { sedan: 725, suv: 725 },
+            Sacramento: { sedan: 1250, suv: 1250 },
+            Salisbury: { sedan: 725, suv: 725 },
+            "Salt Lake City": { sedan: 1250, suv: 1250 },
+            "San Antonio": { sedan: 835, suv: 835 },
+            "San Bernardino": { sedan: 1250, suv: 1250 },
+            "San Diego": { sedan: 1250, suv: 1250 },
+            "San Jose": { sedan: 1250, suv: 1250 },
+            Sarasota: { sedan: 695, suv: 695 },
+            Savannah: { sedan: 695, suv: 695 },
+            Sayreville: { sedan: 725, suv: 725 },
+            Scranton: { sedan: 725, suv: 725 },
+            Seaford: { sedan: 725, suv: 725 },
+            Seattle: { sedan: 1725, suv: 1725 },
+            "Shady Spring, WV": { sedan: 725, suv: 725 },
+            Shreveport: { sedan: 835, suv: 835 },
+            Sikeston: { sedan: 875, suv: 975 },
+            "Sioux Falls": { sedan: 875, suv: 975 },
+            "So Sacramento": { sedan: 1250, suv: 1250 },
+            Somerville: { sedan: 725, suv: 725 },
+            "South Bend": { sedan: 875, suv: 975 },
+            "South Boston": { sedan: 725, suv: 725 },
+            "Southern Illinois": { sedan: 695, suv: 695 },
+            "Southern New Jersey": { sedan: 725, suv: 725 },
+            Spanaway: { sedan: 1725, suv: 1725 },
+            Spartanburg: { sedan: 695, suv: 695 },
+            Spokane: { sedan: 1725, suv: 1725 },
+            Springfield: { sedan: 695, suv: 695 },
+            "St. Cloud": { sedan: 875, suv: 975 },
+            "St. John's": { sedan: 850, suv: 950 },
+            "St. Louis, IL": { sedan: 695, suv: 695 },
+            "St. Louis, MO": { sedan: 695, suv: 695 },
+            Stockton: { sedan: 1250, suv: 1250 },
+            Sudbury: { sedan: 850, suv: 950 },
+            Suffolk: { sedan: 725, suv: 725 },
+            "Sun Valley": { sedan: 1250, suv: 1250 },
+            Syracuse: { sedan: 725, suv: 725 },
+            Tallahassee: { sedan: 695, suv: 695 },
+            Tampa: { sedan: 695, suv: 695 },
+            "Tampa South": { sedan: 695, suv: 695 },
+            Tanner: { sedan: 695, suv: 695 },
+            Taunton: { sedan: 725, suv: 725 },
+            Templeton: { sedan: 725, suv: 725 },
+            Tidewater: { sedan: 725, suv: 725 },
+            Tifton: { sedan: 695, suv: 695 },
+            Toronto: { sedan: 850, suv: 950 },
+            "TOTAL RESOURCE AUC CENTRL PENN": { sedan: 725, suv: 725 },
+            Trenton: { sedan: 725, suv: 725 },
+            Tucson: { sedan: 1250, suv: 1250 },
+            Tulsa: { sedan: 835, suv: 835 },
+            Vallejo: { sedan: 1250, suv: 1250 },
+            "Van Nuys": { sedan: 1250, suv: 1250 },
+            Vancouver: { sedan: 850, suv: 950 },
+            Waco: { sedan: 835, suv: 835 },
+            Walton: { sedan: 875, suv: 975 },
+            WashingtonDC: { sedan: 725, suv: 725 },
+            Wayland: { sedan: 875, suv: 975 },
+            Webster: { sedan: 725, suv: 725 },
+            "West Palm Beach": { sedan: 695, suv: 695 },
+            "West Warren": { sedan: 725, suv: 725 },
+            "Western Colorado": { sedan: 1250, suv: 1250 },
+            Wheeling: { sedan: 875, suv: 975 },
+            Wichita: { sedan: 835, suv: 835 },
+            Wilmington: { sedan: 695, suv: 695 },
+            Windham: { sedan: 725, suv: 725 },
+            Winnipeg: { sedan: 850, suv: 950 },
+            "York Haven": { sedan: 725, suv: 725 },
+            "York Springs": { sedan: 725, suv: 725 },
+          },
+          poti: {
+            Abilene: { sedan: 1180, suv: 1180 },
+            "ACE - Carson": { sedan: 1595, suv: 1595 },
+            "ACE - Perris": { sedan: 1595, suv: 1595 },
+            Adamsburg: { sedan: 895, suv: 895 },
+            Adelanto: { sedan: 1595, suv: 1595 },
+            "ADESA Boston": { sedan: 895, suv: 895 },
+            "ADESA Great Lakes": { sedan: 895, suv: 895 },
+            "ADESA New Jersey": { sedan: 895, suv: 895 },
+            "Adesa PA": { sedan: 895, suv: 895 },
+            "ADESA Sioux Falls": { sedan: 1200, suv: 1200 },
+            "ADESA St. John`s": { sedan: 1150, suv: 1300 },
+            "ADESA Wisconsin": { sedan: 1200, suv: 1200 },
+            "Akron-Canton": { sedan: 895, suv: 895 },
+            Albany: { sedan: 895, suv: 895 },
+            Albuquerque: { sedan: 1180, suv: 1180 },
+            Altoona: { sedan: 895, suv: 895 },
+            Amarillo: { sedan: 1180, suv: 1180 },
+            Anaheim: { sedan: 1595, suv: 1595 },
+            Anchorage: { sedan: 1600, suv: 1600 },
+            Andrews: { sedan: 1180, suv: 1180 },
+            Antelope: { sedan: 1595, suv: 1595 },
+            Appleton: { sedan: 1200, suv: 1200 },
+            "Arizona Auto Auction": { sedan: 1595, suv: 1595 },
+            Asheville: { sedan: 850, suv: 850 },
+            Ashland: { sedan: 1200, suv: 1200 },
+            "Atlanta Auto Auction": { sedan: 850, suv: 850 },
+            "Atlanta East": { sedan: 850, suv: 850 },
+            "Atlanta North": { sedan: 850, suv: 850 },
+            "Atlanta South": { sedan: 850, suv: 850 },
+            "Atlanta West": { sedan: 850, suv: 850 },
+            Augusta: { sedan: 850, suv: 850 },
+            Austin: { sedan: 1180, suv: 1180 },
+            "Avenel New Jersey": { sedan: 895, suv: 895 },
+            Bakersfield: { sedan: 1595, suv: 1595 },
+            Baltimore: { sedan: 895, suv: 895 },
+            Bangor: { sedan: 895, suv: 895 },
+            "Baton Rouge": { sedan: 1180, suv: 1180 },
+            "Bay Area": { sedan: 1595, suv: 1595 },
+            "Bel-Air Auto Auction": { sedan: 895, suv: 895 },
+            Billings: { sedan: 1600, suv: 1600 },
+            Birmingham: { sedan: 850, suv: 850 },
+            Boise: { sedan: 1600, suv: 1600 },
+            Boston: { sedan: 895, suv: 895 },
+            "Boston - Shirley": { sedan: 895, suv: 895 },
+            "Bowling Green": { sedan: 1200, suv: 1200 },
+            Bridgeport: { sedan: 895, suv: 895 },
+            Bridgeview: { sedan: 1200, suv: 1200 },
+            Buckhannon: { sedan: 895, suv: 895 },
+            Buffalo: { sedan: 895, suv: 895 },
+            Burlington: { sedan: 895, suv: 895 },
+            Calgary: { sedan: 1150, suv: 1300 },
+            Candia: { sedan: 895, suv: 895 },
+            Cartersville: { sedan: 850, suv: 850 },
+            Casper: { sedan: 1600, suv: 1600 },
+            "Cedar Rapids": { sedan: 1200, suv: 1200 },
+            "Central Auto Auction": { sedan: 895, suv: 895 },
+            "Central New Jersey": { sedan: 895, suv: 895 },
+            Chambersburg: { sedan: 895, suv: 895 },
+            "Charleston - SC": { sedan: 850, suv: 850 },
+            "Charleston - WV": { sedan: 895, suv: 895 },
+            Charlotte: { sedan: 850, suv: 850 },
+            Chattanooga: { sedan: 850, suv: 850 },
+            "Chicago North": { sedan: 1200, suv: 1200 },
+            "Chicago South": { sedan: 1200, suv: 1200 },
+            "Chicago West": { sedan: 1200, suv: 1200 },
+            "China Grove": { sedan: 850, suv: 850 },
+            Cicero: { sedan: 1200, suv: 1200 },
+            Cincinnati: { sedan: 895, suv: 895 },
+            Clayton: { sedan: 850, suv: 850 },
+            Clearwater: { sedan: 850, suv: 850 },
+            Cleveland: { sedan: 895, suv: 895 },
+            "Cleveland East": { sedan: 895, suv: 895 },
+            "Cleveland West": { sedan: 895, suv: 895 },
+            Clewiston: { sedan: 850, suv: 850 },
+            Clinton: { sedan: 850, suv: 850 },
+            "Colorado Springs": { sedan: 1595, suv: 1595 },
+            "Columbia MO": { sedan: 1200, suv: 1200 },
+            "Columbia SC": { sedan: 850, suv: 850 },
+            "Columbus AL": { sedan: 850, suv: 850 },
+            "Columbus OH": { sedan: 895, suv: 895 },
+            Concord: { sedan: 850, suv: 850 },
+            Cookstown: { sedan: 1150, suv: 1300 },
+            "Corpus Christi": { sedan: 1180, suv: 1180 },
+            "Culpeper,VA": { sedan: 895, suv: 895 },
+            Dallas: { sedan: 1180, suv: 1180 },
+            "Dallas South": { sedan: 1180, suv: 1180 },
+            Danville: { sedan: 850, suv: 850 },
+            Davenport: { sedan: 1200, suv: 1200 },
+            Dayton: { sedan: 895, suv: 895 },
+            "Defuniak Springs": { sedan: 850, suv: 850 },
+            Denver: { sedan: 1180, suv: 1180 },
+            "Denver South": { sedan: 1180, suv: 1180 },
+            "Des Moines": { sedan: 1200, suv: 1200 },
+            Detroit: { sedan: 1200, suv: 1200 },
+            Dothan: { sedan: 850, suv: 850 },
+            Dundalk: { sedan: 895, suv: 895 },
+            Dyer: { sedan: 1200, suv: 1200 },
+            Earlington: { sedan: 850, suv: 850 },
+            "East Bay": { sedan: 1595, suv: 1595 },
+            "East NC": { sedan: 850, suv: 850 },
+            Edmonton: { sedan: 1150, suv: 1300 },
+            "El Paso": { sedan: 1180, suv: 1180 },
+            Eldridge: { sedan: 1200, suv: 1200 },
+            Elkton: { sedan: 895, suv: 895 },
+            Englishtown: { sedan: 895, suv: 895 },
+            Erie: { sedan: 895, suv: 895 },
+            Essex: { sedan: 895, suv: 895 },
+            Eugene: { sedan: 1600, suv: 1600 },
+            Exeter: { sedan: 895, suv: 895 },
+            Fairburn: { sedan: 850, suv: 850 },
+            Fargo: { sedan: 1200, suv: 1200 },
+            Fayetteville: { sedan: 1180, suv: 1180 },
+            Flint: { sedan: 1200, suv: 1200 },
+            Florence: { sedan: 850, suv: 850 },
+            Fontana: { sedan: 1595, suv: 1595 },
+            "Fort Myers": { sedan: 850, suv: 850 },
+            "Fort Wayne": { sedan: 1200, suv: 1200 },
+            "Fort Worth North": { sedan: 1180, suv: 1180 },
+            "Four Oaks, NC": { sedan: 850, suv: 850 },
+            "Fredericksburg-South": { sedan: 895, suv: 895 },
+            Freetown: { sedan: 895, suv: 895 },
+            Fremont: { sedan: 1595, suv: 1595 },
+            Fresno: { sedan: 1595, suv: 1595 },
+            "Ft. Pierce": { sedan: 850, suv: 850 },
+            "Ft. Worth": { sedan: 1180, suv: 1180 },
+            "Ft.Lauderdale": { sedan: 850, suv: 850 },
+            Gastonia: { sedan: 850, suv: 850 },
+            "Glassboro East": { sedan: 895, suv: 895 },
+            "Glassboro West": { sedan: 895, suv: 895 },
+            "Golden Gate": { sedan: 1595, suv: 1595 },
+            "Gr.Rapids": { sedan: 1200, suv: 1200 },
+            Graham: { sedan: 1600, suv: 1600 },
+            "Grand Island": { sedan: 895, suv: 895 },
+            Grantville: { sedan: 895, suv: 895 },
+            "Greater Auto Auction Phoenix": { sedan: 1595, suv: 1595 },
+            Greensboro: { sedan: 850, suv: 850 },
+            Greenville: { sedan: 850, suv: 850 },
+            Greer: { sedan: 850, suv: 850 },
+            Grenada: { sedan: 850, suv: 850 },
+            "Gulf Coast": { sedan: 850, suv: 850 },
+            Gulfport: { sedan: 850, suv: 850 },
+            Halifax: { sedan: 1150, suv: 1300 },
+            Hamilton: { sedan: 1150, suv: 1300 },
+            Hammond: { sedan: 1200, suv: 1200 },
+            Hampton: { sedan: 1150, suv: 1300 },
+            "Hampton, VA": { sedan: 895, suv: 895 },
+            Harrisburg: { sedan: 895, suv: 895 },
+            Hartford: { sedan: 895, suv: 895 },
+            "Hartford City": { sedan: 1200, suv: 1200 },
+            "Hartford-South": { sedan: 895, suv: 895 },
+            Hatward: { sedan: 1200, suv: 1200 },
+            Hayward: { sedan: 1595, suv: 1595 },
+            Helena: { sedan: 1600, suv: 1600 },
+            "High Desert": { sedan: 1595, suv: 1595 },
+            "High Point": { sedan: 850, suv: 850 },
+            Honolulu: { sedan: 1595, suv: 1595 },
+            Houston: { sedan: 1180, suv: 1180 },
+            "Houston-North": { sedan: 1180, suv: 1180 },
+            Huntsville: { sedan: 850, suv: 850 },
+            Indianapolis: { sedan: 1200, suv: 1200 },
+            Ionia: { sedan: 1200, suv: 1200 },
+            Jackson: { sedan: 850, suv: 850 },
+            Jacksonville: { sedan: 850, suv: 850 },
+            "Jacksonville East": { sedan: 850, suv: 850 },
+            "Jacksonville West": { sedan: 850, suv: 850 },
+            "Kansas City": { sedan: 850, suv: 850 },
+            Kincheloe: { sedan: 1200, suv: 1200 },
+            Knoxville: { sedan: 850, suv: 850 },
+            Lafayette: { sedan: 1180, suv: 1180 },
+            "Lake City": { sedan: 850, suv: 850 },
+            Lansing: { sedan: 1200, suv: 1200 },
+            "Las Vegas": { sedan: 1595, suv: 1595 },
+            Laurel: { sedan: 895, suv: 895 },
+            "Lexington East KY": { sedan: 1200, suv: 1200 },
+            "Lexington SC": { sedan: 850, suv: 850 },
+            "Lexington West KY": { sedan: 1200, suv: 1200 },
+            "Lincoln, IL": { sedan: 1200, suv: 1200 },
+            "Lincoln, NE": { sedan: 1200, suv: 1200 },
+            "Little Rock": { sedan: 1180, suv: 1180 },
+            London: { sedan: 1150, suv: 1300 },
+            "Long Beach": { sedan: 1595, suv: 1595 },
+            "Long Island": { sedan: 895, suv: 895 },
+            Longview: { sedan: 1180, suv: 1180 },
+            "Los Angeles": { sedan: 1595, suv: 1595 },
+            "Los Angeles - Adesa": { sedan: 1595, suv: 1595 },
+            Louisville: { sedan: 1200, suv: 1200 },
+            Lubbock: { sedan: 1180, suv: 1180 },
+            Lufkin: { sedan: 1180, suv: 1180 },
+            Lumberton: { sedan: 850, suv: 850 },
+            Lyman: { sedan: 895, suv: 895 },
+            Macon: { sedan: 850, suv: 850 },
+            Madison: { sedan: 1200, suv: 1200 },
+            "Madison Heights": { sedan: 895, suv: 895 },
+            Manchester: { sedan: 895, suv: 895 },
+            "Manheim Albany": { sedan: 895, suv: 895 },
+            "Manheim Arena Illinois": { sedan: 1200, suv: 1200 },
+            "Manheim Auto Auction": { sedan: 895, suv: 895 },
+            "Manheim Baltimore-Washington": { sedan: 895, suv: 895 },
+            "Manheim Bishop Brothers": { sedan: 850, suv: 850 },
+            "Manheim California": { sedan: 1595, suv: 1595 },
+            "Manheim Carleton": { sedan: 895, suv: 895 },
+            "Manheim Central California": { sedan: 1595, suv: 1595 },
+            "Manheim Central Florida": { sedan: 850, suv: 850 },
+            "Manheim Chicago": { sedan: 1200, suv: 1200 },
+            "Manheim Cincinnati": { sedan: 895, suv: 895 },
+            "Manheim Colorado": { sedan: 1200, suv: 1200 },
+            "Manheim Dallas": { sedan: 1180, suv: 1180 },
+            "Manheim Dallas-Ft Worth": { sedan: 1180, suv: 1180 },
+            "Manheim Darlington": { sedan: 850, suv: 850 },
+            "Manheim Daytona Beach": { sedan: 850, suv: 850 },
+            "Manheim Denver": { sedan: 1180, suv: 1180 },
+            "Manheim Detroit": { sedan: 895, suv: 895 },
+            "Manheim Fort Lauderdale": { sedan: 850, suv: 850 },
+            "Manheim Fort Myers": { sedan: 850, suv: 850 },
+            "Manheim Fort Wayne": { sedan: 1200, suv: 1200 },
+            "Manheim Fredericksburg": { sedan: 895, suv: 895 },
+            "Manheim Georgia": { sedan: 850, suv: 850 },
+            "Manheim Harrisonburg": { sedan: 895, suv: 895 },
+            "Manheim Imperial Auto Auction": { sedan: 850, suv: 850 },
+            "Manheim Kentucky": { sedan: 895, suv: 895 },
+            "Manheim Lafayette": { sedan: 1180, suv: 1180 },
+            "Manheim Lakeland": { sedan: 850, suv: 850 },
+            "Manheim Metro Milwaukee": { sedan: 1200, suv: 1200 },
+            "Manheim Milwaukee": { sedan: 1200, suv: 1200 },
+            "Manheim Mississippi": { sedan: 850, suv: 850 },
+            "Manheim Missouri": { sedan: 1200, suv: 1200 },
+            "Manheim Montreal": { sedan: 1150, suv: 1300 },
+            "Manheim Nashville": { sedan: 850, suv: 850 },
+            "Manheim Nevada": { sedan: 1595, suv: 1595 },
+            "Manheim New England": { sedan: 895, suv: 895 },
+            "Manheim New Jersey": { sedan: 895, suv: 895 },
+            "Manheim New Mexico": { sedan: 1180, suv: 1180 },
+            "Manheim New Orleans": { sedan: 850, suv: 850 },
+            "Manheim New York": { sedan: 895, suv: 895 },
+            "Manheim North Carolina": { sedan: 850, suv: 850 },
+            "Manheim Northstar Minnesota": { sedan: 1200, suv: 1200 },
+            "Manheim Ohio": { sedan: 895, suv: 895 },
+            "Manheim Oklahoma City": { sedan: 1180, suv: 1180 },
+            "Manheim Orlando": { sedan: 850, suv: 850 },
+            "Manheim Oshawa": { sedan: 1150, suv: 1300 },
+            "MANHEIM PALM BEACH": { sedan: 850, suv: 850 },
+            "Manheim Pennsylvania": { sedan: 895, suv: 895 },
+            "Manheim Pensacola": { sedan: 850, suv: 850 },
+            "Manheim Philadelphia": { sedan: 895, suv: 895 },
+            "Manheim Phoenix": { sedan: 1595, suv: 1595 },
+            "Manheim Pittsburg": { sedan: 895, suv: 895 },
+            "Manheim Riverside": { sedan: 1595, suv: 1595 },
+            "Manheim San Antonio": { sedan: 1180, suv: 1180 },
+            "Manheim San Diego": { sedan: 1595, suv: 1595 },
+            "Manheim San Francisco Bay": { sedan: 1595, suv: 1595 },
+            "Manheim Seattle": { sedan: 1600, suv: 1600 },
+            "Manheim Skyline Auto Auction": { sedan: 895, suv: 895 },
+            "Manheim Southern California": { sedan: 1595, suv: 1595 },
+            "Manheim St Louis": { sedan: 850, suv: 850 },
+            "Manheim St. Pete": { sedan: 850, suv: 850 },
+            "Manheim Statesville": { sedan: 850, suv: 850 },
+            "MANHEIM TAMPA": { sedan: 850, suv: 850 },
+            "Manheim Tennessee": { sedan: 850, suv: 850 },
+            "Manheim Texas Hobby": { sedan: 1180, suv: 1180 },
+            "Manheim Toronto": { sedan: 1150, suv: 1300 },
+            "Manheim Tucson": { sedan: 1595, suv: 1595 },
+            "Manheim Utah": { sedan: 1595, suv: 1595 },
+            "Manheim Virginia (FREDERICKSBURG)": { sedan: 895, suv: 895 },
+            Martinez: { sedan: 1595, suv: 1595 },
+            MCAllen: { sedan: 1180, suv: 1180 },
+            Mebane: { sedan: 850, suv: 850 },
+            Memphis: { sedan: 850, suv: 850 },
+            Mentone: { sedan: 1595, suv: 1595 },
+            "Metro DC": { sedan: 895, suv: 895 },
+            Miami: { sedan: 850, suv: 850 },
+            "Miami Central": { sedan: 850, suv: 850 },
+            "Miami North": { sedan: 850, suv: 850 },
+            "Miami South": { sedan: 850, suv: 850 },
+            Middletown: { sedan: 895, suv: 895 },
+            Milwaukee: { sedan: 1200, suv: 1200 },
+            Minneapolis: { sedan: 1200, suv: 1200 },
+            "Minneapolis /St. Paul": { sedan: 1200, suv: 1200 },
+            "Minneapolis North": { sedan: 1200, suv: 1200 },
+            Missoula: { sedan: 1600, suv: 1600 },
+            Mobile: { sedan: 850, suv: 850 },
+            Mocksville: { sedan: 850, suv: 850 },
+            Moncton: { sedan: 1150, suv: 1300 },
+            Montgomery: { sedan: 850, suv: 850 },
+            Monticello: { sedan: 895, suv: 895 },
+            Montreal: { sedan: 1150, suv: 1300 },
+            Napa: { sedan: 1595, suv: 1595 },
+            Nashville: { sedan: 850, suv: 850 },
+            "National Auto Dealers Exchange": { sedan: 895, suv: 895 },
+            "New Castle": { sedan: 895, suv: 895 },
+            "New Orleans": { sedan: 850, suv: 850 },
+            Newburgh: { sedan: 895, suv: 895 },
+            "North Boston": { sedan: 895, suv: 895 },
+            "North Charleston - SC": { sedan: 850, suv: 850 },
+            "North Hollywood": { sedan: 1595, suv: 1595 },
+            "North Seattle": { sedan: 1600, suv: 1600 },
+            "Northern New Jersey": { sedan: 895, suv: 895 },
+            "Northern Virginia": { sedan: 895, suv: 895 },
+            Ocala: { sedan: 850, suv: 850 },
+            Ogden: { sedan: 1595, suv: 1595 },
+            "Oklahoma City": { sedan: 1180, suv: 1180 },
+            Omaha: { sedan: 1200, suv: 1200 },
+            Orlando: { sedan: 850, suv: 850 },
+            "Orlando North": { sedan: 850, suv: 850 },
+            "Orlando South": { sedan: 850, suv: 850 },
+            Ottawa: { sedan: 1150, suv: 1300 },
+            Paducah: { sedan: 1200, suv: 1200 },
+            Pasco: { sedan: 1600, suv: 1600 },
+            Pensacola: { sedan: 850, suv: 850 },
+            Peoria: { sedan: 1200, suv: 1200 },
+            "Permian Basin": { sedan: 1180, suv: 1180 },
+            Philadelphia: { sedan: 895, suv: 895 },
+            "Philadelphia East": { sedan: 895, suv: 895 },
+            Phoenix: { sedan: 1595, suv: 1595 },
+            Pittsburg: { sedan: 895, suv: 895 },
+            "Pittsburgh South": { sedan: 895, suv: 895 },
+            "Port Murray": { sedan: 895, suv: 895 },
+            Portage: { sedan: 1200, suv: 1200 },
+            Portland: { sedan: 1600, suv: 1600 },
+            "Portland - Gorham": { sedan: 895, suv: 895 },
+            "Portland North": { sedan: 1600, suv: 1600 },
+            "Portland South": { sedan: 1600, suv: 1600 },
+            "Portland West": { sedan: 1600, suv: 1600 },
+            Providence: { sedan: 895, suv: 895 },
+            Pulaski: { sedan: 895, suv: 895 },
+            "Punta Gorda": { sedan: 850, suv: 850 },
+            Puyallup: { sedan: 1600, suv: 1600 },
+            Quebec: { sedan: 1150, suv: 1300 },
+            "Quebec city": { sedan: 1150, suv: 1300 },
+            Raleigh: { sedan: 850, suv: 850 },
+            "Rancho Cucamonga": { sedan: 1595, suv: 1595 },
+            "Rapid City": { sedan: 1200, suv: 1200 },
+            Redding: { sedan: 1595, suv: 1595 },
+            Regina: { sedan: 1150, suv: 1300 },
+            Reno: { sedan: 1595, suv: 1595 },
+            Richmond: { sedan: 895, suv: 895 },
+            Riverside: { sedan: 1595, suv: 1595 },
+            Roanoke: { sedan: 895, suv: 895 },
+            Rochester: { sedan: 895, suv: 895 },
+            Rosedale: { sedan: 895, suv: 895 },
+            Rutland: { sedan: 895, suv: 895 },
+            Sacramento: { sedan: 1595, suv: 1595 },
+            Salisbury: { sedan: 895, suv: 895 },
+            "Salt Lake City": { sedan: 1595, suv: 1595 },
+            "San Antonio": { sedan: 1180, suv: 1180 },
+            "San Bernardino": { sedan: 1595, suv: 1595 },
+            "San Diego": { sedan: 1595, suv: 1595 },
+            "San Jose": { sedan: 1595, suv: 1595 },
+            Sarasota: { sedan: 850, suv: 850 },
+            Savannah: { sedan: 850, suv: 850 },
+            Sayreville: { sedan: 895, suv: 895 },
+            Scranton: { sedan: 895, suv: 895 },
+            Seaford: { sedan: 895, suv: 895 },
+            Seattle: { sedan: 1600, suv: 1600 },
+            "Shady Spring, WV": { sedan: 895, suv: 895 },
+            Shreveport: { sedan: 1180, suv: 1180 },
+            Sikeston: { sedan: 1200, suv: 1200 },
+            "Sioux Falls": { sedan: 1200, suv: 1200 },
+            "So Sacramento": { sedan: 1595, suv: 1595 },
+            Somerville: { sedan: 895, suv: 895 },
+            "South Bend": { sedan: 1200, suv: 1200 },
+            "South Boston": { sedan: 895, suv: 895 },
+            "Southern Illinois": { sedan: 850, suv: 850 },
+            "Southern New Jersey": { sedan: 895, suv: 895 },
+            Spanaway: { sedan: 1600, suv: 1600 },
+            Spartanburg: { sedan: 850, suv: 850 },
+            Spokane: { sedan: 1600, suv: 1600 },
+            Springfield: { sedan: 850, suv: 850 },
+            "St. Cloud": { sedan: 1200, suv: 1200 },
+            "St. John's": { sedan: 1150, suv: 1300 },
+            "St. Louis, IL": { sedan: 850, suv: 850 },
+            "St. Louis, MO": { sedan: 850, suv: 850 },
+            Stockton: { sedan: 1595, suv: 1595 },
+            Sudbury: { sedan: 1150, suv: 1300 },
+            Suffolk: { sedan: 895, suv: 895 },
+            "Sun Valley": { sedan: 1595, suv: 1595 },
+            Syracuse: { sedan: 895, suv: 895 },
+            Tallahassee: { sedan: 850, suv: 850 },
+            Tampa: { sedan: 850, suv: 850 },
+            "Tampa South": { sedan: 850, suv: 850 },
+            Tanner: { sedan: 850, suv: 850 },
+            Taunton: { sedan: 895, suv: 895 },
+            Templeton: { sedan: 895, suv: 895 },
+            Tidewater: { sedan: 895, suv: 895 },
+            Tifton: { sedan: 850, suv: 850 },
+            Toronto: { sedan: 1150, suv: 1300 },
+            "TOTAL RESOURCE AUC CENTRL PENN": { sedan: 895, suv: 895 },
+            Trenton: { sedan: 895, suv: 895 },
+            Tucson: { sedan: 1595, suv: 1595 },
+            Tulsa: { sedan: 1180, suv: 1180 },
+            Vallejo: { sedan: 1595, suv: 1595 },
+            "Van Nuys": { sedan: 1595, suv: 1595 },
+            Vancouver: { sedan: 1150, suv: 1300 },
+            Waco: { sedan: 1180, suv: 1180 },
+            Walton: { sedan: 1200, suv: 1200 },
+            WashingtonDC: { sedan: 895, suv: 895 },
+            Wayland: { sedan: 1200, suv: 1200 },
+            Webster: { sedan: 895, suv: 895 },
+            "West Palm Beach": { sedan: 850, suv: 850 },
+            "West Warren": { sedan: 895, suv: 895 },
+            "Western Colorado": { sedan: 1595, suv: 1595 },
+            Wheeling: { sedan: 1200, suv: 1200 },
+            Wichita: { sedan: 1180, suv: 1180 },
+            Wilmington: { sedan: 850, suv: 850 },
+            Windham: { sedan: 895, suv: 895 },
+            Winnipeg: { sedan: 1150, suv: 1300 },
+            "York Haven": { sedan: 895, suv: 895 },
+            "York Springs": { sedan: 895, suv: 895 },
+          },
         },
       };
 
+      // Функция для получения ставки портовой доставки (с учётом города)
+      function getPortRate(city, portType, autoType) {
+        // Проверяем наличие данных для города
+        if (
+          logisticsData.portToDestinationRates[portType] &&
+          logisticsData.portToDestinationRates[portType][city]
+        ) {
+          const rate =
+            logisticsData.portToDestinationRates[portType][city][autoType];
+          return rate;
+        }
+
+        // Если данных нет, возвращаем базовую ставку (fallback)
+        console.warn(
+          `Город ${city} не найден в portToDestinationRates для порта ${portType}, используется базовая ставка`
+        );
+        const baseRates = {
+          klaipeda: { sedan: 725, suv: 725 },
+          poti: { sedan: 895, suv: 895 },
+        };
+        return baseRates[portType][autoType];
+      }
+
       // Дополнительные сборы
       const extraFees = {
-        hybridFee: 150, // $ для гибридов и электро
-        oversizeMultiplier: 1.5, // коэффициент для оверсайз (седан * 1.5)
-        suvMultiplier: 1.0, // коэффициент для SUV (без изменений)
-        // Стоимость автовоза по направлениям
+        hybridFee: 150,
+        oversizeMultiplier: 1.5,
         autoTransporter: {
-          klaipeda: 1000, // Литва
-          poti: 2000, // Грузия
+          klaipeda: 1000,
+          poti: 2000,
         },
-        // Стоимость дополнительных услуг (все три доступа суммируются)
         additionalServices: {
-          service1: 100, // Доступ 1
-          service2: 250, // Доступ 2
-          service3: 450, // Доступ 3
-        },
-        // Альтернативные цены для некоторых регионов
-        specialPortRates: {
-          Abilene: {
-            klaipeda: { sedan: 835, suv: 835 },
-            poti: { sedan: 1180, suv: 1180 },
-          },
-          "ACE - Carson": {
-            klaipeda: { sedan: 1250, suv: 1250 },
-            poti: { sedan: 1595, suv: 1595 },
-          },
-          "ACE - Perris": {
-            klaipeda: { sedan: 1250, suv: 1250 },
-            poti: { sedan: 1595, suv: 1595 },
-          },
-          Adamsburg: {
-            klaipeda: { sedan: 725, suv: 725 },
-            poti: { sedan: 895, suv: 895 },
-          },
-          Adelanto: {
-            klaipeda: { sedan: 1250, suv: 1250 },
-            poti: { sedan: 1595, suv: 1595 },
-          },
-          "ADESA Boston": {
-            klaipeda: { sedan: 725, suv: 725 },
-            poti: { sedan: 895, suv: 895 },
-          },
-          "ADESA Great Lakes": {
-            klaipeda: { sedan: 725, suv: 725 },
-            poti: { sedan: 895, suv: 895 },
-          },
-          Albuquerque: {
-            klaipeda: { sedan: 835, suv: 835 },
-            poti: { sedan: 1180, suv: 1180 },
-          },
-          Amarillo: {
-            klaipeda: { sedan: 835, suv: 835 },
-            poti: { sedan: 1180, suv: 1180 },
-          },
-          Anchorage: {
-            klaipeda: { sedan: 1725, suv: 1725 },
-            poti: { sedan: 1600, suv: 1600 },
-          },
-          Billings: {
-            klaipeda: { sedan: 1725, suv: 1725 },
-            poti: { sedan: 1600, suv: 1600 },
-          },
-          Boise: {
-            klaipeda: { sedan: 1725, suv: 1725 },
-            poti: { sedan: 1600, suv: 1600 },
-          },
+          service1: 100,
+          service2: 250,
+          service3: 450,
         },
       };
 
@@ -891,7 +1676,6 @@
       const carTypeSelect = document.getElementById("carType");
       const portSelect = document.getElementById("port");
       const isHybridCheckbox = document.getElementById("isHybrid");
-
       const finalTotalElement = document.getElementById("finalTotal");
 
       // Заполняем select с локациями
@@ -908,63 +1692,7 @@
         });
       }
 
-      // Получить стоимость инленда для локации
-      function getInlandRate(location) {
-        return logisticsData.inlandRates[location] || null;
-      }
-
-      // Получить стоимость доставки от порта с учётом типа автомобиля
-      function getPortToDestinationRate(location, port, carType) {
-        // Определяем базовую ставку в зависимости от типа авто
-        let baseRate;
-
-        // Проверяем особые тарифы
-        if (
-          extraFees.specialPortRates[location] &&
-          extraFees.specialPortRates[location][port]
-        ) {
-          // Для оверсайз используем ставку седана из особых тарифов
-          if (carType === "oversize") {
-            baseRate = extraFees.specialPortRates[location][port].sedan;
-          } else {
-            baseRate = extraFees.specialPortRates[location][port][carType];
-          }
-        } else {
-          // Стандартные тарифы
-          const standardRate = logisticsData.portToDestination[port];
-          if (carType === "oversize") {
-            baseRate = standardRate ? standardRate.sedan : 895;
-          } else {
-            baseRate = standardRate ? standardRate[carType] : 895;
-          }
-        }
-
-        // Применяем коэффициенты для разных типов авто
-        if (carType === "oversize") {
-          return baseRate * extraFees.oversizeMultiplier;
-        } else if (carType === "suv") {
-          return baseRate * extraFees.suvMultiplier;
-        }
-
-        return baseRate;
-      }
-
-      // Получить стоимость автовоза
-      function getAutoTransporterRate(port) {
-        return extraFees.autoTransporter[port] || 0;
-      }
-
-      // Получить общую стоимость всех дополнительных услуг
-      function getTotalAdditionalServicesRate() {
-        // Все три услуги всегда включены
-        return (
-          extraFees.additionalServices.service1 +
-          extraFees.additionalServices.service2 +
-          extraFees.additionalServices.service3
-        );
-      }
-
-      // Основная функция расчёта
+      // Основная функция расчёта (исправленная)
       function calculate() {
         if (calculationTimeout) clearTimeout(calculationTimeout);
         calculationTimeout = setTimeout(() => {
@@ -976,29 +1704,40 @@
 
           // Проверяем выбранную локацию
           if (!location || !logisticsData.inlandRates[location]) {
-            finalTotalElement.textContent = "— USD";
+            if (finalTotalElement) finalTotalElement.textContent = "— USD";
             return;
           }
 
           // 1. Инленд (перевозка по США)
-          const inlandCost = getInlandRate(location);
+          const inlandCost = logisticsData.inlandRates[location];
 
-          // 2. Доставка от порта (с учётом типа авто)
-          let portDelivery = getPortToDestinationRate(location, port, carType);
+          // 2. Доставка от порта с учётом типа авто (используем исправленную функцию)
+          let portRate;
+          if (carType === "oversize") {
+            // Для оверсайз используем ставку седана (не умноженную)
+            portRate = getPortRate(location, port, "sedan");
+            // Применяем оверсайз коэффициент только к портовой ставке
+            portRate = portRate * extraFees.oversizeMultiplier;
+          } else {
+            portRate = getPortRate(location, port, carType);
+          }
 
           // 3. Сбор за гибрид/электро
           const hybridFee = isHybrid ? extraFees.hybridFee : 0;
 
           // 4. Стоимость автовоза
-          const autoTransporterCost = getAutoTransporterRate(port);
+          const autoTransporterCost = extraFees.autoTransporter[port] || 0;
 
           // 5. Стоимость всех дополнительных услуг (все три сразу)
-          const additionalServicesTotal = getTotalAdditionalServicesRate();
+          const additionalServicesTotal =
+            extraFees.additionalServices.service1 +
+            extraFees.additionalServices.service2 +
+            extraFees.additionalServices.service3;
 
           // Итоговая стоимость
           const finalTotal =
             inlandCost +
-            portDelivery +
+            portRate +
             hybridFee +
             autoTransporterCost +
             additionalServicesTotal;
@@ -1008,7 +1747,8 @@
             Math.round(value).toLocaleString("ru-RU") + " USD";
 
           // Обновляем UI
-          finalTotalElement.textContent = formatUSD(finalTotal);
+          if (finalTotalElement)
+            finalTotalElement.textContent = formatUSD(finalTotal);
         }, 100);
       }
 
@@ -1017,7 +1757,7 @@
         if (!carTypeSelect) return;
         carTypeSelect.innerHTML = `
           <option value="sedan">Седан</option>
-          <option value="suv">SUV </option>
+          <option value="suv">SUV</option>
           <option value="oversize">Оверсайз (тяжёлый/большой автомобиль)</option>
         `;
       }
@@ -1031,9 +1771,11 @@
           isHybridCheckbox,
         ];
         elements.forEach((el) => {
-          if (el) el.addEventListener("input", calculate);
-          if (el && el.type !== "checkbox") {
-            if (el.addEventListener) el.addEventListener("change", calculate);
+          if (el) {
+            el.addEventListener("input", calculate);
+            if (el.type !== "checkbox") {
+              el.addEventListener("change", calculate);
+            }
           }
         });
       }

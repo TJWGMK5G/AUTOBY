@@ -3084,12 +3084,6 @@ body::before {
   background-image: linear-gradient(145deg, #2a2a2a, #111111);
 }
 
-.info-grid > div:hover {
-  transform: translateY(-3px);
-  border-left-width: 10px;
-  background: #222;
-}
-
 /* Стили для виджета курсов валют */
 .currency-widget {
   padding: 10px;
