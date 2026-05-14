@@ -3242,6 +3242,64 @@ body::before {
     auto;
 }
 
+.final-price-byn {
+  font-size: 24px;
+  font-weight: 600;
+  color: #4ade80;
+  text-shadow: 3px 3px 0 #14532d;
+  margin-top: 8px;
+  padding-top: 8px;
+  padding-bottom: 4px;
+  border-top: 2px solid;
+  border-image: linear-gradient(90deg, #f39c12, #e67e22, #f1c40f) 1;
+  border-top-style: solid;
+  position: relative;
+
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.final-price-byn::before {
+  content: "🏁";
+  font-size: 14px;
+  margin-right: 6px;
+  background: none;
+  -webkit-text-fill-color: initial;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+/* Стили для предупреждения об оверсайзе */
+.oversize-warning {
+  display: block;
+  background-color: #fff3cd;
+  border-left: 4px solid #ffc107;
+  padding: 12px 15px;
+  margin-top: 15px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #856404;
+}
+
+.oversize-warning strong {
+  font-weight: 700;
+}
+
+/* Адаптив для мобильных устройств */
+@media (max-width: 768px) {
+  .final-price-byn {
+    font-size: 20px;
+  }
+
+  .oversize-warning {
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+}
+/* === CALCULATOR */
+
 /* === ПЛАВНЫЙ PARALLAX */
 .parallax-divider {
   position: relative;

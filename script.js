@@ -1677,6 +1677,8 @@
       const portSelect = document.getElementById("port");
       const isHybridCheckbox = document.getElementById("isHybrid");
       const finalTotalElement = document.getElementById("finalTotal");
+      const finalTotalBYNElement = document.getElementById("finalTotalBYN");
+      const oversizeWarningElement = document.getElementById("oversizeWarning");
 
       // Заполняем select с локациями
       function populateLocationSelect() {
@@ -1692,19 +1694,119 @@
         });
       }
 
+      // Функция для получения курса USD/BYN с API Национального банка РБ
+      async function getUSDBYNRate() {
+        // Только проверенные, рабочие URL
+        const apiUrls = [
+          "https://api.nbrb.by/exrates/rates/431", // основной рабочий URL (без ?parammode=2)
+          "https://www.nbrb.by/api/exrates/rates/431", // альтернативный эндпоинт
+          "https://api.nbrb.by/exrates/rates/usd?parammode=2", // по коду валюты
+        ];
+
+        for (const url of apiUrls) {
+          try {
+            const response = await fetch(url, {
+              method: "GET",
+              headers: { Accept: "application/json" },
+              mode: "cors",
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              let rate = null;
+
+              // Универсальная проверка формата ответа
+              if (data?.Cur_OfficialRate) {
+                rate = data.Cur_OfficialRate;
+              } else if (data?.Rate) {
+                rate = data.Rate;
+              } else if (Array.isArray(data) && data[0]?.Cur_OfficialRate) {
+                rate = data[0].Cur_OfficialRate;
+              }
+
+              if (rate && !isNaN(rate) && rate > 0) {
+                console.log("✅ Курс USD/BYN успешно получен:", rate);
+                return rate;
+              }
+            }
+          } catch (error) {
+            console.warn(`⚠️ Ошибка при запросе к ${url}:`, error.message);
+            continue; // Пробуем следующий URL
+          }
+        }
+
+        // Если все API не сработали, используем fallback
+        console.warn(
+          "⚠️ Не удалось получить курс с API НБРБ, используем резервный вариант"
+        );
+        return getFallbackRate();
+      }
+      // Функция для получения запасного курса
+      async function getFallbackRate() {
+        // 1. Пробуем ваш серверный прокси (рекомендуемый способ)
+        try {
+          const response = await fetch("/api/usd-rate", { method: "GET" });
+          if (response.ok) {
+            const data = await response.json();
+            if (data?.rate && !isNaN(data.rate) && data.rate > 0) {
+              console.log("✅ Курс получен через серверный прокси:", data.rate);
+              return data.rate;
+            }
+          }
+        } catch (error) {
+          console.warn("Серверный эндпоинт не доступен");
+        }
+
+        // 2. Пробуем публичное API (может быть заблокировано CORS)
+        try {
+          const response = await fetch(
+            "https://api.exchangerate-api.com/v4/latest/USD"
+          );
+          if (response.ok) {
+            const data = await response.json();
+            if (data?.rates?.BYN) {
+              console.log(
+                "✅ Курс получен через ExchangeRate-API:",
+                data.rates.BYN
+              );
+              return data.rates.BYN;
+            }
+          }
+        } catch (error) {
+          console.warn("ExchangeRate-API не доступен");
+        }
+
+        // 3. Финальный резервный курс (обновляйте при необходимости)
+        const FALLBACK_RATE = 3.2;
+        console.warn(
+          `⚠️ Используем приблизительный курс USD/BYN = ${FALLBACK_RATE}`
+        );
+        return FALLBACK_RATE;
+      }
+
       // Основная функция расчёта (исправленная)
-      function calculate() {
+      async function calculate() {
         if (calculationTimeout) clearTimeout(calculationTimeout);
-        calculationTimeout = setTimeout(() => {
+        calculationTimeout = setTimeout(async () => {
           // Получаем значения
           const location = locationSelect?.value;
           const carType = carTypeSelect?.value;
           const port = portSelect?.value;
           const isHybrid = isHybridCheckbox?.checked || false;
+          const isOversize = carType === "oversize";
+
+          // Показываем/скрываем предупреждение об оверсайзе
+          if (oversizeWarningElement) {
+            oversizeWarningElement.style.display = isOversize
+              ? "block"
+              : "none";
+          }
 
           // Проверяем выбранную локацию
           if (!location || !logisticsData.inlandRates[location]) {
             if (finalTotalElement) finalTotalElement.textContent = "— USD";
+            if (finalTotalBYNElement)
+              finalTotalBYNElement.textContent = "— BYN";
             return;
           }
 
@@ -1713,7 +1815,7 @@
 
           // 2. Доставка от порта с учётом типа авто (используем исправленную функцию)
           let portRate;
-          if (carType === "oversize") {
+          if (isOversize) {
             // Для оверсайз используем ставку седана (не умноженную)
             portRate = getPortRate(location, port, "sedan");
             // Применяем оверсайз коэффициент только к портовой ставке
@@ -1734,21 +1836,32 @@
             extraFees.additionalServices.service2 +
             extraFees.additionalServices.service3;
 
-          // Итоговая стоимость
-          const finalTotal =
+          // Итоговая стоимость в USD
+          const finalTotalUSD =
             inlandCost +
             portRate +
             hybridFee +
             autoTransporterCost +
             additionalServicesTotal;
 
-          // Форматируем
+          // Форматируем USD
           const formatUSD = (value) =>
             Math.round(value).toLocaleString("ru-RU") + " USD";
 
-          // Обновляем UI
+          // Обновляем USD в UI
           if (finalTotalElement)
-            finalTotalElement.textContent = formatUSD(finalTotal);
+            finalTotalElement.textContent = formatUSD(finalTotalUSD);
+
+          // Получаем курс и обновляем BYN
+          const usdRate = await getUSDBYNRate();
+          if (usdRate && finalTotalBYNElement) {
+            const finalTotalBYN = finalTotalUSD * usdRate;
+            const formatBYN = (value) =>
+              Math.round(value).toLocaleString("ru-RU") + " BYN";
+            finalTotalBYNElement.textContent = `≈ ${formatBYN(finalTotalBYN)}`;
+          } else if (finalTotalBYNElement) {
+            finalTotalBYNElement.textContent = "— BYN (курс не загружен)";
+          }
         }, 100);
       }
 
@@ -1756,10 +1869,10 @@
       function updateCarTypeOptions() {
         if (!carTypeSelect) return;
         carTypeSelect.innerHTML = `
-          <option value="sedan">Седан</option>
-          <option value="suv">SUV</option>
-          <option value="oversize">Оверсайз (тяжёлый/большой автомобиль)</option>
-        `;
+            <option value="sedan">Седан</option>
+            <option value="suv">SUV</option>
+            <option value="oversize">Оверсайз (тяжёлый/большой автомобиль)</option>
+          `;
       }
 
       // Навешиваем обработчики

@@ -984,16 +984,6 @@
                 </select>
               </div>
 
-              <!-- <div class="form-group">
-                <label for="additionalService">Дополнительные услуги</label>
-                <select id="additionalService" class="form-control">
-                  <option value="none">— Без услуг —</option>
-                  <option value="service1">Доступ 1 — $100</option>
-                  <option value="service2">Доступ 2 — $250</option>
-                  <option value="service3">Доступ 3 — $450</option>
-                </select>
-              </div> -->
-
               <div class="form-group checkbox-group-inline">
                 <label class="checkbox-label">
                   <input type="checkbox" id="isHybrid" />
@@ -1020,10 +1010,26 @@
                 <div id="finalTotal" class="final-price" aria-live="polite">
                   — USD
                 </div>
-                <span class="rate-info"
-                  >* Все цены указаны в USD. Стоимость автовоза включена в
-                  расчёт.</span
+                <div
+                  id="finalTotalBYN"
+                  class="final-price-byn"
+                  aria-live="polite"
                 >
+                  — BYN
+                </div>
+                <span class="rate-info">
+                  * Все цены указаны в USD. Стоимость автовоза включена в
+                  расчёт.
+                </span>
+                <span
+                  id="oversizeWarning"
+                  class="oversize-warning"
+                  style="display: none"
+                >
+                  ⚠️ <strong>Внимание!</strong> Для оверсайз-автомобилей
+                  (тяжёлые/большие) цена может существенно отличаться. Необходим
+                  индивидуальный расчёт под каждое авто!
+                </span>
               </div>
               <a href="/#contact" class="home-hero__cta home-calculator__cta"
                 >ЗАКАЗАТЬ РАСЧЁТ ПОД ВАШЕ АВТО →</a
