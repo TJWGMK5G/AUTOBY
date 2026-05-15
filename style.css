@@ -80,11 +80,7 @@ body::before {
 /* Стили для модифицированного хедера (на внутренних страницах) */
 .home-header__modify {
   position: relative;
-  background: linear-gradient(
-    125deg,
-    rgba(230, 57, 71, 0.9),
-    rgba(230, 57, 70, 0.9)
-  );
+  background: linear-gradient(125deg, rgb(79 0 6 / 90%), rgb(157 9 20 / 90%));
 }
 
 .home-header__modify.scrolled {
