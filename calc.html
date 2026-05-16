@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <meta property="og:type" content="website" />
+    <meta name="color-scheme" content="only light" />
+    <link type="image/x-icon" href="image/favicon.ico" rel="icon" />
+    <title>Калькулятор</title>
+    <!-- ШРИФТЫ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Асинхронная загрузка шрифтов -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'; this.onload=null;"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- ==================== HEADER ==================== -->
+    <header class="home-header home-header__modify">
+      <div class="home-header__container">
+        <!-- Верхняя строка: логотип слева, бургер справа -->
+        <div class="home-header-top">
+          <a href="index.html" class="home-logo">
+            <img src="image/logo.png" alt="logo" />
+            <span class="home-logo__text">RS-Motors</span>
+          </a>
+          <div
+            class="home-burger"
+            id="home-burger-toggle"
+            aria-label="Открыть меню"
+            role="button"
+          >
+            <span class="home-burger__line"></span>
+            <span class="home-burger__line"></span>
+            <span class="home-burger__line"></span>
+          </div>
+          <!-- Навигация (мобильное меню) -->
+          <nav class="home-nav" id="home-nav-menu">
+            <ul class="home-nav__list">
+              <li><a href="index.html" class="home-nav__link">Главная</a></li>
+              <li>
+                <a href="index.html#inventory" class="home-nav__link"
+                  >Автопарк</a
+                >
+              </li>
+              <li>
+                <a href="index.html#service" class="home-nav__link">Услуги</a>
+              </li>
+              <li>
+                <a href="index.html#calculator" class="home-nav__link"
+                  >Калькулятор</a
+                >
+              </li>
+              <li>
+                <a href="index.html#contact" class="home-nav__link">Контакты</a>
+              </li>
+            </ul>
+            <!-- Мобильная версия контактов (дублируется внутри меню) -->
+            <div class="mobile-contacts-block" style="display: none"></div>
+          </nav>
+        </div>
+
+        <!-- Блок контактов снизу по центру (на мобилках) -->
+        <div class="header-contacts">
+          <a href="tel:+375293189865" class="contact-phone">
+            <span class="phone-icon">📞</span>
+            <span class="phone-number">+375293189865</span>
+          </a>
+          <div class="contacts-divider"></div>
+          <div class="social-links">
+            <a
+              href="https://t.me/rsmotorsinfo"
+              target="_blank"
+              class="social-icon-link"
+            >
+              <svg
+                class="social-icon"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.065-1.226-.461-1.901-.904-1.056-.694-1.653-1.126-2.678-1.804-1.185-.784-.417-1.215.259-1.92.177-.184 3.248-2.977 3.307-3.23.007-.032.014-.15-.056-.213-.07-.063-.174-.041-.249-.024-.106.024-1.793 1.14-5.062 3.345-.479.329-.913.489-1.302.48-.428-.009-1.252-.242-1.865-.441-.751-.244-1.349-.373-1.297-.787.027-.216.324-.437.891-.663 1.733-.755 4.532-1.567 7.363-2.103 2.355-.445 3.163-.28 3.7.021.436.244.566.675.517 1.111z"
+                  fill="yellow"
+                />
+              </svg>
+            </a>
+            <a
+              href="https://www.instagram.com/rsmotors.by?igsh=MTBqbjR6OTczYzV2aw=="
+              target="_blank"
+              class="social-icon-link"
+            >
+              <svg
+                class="social-icon"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.336 3.608 1.311.975.975 1.249 2.242 1.311 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.336 2.633-1.311 3.608-.975.975-2.242 1.249-3.608 1.311-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.336-3.608-1.311-.975-.975-1.249-2.242-1.311-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.336-2.633 1.311-3.608.975-.975 2.242-1.249 3.608-1.311 1.266-.058 1.646-.07 4.85-.07zM12 0C8.741 0 8.332.014 7.052.072 5.197.157 3.548.588 2.197 1.939.646 3.49.214 5.396.13 7.502.072 8.782.058 9.191.058 12s.014 3.218.072 4.498c.084 2.106.516 4.012 2.067 5.563 1.649 1.649 3.553 2.081 5.659 2.165 1.28.058 1.689.072 4.502.072s3.222-.014 4.502-.072c2.106-.084 4.01-.516 5.559-2.067 1.649-1.649 2.081-3.553 2.165-5.659.058-1.28.072-1.689.072-4.502s-.014-3.222-.072-4.502c-.084-2.106-.516-4.01-2.067-5.559C21.009.645 19.105.213 16.999.129 15.719.071 15.31.057 12.001.057zM12 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"
+                  fill="yellow"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section>
+        <!-- ЗАЩИТА ПАРОЛЕМ -->
+        <div id="passwordOverlay" class="password-overlay">
+          <div class="password-card">
+            <h3>🔐 Доступ ограничен</h3>
+            <p>Введите пароль для открытия калькулятора логистики</p>
+            <input
+              type="password"
+              id="passwordInput"
+              class="password-input"
+              placeholder="Пароль"
+              autofocus
+            />
+            <button id="unlockBtn" class="password-btn">ВОЙТИ</button>
+            <div id="passError" class="error-msg" style="display: none">
+              ❌ Неверный пароль, попробуйте снова
+            </div>
+          </div>
+        </div>
+
+        <!-- ОСНОВНОЙ БЛОК (калькулятор) -->
+        <div id="calculatorContent" style="display: none">
+          <div class="calculator-main">
+            <section class="home-calculator" id="calculator">
+              <div class="home-calculator__container">
+                <div class="calculator-warning">
+                  <strong>Внимание!</strong> Все расчёты в калькуляторе являются
+                  <strong>ориентировочными</strong>.<br />
+                  Точная стоимость зависит от конкретного места стоянки, типа
+                  автомобиля, текущего курса валют и других факторов.<br />
+                  Для получения точного расчёта под ваш запрос — обратитесь к
+                  нашему специалисту.
+                </div>
+
+                <div class="home-calculator__header">
+                  <div class="home-featured__pretitle">
+                    РАССЧИТАЙТЕ СТОИМОСТЬ
+                  </div>
+                  <h2>Калькулятор доставки авто из США/Канады</h2>
+                  <p>
+                    Автоперевозка до портов Европы • Инленд по США • Расчёт за
+                    15 секунд
+                  </p>
+                </div>
+
+                <div class="home-calculator__grid">
+                  <!-- Форма -->
+                  <div class="home-calculator__form">
+                    <div class="form-group">
+                      <label for="location">Место стоянки / Аукцион</label>
+                      <select id="location" class="form-control">
+                        <option value="">
+                          -- Выберите город или аукцион --
+                        </option>
+                      </select>
+                      <span class="form-hint"
+                        >Или начните вводить название</span
+                      >
+                    </div>
+
+                    <div class="form-group">
+                      <label for="carType">Тип автомобиля</label>
+                      <select id="carType" class="form-control">
+                        <option value="sedan">Седан</option>
+                        <option value="suv">SUV</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="port">Порт назначения в Европе</label>
+                      <select id="port" class="form-control">
+                        <option value="klaipeda">Клайпеда (Литва)</option>
+                        <option value="poti">Поти / Батуми (Грузия)</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group checkbox-group-inline">
+                      <label class="checkbox-label">
+                        <input type="checkbox" id="isHybrid" />
+                        <span>Гибрид / Электромобиль</span>
+                        <span class="checkbox-hint">(доп. сбор $150)</span>
+                      </label>
+                    </div>
+
+                    <p class="calculator-note">
+                      * Расчёт справочный. Точная сумма — после уточнения места
+                      стоянки и комплектации авто.
+                    </p>
+                  </div>
+
+                  <div class="home-calculator__result">
+                    <h3>Стоимость логистики</h3>
+                    <div
+                      class="result-breakdown"
+                      id="breakdown"
+                      aria-live="polite"
+                    ></div>
+                    <div class="result-footer">
+                      <strong>Итого к оплате:</strong>
+                      <div
+                        id="finalTotal"
+                        class="final-price"
+                        aria-live="polite"
+                      >
+                        — USD
+                      </div>
+                      <div
+                        id="finalTotalBYN"
+                        class="final-price-byn"
+                        aria-live="polite"
+                      >
+                        — BYN
+                      </div>
+                      <span class="rate-info">
+                        * Все цены указаны в USD. Стоимость автовоза включена в
+                        расчёт.
+                      </span>
+                      <span
+                        id="oversizeWarning"
+                        class="oversize-warning"
+                        style="display: none"
+                      >
+                        ⚠️ <strong>Внимание!</strong> Для оверсайз-автомобилей
+                        (тяжёлые/большие) цена может существенно отличаться.
+                        Необходим индивидуальный расчёт под каждое авто!
+                      </span>
+                    </div>
+                    <a
+                      href="/#contact"
+                      class="home-hero__cta home-calculator__cta"
+                      >ЗАКАЗАТЬ РАСЧЁТ ПОД ВАШЕ АВТО →</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+      <!-- Форма для обратной связи -->
+      <div class="form-feedback" id="formFeedbackContainer">
+        <div class="speed-stripe"></div>
+        <div class="finish-line"></div>
+
+        <div class="form-header">
+          <h2 class="form-title">Свяжись с нами!</h2>
+          <p class="form-description">
+            Оставьте заявку — и наши специалисты свяжутся с вами в ближайшее
+            время. Ответим на все вопросы, поможем с выбором авто и рассчитаем
+            стоимость.
+          </p>
+          <div class="form-divider"></div>
+        </div>
+
+        <form id="feedbackForm" action="telegram.php" method="post">
+          <div class="input-group">
+            <label for="userName" class="input-label">
+              <span class="label-icon">👤</span>
+              Как к тебе обращаться?
+            </label>
+            <input
+              required
+              type="text"
+              id="userName"
+              name="name"
+              placeholder="Например: Молния МакКуин"
+            />
+            <span class="input-hint"
+              >Имя поможет нам обратиться к тебе лично</span
+            >
+          </div>
+
+          <div class="input-group">
+            <label for="userPhone" class="input-label">
+              <span class="label-icon">📞</span>
+              Твой номер телефона
+            </label>
+            <input
+              type="tel"
+              id="userPhone"
+              name="phone"
+              placeholder="+7 (___)-___-__-__"
+              required
+            />
+            <span class="input-hint">Мы свяжемся с вами</span>
+          </div>
+
+          <div class="input-group">
+            <label for="userEmail" class="input-label">
+              <span class="label-icon">✉️</span>
+              Электронная почта
+            </label>
+            <input
+              required
+              type="email"
+              id="userEmail"
+              name="email"
+              placeholder="tvoi@email.ru"
+            />
+            <span class="input-hint">На почту придет обрытная связь</span>
+          </div>
+
+          <input type="text" name="honeypot" style="display: none" />
+
+          <button type="submit" class="send-button">
+            <span class="button-text">Отправить заявку</span>
+            <span class="button-icon">🏁</span>
+          </button>
+        </form>
+
+        <div id="thanksBlock" class="thanks">
+          <div class="success">✅ Спасибо! Ваша заявка принята.</div>
+          <p>Мы свяжемся с вами в ближайшее время.</p>
+          <a href="index.html">Вернуться на главную</a>
+        </div>
+      </div>
+      <!-- Модальное окно для формы -->
+      <div id="modalForm" class="modal">
+        <div class="modal-content">
+          <span class="modal-close">&times;</span>
+          <div id="modalFormContainer"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="home-footer">
+      <div class="home-footer__container">
+        <div class="home-footer__col">
+          <a href="index.html" class="home-footer__logo-link">
+            <img
+              src="image/logo.png"
+              alt="RS-Motors"
+              class="home-footer__logo-img"
+            />
+            <span class="home-footer__logo-text">RS-Motors</span>
+          </a>
+          <p class="home-footer__desc">
+            Авто на заказ из любой страны мира с полной доставкой и растаможкой
+            в Беларуси.
+          </p>
+        </div>
+        <div class="home-footer__col">
+          <h3>Навигация</h3>
+          <ul class="home-footer__nav-list">
+            <li><a href="/#inventory">Готовые авто</a></li>
+            <li><a href="/#calculator">Калькулятор</a></li>
+            <li><a href="/#service">О нас</a></li>
+            <li><a href="/#services">Услуги</a></li>
+          </ul>
+        </div>
+        <div class="home-footer__col home-footer__contacts">
+          <h3>Контакты</h3>
+          <a href="tel:+375293189865">+375293189865</a>
+          <a href="mailto:rsmotorsby@yandex.ru">rsmotorsby@yandex.ru</a>
+          <span
+            >246017, Республика Беларусь, Гомельская область г. Гомель, ул.
+            Гагарина 89 пом. 4 (2 этаж)</span
+          >
+        </div>
+        <div class="home-footer__col">
+          <h3>Документы</h3>
+          <ul class="home-footer__nav-list">
+            <li>
+              <a href="privacy-policy.html">Политика конфиденциальности</a>
+            </li>
+            <li><a href="terms-conditions.html">Условия сотрудничества</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="home-footer__bottom">
+        <p>© 2026 RS-Motors Беларусь. Все права защищены.</p>
+        <p>Профессиональный импорт автомобилей под ключ</p>
+      </div>
+    </footer>
+    <script src="script.js" defer></script>
+  </body>
+</html>

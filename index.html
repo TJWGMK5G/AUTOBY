@@ -21,6 +21,7 @@
       content="Подберём и привезём любой автомобиль под ключ. Европа, США, Китай, Корея. Полное сопровождение: поиск, покупка, растаможка, доставка по всей Беларуси."
     />
     <meta property="og:type" content="website" />
+    <meta name="color-scheme" content="only light" />
     <link type="image/x-icon" href="image/favicon.ico" rel="icon" />
 
     <!-- ШРИФТЫ -->
@@ -164,6 +165,9 @@
           <a href="/#contact" class="home-hero__cta">
             ЗАКАЗАТЬ АВТО ПОД КЛЮЧ
             <span>→</span>
+          </a>
+          <a href="calc.html" class="calculator-link-btn">
+            <span class="btn-text">КАЛЬКУЛЯТОР ЛОГИСТИКИ</span>
           </a>
           <p class="home-hero__note">
             Более 2400 успешно реализованных авто • Работаем по всей Беларуси
@@ -937,7 +941,7 @@
       </section>
 
       <!-- ==================== КАЛЬКУЛЯТОР ЛОГИСТИКИ АВТО ИЗ США/КАНАДЫ ==================== -->
-      <section class="home-calculator" id="calculator">
+      <!-- <section class="home-calculator" id="calculator">
         <div class="home-calculator__container">
           <div class="calculator-warning">
             <strong>Внимание!</strong> Все расчёты в калькуляторе являются
@@ -958,7 +962,7 @@
           </div>
 
           <div class="home-calculator__grid">
-            <!-- Форма -->
+            
             <div class="home-calculator__form">
               <div class="form-group">
                 <label for="location">Место стоянки / Аукцион</label>
@@ -1037,6 +1041,178 @@
             </div>
           </div>
         </div>
+      </section> -->
+      <!-- ==================== КАЛЬКУЛЯТОР ТАМОЖЕННЫХ ПОШЛИН ==================== -->
+      <section class="customs-calculator" id="calculator">
+        <div class="customs-calculator__container">
+          <div class="customs-calculator__header">
+            <div class="home-featured__pretitle">РАСТАМОЖКА АВТО</div>
+            <h2>Калькулятор таможенных пошлин 2026</h2>
+            <p>
+              Расчёт стоимости растаможки автомобилей для физических и
+              юридических лиц
+            </p>
+          </div>
+
+          <div class="customs-calculator__grid">
+            <!-- Форма калькулятора -->
+            <div class="customs-calculator__form">
+              <form id="customsForm" class="customs-form">
+                <!-- Возраст авто -->
+                <div class="form-group">
+                  <label for="customsAge">Возраст авто</label>
+                  <select id="customsAge" class="form-control">
+                    <option value="0">менее 3-х лет</option>
+                    <option value="1" selected>от 3-х до 5 лет</option>
+                    <option value="2">более 5 лет</option>
+                  </select>
+                  <span class="form-hint"
+                    >Для авто с ДВС — наиболее выгодные пошлины при возрасте 3-5
+                    лет</span
+                  >
+                </div>
+
+                <!-- Стоимость авто -->
+                <div class="form-group">
+                  <label for="customsPrice">Стоимость авто</label>
+                  <input
+                    type="number"
+                    id="customsPrice"
+                    class="form-control"
+                    placeholder="в евро"
+                    min="0"
+                    step="100"
+                  />
+                </div>
+
+                <!-- Тип двигателя -->
+                <div class="form-group">
+                  <label>Тип двигателя</label>
+                  <div class="radio-group">
+                    <label class="radio-label">
+                      <input
+                        type="radio"
+                        name="engineType"
+                        value="fuel"
+                        checked
+                      />
+                      Топливо (бензин/дизель/гибрид)
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" name="engineType" value="electric" />
+                      Электро
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Кто растамаживает -->
+                <div class="form-group">
+                  <label>Растамаживает</label>
+                  <div class="radio-group">
+                    <label class="radio-label">
+                      <input
+                        type="radio"
+                        name="customsEntity"
+                        value="person"
+                        checked
+                      />
+                      Физическое лицо
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" name="customsEntity" value="legal" />
+                      Юридическое лицо
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Объём двигателя (показывается для топливных авто) -->
+                <div class="form-group" id="engineVolumeGroup">
+                  <label for="customsVolume">Объём двигателя, см³</label>
+                  <input
+                    type="number"
+                    id="customsVolume"
+                    class="form-control"
+                    placeholder="например: 2000"
+                    min="0"
+                    step="100"
+                  />
+                </div>
+
+                <!-- Вид топлива (для топливных авто) -->
+                <div class="form-group" id="fuelTypeGroup">
+                  <label>Вид топлива</label>
+                  <div class="radio-group">
+                    <label class="radio-label">
+                      <input
+                        type="radio"
+                        name="fuelType"
+                        value="petrol"
+                        checked
+                      />
+                      Бензин
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" name="fuelType" value="diesel" />
+                      Дизель
+                    </label>
+                  </div>
+                  <span class="form-hint">Для дизельных авто акциз выше</span>
+                </div>
+
+                <!-- Таможенная льгота -->
+                <div class="form-group">
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="customsDiscount" checked />
+                    Таможенная льгота 50% (Указ №140)
+                  </label>
+                </div>
+
+                <!-- <button
+                  type="button"
+                  id="calculateCustomsBtn"
+                  class="home-hero__cta customs-cta"
+                >
+                  РАССЧИТАТЬ ПОШЛИНУ →
+                </button> -->
+              </form>
+            </div>
+
+            <!-- Результат -->
+            <div class="customs-calculator__result" id="customsResult">
+              <h3>Стоимость растаможки</h3>
+              <div class="result-items">
+                <div class="result-row">
+                  <span>Таможенная пошлина:</span>
+                  <span id="dutyAmount" class="result-value">— €</span>
+                </div>
+                <div class="result-row">
+                  <span>Акциз:</span>
+                  <span id="exciseAmount" class="result-value">— €</span>
+                </div>
+                <div class="result-row">
+                  <span>НДС (20%):</span>
+                  <span id="vatAmount" class="result-value">— €</span>
+                </div>
+                <div class="result-row total-row">
+                  <span>ИТОГО к оплате:</span>
+                  <span id="totalCustoms" class="result-value total-price"
+                    >— €</span
+                  >
+                </div>
+              </div>
+              <div class="result-footer">
+                <span class="rate-info"
+                  >* Расчёт является ориентировочным. Точная сумма может
+                  отличаться в зависимости от конкретных условий
+                  растаможки.</span
+                >
+              </div>
+              <a href="/#contact" class="home-hero__cta customs-result-cta"
+                >ПОЛУЧИТЬ ТОЧНЫЙ РАСЧЁТ →</a
+              >
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- Полезная информация -->
@@ -1063,6 +1239,153 @@
           </p>
         </div>
       </section>
+
+      <!-- ==================== СЕКЦИЯ "О НАС" ==================== -->
+      <section class="about-section">
+        <div class="about__container">
+          <div class="about__header">
+            <div class="about__pretitle">КТО МЫ</div>
+            <h2>О компании</h2>
+            <p>Надёжный партнёр в доставке автомобилей из США и Канады</p>
+          </div>
+
+          <div class="about__grid">
+            <div class="about__content">
+              <div class="about__text">
+                <p>
+                  Мы — команда профессионалов с
+                  <strong>глубокой экспертизой</strong> в сфере международной
+                  логистики и поставки автомобилей из Северной Америки. Наша
+                  специализация — <strong>полный цикл сопровождения</strong> от
+                  подбора авто на аукционе до доставки «под ключ» клиенту.
+                </p>
+                <p>
+                  Наша миссия — сделать процесс покупки и доставки авто из США и
+                  Канады
+                  <strong>максимально прозрачным, быстрым и выгодным</strong>
+                  для каждого клиента. Мы работаем напрямую с крупнейшими
+                  аукционами (Manheim, ADESA, Copart, IAAI) и имеем собственную
+                  сеть представителей в США.
+                </p>
+                <p>
+                  <strong>Почему выбирают нас?</strong> Индивидуальный подход,
+                  полное юридическое сопровождение, фиксированная стоимость без
+                  скрытых платежей и оперативная доставка до портов Европы.
+                </p>
+              </div>
+              <div class="about__features">
+                <div class="feature-item">
+                  <span class="feature-icon">🏆</span>
+                  <span class="feature-text">Профессиональная экспертиза</span>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">⚡</span>
+                  <span class="feature-text">Скорость обработки заявок</span>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">🔒</span>
+                  <span class="feature-text">Прозрачность и честность</span>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">🌎</span>
+                  <span class="feature-text"
+                    >Прямые контракты с аукционами</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="about__stats">
+              <div class="stat-card">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Прозрачность сделки</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">15 мин</div>
+                <div class="stat-label">Среднее время ответа</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">30+</div>
+                <div class="stat-label">Партнёров в США</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Онлайн-поддержка</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== СЕКЦИЯ "ЭТАПЫ РАБОТЫ" ==================== -->
+      <section class="steps-section">
+        <div class="steps__container">
+          <div class="steps__header">
+            <div class="steps__pretitle">ПРОСТО И ПРОЗРАЧНО</div>
+            <h2>5 шагов к вашему авто</h2>
+            <p>
+              Как проходит сотрудничество с нами — от заявки до получения ключей
+            </p>
+          </div>
+
+          <div class="steps__grid">
+            <!-- Шаг 1 -->
+            <div class="step-card">
+              <div class="step-number">1</div>
+              <div class="step-icon">📝</div>
+              <div class="step-title">Консультация</div>
+              <div class="step-description">
+                Оставьте заявку. Мы бесплатно проконсультируем по всем вопросам
+                и поможем определить бюджет.
+              </div>
+            </div>
+
+            <!-- Шаг 2 -->
+            <div class="step-card">
+              <div class="step-number">2</div>
+              <div class="step-icon">🔎</div>
+              <div class="step-title">Подбор авто</div>
+              <div class="step-description">
+                Подбираем автомобиль на аукционах США/Канады под ваш запрос.
+                Предоставляем полный отчёт.
+              </div>
+            </div>
+
+            <!-- Шаг 3 -->
+            <div class="step-card">
+              <div class="step-number">3</div>
+              <div class="step-icon">💰</div>
+              <div class="step-title">Покупка</div>
+              <div class="step-description">
+                Участвуем в торгах, побеждаем. Вы оплачиваете авто и наши услуги
+                по договору.
+              </div>
+            </div>
+
+            <!-- Шаг 4 -->
+            <div class="step-card">
+              <div class="step-number">4</div>
+              <div class="step-icon">🚢</div>
+              <div class="step-title">Логистика</div>
+              <div class="step-description">
+                Организуем доставку до порта США, морскую перевозку в Европу и
+                инленд по необходимости.
+              </div>
+            </div>
+
+            <!-- Шаг 5 -->
+            <div class="step-card">
+              <div class="step-number">5</div>
+              <div class="step-icon">🎉</div>
+              <div class="step-title">Получение</div>
+              <div class="step-description">
+                Авто прибывает в порт. Помогаем с растаможкой и доставкой «под
+                ключ» до вашего города.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <!-- ==================== MODAL CONTACTS ==================== -->
@@ -1087,7 +1410,8 @@
             <div class="home-modal__item">
               <span class="home-modal__icon">📍</span>
               <div>
-                <strong>Главный офис</strong><br />Минск, ул. Притыцкого, 156
+                <strong>Главный офис</strong><br />246017, Республика Беларусь,
+                Гомельская область г. Гомель, ул. Гагарина 89 пом. 4 (2 этаж)
               </div>
             </div>
             <div class="home-modal__item">
@@ -1140,6 +1464,7 @@
         <path d="M12 4l-8 8h6v8h4v-8h6z" />
       </svg>
     </button>
+
     <!-- Форма для обратной связи -->
     <div class="form-feedback" id="formFeedbackContainer">
       <div class="speed-stripe"></div>
@@ -1255,7 +1580,10 @@
           <h3>Контакты</h3>
           <a href="tel:+375293189865">+375293189865</a>
           <a href="mailto:rsmotorsby@yandex.ru">rsmotorsby@yandex.ru</a>
-          <span>Минск • Брест • Гродно • Витебск • Могилёв • Гомель</span>
+          <span
+            >246017, Республика Беларусь, Гомельская область г. Гомель, ул.
+            Гагарина 89 пом. 4 (2 этаж)</span
+          >
         </div>
         <div class="home-footer__col">
           <h3>Документы</h3>

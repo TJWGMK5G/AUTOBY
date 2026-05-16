@@ -392,12 +392,49 @@
     // --------------------------------------------------------------
     // 5. КАЛЬКУЛЯТОР АВТО (ОБНОВЛЁННЫЙ)
     // --------------------------------------------------------------
-    const calculatorExists = document.getElementById("calculator");
+    (function () {
+      // ПРОВЕРЯЕМ: есть ли на странице элементы калькулятора и парольной защиты
+      const overlay = document.getElementById("passwordOverlay");
+      const content = document.getElementById("calculatorContent");
 
-    if (calculatorExists) {
-      // Данные из таблицы (полностью обновлены)
+      // Если элементов нет - просто выходим, чтобы не было ошибок на других страницах
+      if (!overlay || !content) {
+        return; // Молча завершаем работу скрипта на страницах без калькулятора
+      }
+
+      // ---------- ПАРОЛЬНАЯ ЗАЩИТА ----------
+      const correctPassword = "1234"; // Можете сменить на нужный пароль
+      const passInput = document.getElementById("passwordInput");
+      const unlockBtn = document.getElementById("unlockBtn");
+      const errorDiv = document.getElementById("passError");
+
+      // Дополнительная проверка на наличие нужных элементов
+      if (passInput && unlockBtn) {
+        function unlockCalculator() {
+          const entered = passInput.value.trim();
+          if (entered === correctPassword) {
+            overlay.style.display = "none";
+            content.style.display = "block";
+            document.body.style.overflow = "auto";
+            // после разблокировки инициализируем калькулятор
+            if (typeof initCalculator === "function") {
+              initCalculator();
+            }
+          } else {
+            if (errorDiv) errorDiv.style.display = "block";
+            passInput.value = "";
+            passInput.focus();
+          }
+        }
+
+        unlockBtn.addEventListener("click", unlockCalculator);
+        passInput.addEventListener("keypress", (e) => {
+          if (e.key === "Enter") unlockCalculator();
+        });
+      }
+
+      // ---------- ДАННЫЕ И ЛОГИКА КАЛЬКУЛЯТОРА (полностью идентичная вашей, но обёрнута в функцию) ----------
       const logisticsData = {
-        // Базовые цены на инленд (перевозка по США до порта)
         inlandRates: {
           Abilene: 400,
           "ACE - Carson": 200,
@@ -807,8 +844,6 @@
           "York Haven": 325,
           "York Springs": 325,
         },
-
-        // Стоимость перевозки от порта (для каждого города)
         portToDestinationRates: {
           klaipeda: {
             Abilene: { sedan: 835, suv: 835 },
@@ -1631,22 +1666,20 @@
         },
       };
 
-      // Функция для получения ставки портовой доставки (с учётом города)
+      const extraFees = {
+        hybridFee: 150,
+        oversizeMultiplier: 1.5,
+        autoTransporter: { klaipeda: 1000, poti: 2000 },
+        additionalServices: { service1: 100, service2: 250, service3: 450 },
+      };
+
       function getPortRate(city, portType, autoType) {
-        // Проверяем наличие данных для города
         if (
           logisticsData.portToDestinationRates[portType] &&
           logisticsData.portToDestinationRates[portType][city]
         ) {
-          const rate =
-            logisticsData.portToDestinationRates[portType][city][autoType];
-          return rate;
+          return logisticsData.portToDestinationRates[portType][city][autoType];
         }
-
-        // Если данных нет, возвращаем базовую ставку (fallback)
-        console.warn(
-          `Город ${city} не найден в portToDestinationRates для порта ${portType}, используется базовая ставка`
-        );
         const baseRates = {
           klaipeda: { sedan: 725, suv: 725 },
           poti: { sedan: 895, suv: 895 },
@@ -1654,260 +1687,393 @@
         return baseRates[portType][autoType];
       }
 
-      // Дополнительные сборы
-      const extraFees = {
-        hybridFee: 150,
-        oversizeMultiplier: 1.5,
-        autoTransporter: {
-          klaipeda: 1000,
-          poti: 2000,
-        },
-        additionalServices: {
-          service1: 100,
-          service2: 250,
-          service3: 450,
-        },
-      };
+      async function getUSDBYNRate() {
+        const fallback = 3.2;
+        try {
+          const res = await fetch("https://api.nbrb.by/exrates/rates/431");
+          if (res.ok) {
+            const data = await res.json();
+            if (data?.Cur_OfficialRate) return data.Cur_OfficialRate;
+          }
+        } catch (e) {}
+        try {
+          const res2 = await fetch(
+            "https://api.exchangerate-api.com/v4/latest/USD"
+          );
+          if (res2.ok) {
+            const data2 = await res2.json();
+            if (data2?.rates?.BYN) return data2.rates.BYN;
+          }
+        } catch (e) {}
+        return fallback;
+      }
 
-      let calculationTimeout = null;
+      let calcTimeout = null;
+      function initCalculator() {
+        const locationSelect = document.getElementById("location");
+        const carTypeSelect = document.getElementById("carType");
+        const portSelect = document.getElementById("port");
+        const isHybridCheckbox = document.getElementById("isHybrid");
+        const finalTotal = document.getElementById("finalTotal");
+        const finalTotalBYN = document.getElementById("finalTotalBYN");
+        const oversizeWarning = document.getElementById("oversizeWarning");
 
-      // Получаем элементы
-      const locationSelect = document.getElementById("location");
-      const carTypeSelect = document.getElementById("carType");
-      const portSelect = document.getElementById("port");
-      const isHybridCheckbox = document.getElementById("isHybrid");
-      const finalTotalElement = document.getElementById("finalTotal");
-      const finalTotalBYNElement = document.getElementById("finalTotalBYN");
-      const oversizeWarningElement = document.getElementById("oversizeWarning");
-
-      // Заполняем select с локациями
-      function populateLocationSelect() {
         if (!locationSelect) return;
         const locations = Object.keys(logisticsData.inlandRates).sort();
         locationSelect.innerHTML =
           '<option value="">-- Выберите город или аукцион --</option>';
-        locations.forEach((location) => {
-          const option = document.createElement("option");
-          option.value = location;
-          option.textContent = location;
-          locationSelect.appendChild(option);
+        locations.forEach((loc) => {
+          const opt = document.createElement("option");
+          opt.value = loc;
+          opt.textContent = loc;
+          locationSelect.appendChild(opt);
         });
-      }
 
-      // Функция для получения курса USD/BYN с API Национального банка РБ
-      async function getUSDBYNRate() {
-        // Только проверенные, рабочие URL
-        const apiUrls = [
-          "https://api.nbrb.by/exrates/rates/431", // основной рабочий URL (без ?parammode=2)
-          "https://www.nbrb.by/api/exrates/rates/431", // альтернативный эндпоинт
-          "https://api.nbrb.by/exrates/rates/usd?parammode=2", // по коду валюты
-        ];
+        carTypeSelect.innerHTML = `<option value="sedan">Седан</option><option value="suv">SUV</option><option value="oversize">Оверсайз (тяжёлый/большой автомобиль)</option>`;
 
-        for (const url of apiUrls) {
-          try {
-            const response = await fetch(url, {
-              method: "GET",
-              headers: { Accept: "application/json" },
-              mode: "cors",
-            });
+        async function calculate() {
+          if (calcTimeout) clearTimeout(calcTimeout);
+          calcTimeout = setTimeout(async () => {
+            const location = locationSelect.value;
+            const carType = carTypeSelect.value;
+            const port = portSelect.value;
+            const isHybrid = isHybridCheckbox.checked;
+            const isOversize = carType === "oversize";
 
-            if (response.ok) {
-              const data = await response.json();
-              let rate = null;
-
-              // Универсальная проверка формата ответа
-              if (data?.Cur_OfficialRate) {
-                rate = data.Cur_OfficialRate;
-              } else if (data?.Rate) {
-                rate = data.Rate;
-              } else if (Array.isArray(data) && data[0]?.Cur_OfficialRate) {
-                rate = data[0].Cur_OfficialRate;
-              }
-
-              if (rate && !isNaN(rate) && rate > 0) {
-                console.log("✅ Курс USD/BYN успешно получен:", rate);
-                return rate;
-              }
+            if (oversizeWarning)
+              oversizeWarning.style.display = isOversize ? "block" : "none";
+            if (!location || !logisticsData.inlandRates[location]) {
+              if (finalTotal) finalTotal.textContent = "— USD";
+              if (finalTotalBYN) finalTotalBYN.textContent = "— BYN";
+              return;
             }
-          } catch (error) {
-            console.warn(`⚠️ Ошибка при запросе к ${url}:`, error.message);
-            continue; // Пробуем следующий URL
-          }
+            const inlandCost = logisticsData.inlandRates[location];
+            let portRate = getPortRate(
+              location,
+              port,
+              isOversize ? "sedan" : carType
+            );
+            if (isOversize) portRate = portRate * extraFees.oversizeMultiplier;
+            const hybridFee = isHybrid ? extraFees.hybridFee : 0;
+            const autoTransporterCost = extraFees.autoTransporter[port] || 0;
+            const additionalServicesTotal =
+              extraFees.additionalServices.service1 +
+              extraFees.additionalServices.service2 +
+              extraFees.additionalServices.service3;
+            const finalTotalUSD =
+              inlandCost +
+              portRate +
+              hybridFee +
+              autoTransporterCost +
+              additionalServicesTotal;
+            if (finalTotal)
+              finalTotal.textContent =
+                Math.round(finalTotalUSD).toLocaleString("ru-RU") + " USD";
+            const rate = await getUSDBYNRate();
+            if (rate && finalTotalBYN)
+              finalTotalBYN.textContent =
+                "≈ " +
+                Math.round(finalTotalUSD * rate).toLocaleString("ru-RU") +
+                " BYN";
+            else if (finalTotalBYN)
+              finalTotalBYN.textContent = "— BYN (курс временно недоступен)";
+          }, 80);
         }
 
-        // Если все API не сработали, используем fallback
-        console.warn(
-          "⚠️ Не удалось получить курс с API НБРБ, используем резервный вариант"
+        locationSelect.addEventListener("change", calculate);
+        carTypeSelect.addEventListener("change", calculate);
+        portSelect.addEventListener("change", calculate);
+        isHybridCheckbox.addEventListener("change", calculate);
+        calculate();
+      }
+
+      window.initCalculator = initCalculator;
+    })();
+
+    // --------------------------------------------------------------
+    // 5.1 КАЛЬКУЛЯТОР НА ГЛАВНОЙ СТРАНИЦЕ - ОСНОВНОЙ
+    // --------------------------------------------------------------
+    (function () {
+      // ============================================================
+      // ПРОВЕРКА: есть ли на странице элементы таможенного калькулятора
+      // ============================================================
+      const customsAgeEl = document.getElementById("customsAge");
+      const customsPriceEl = document.getElementById("customsPrice");
+      const customsVolumeEl = document.getElementById("customsVolume");
+
+      // Если нет основных элементов - выходим (ошибок не будет)
+      if (!customsAgeEl || !customsPriceEl) {
+        console.log("Таможенный калькулятор не найден на этой странице");
+        return;
+      }
+
+      // ============================================================
+      // ТАМОЖЕННЫЙ КАЛЬКУЛЯТОР НА ОСНОВЕ ПРЕДОСТАВЛЕННОЙ ТАБЛИЦЫ
+      // ============================================================
+
+      // Ставки для авто с ДВС (возраст до 3 лет) - в зависимости от стоимости
+      const ageUnder3Rates = [
+        { maxPrice: 8500, percent: 54, minPerCubic: 2.5 },
+        { maxPrice: 16700, percent: 48, minPerCubic: 3.5 },
+        { maxPrice: 42300, percent: 48, minPerCubic: 5.5 },
+        { maxPrice: 84500, percent: 48, minPerCubic: 7.5 },
+        { maxPrice: 169000, percent: 48, minPerCubic: 15 },
+        { maxPrice: Infinity, percent: 48, minPerCubic: 20 },
+      ];
+
+      // Ставки для авто с ДВС (возраст 3-5 лет)
+      const age3to5Rates = [
+        { maxVolume: 1000, ratePerCubic: 1.5 },
+        { maxVolume: 1500, ratePerCubic: 1.7 },
+        { maxVolume: 1800, ratePerCubic: 2.5 },
+        { maxVolume: 2300, ratePerCubic: 2.7 },
+        { maxVolume: 3000, ratePerCubic: 3.0 },
+        { maxVolume: Infinity, ratePerCubic: 3.6 },
+      ];
+
+      // Ставки для авто с ДВС (возраст более 5 лет)
+      const ageOver5Rates = [
+        { maxVolume: 1000, ratePerCubic: 3.0 },
+        { maxVolume: 1500, ratePerCubic: 3.2 },
+        { maxVolume: 1800, ratePerCubic: 3.5 },
+        { maxVolume: 2300, ratePerCubic: 4.8 },
+        { maxVolume: 3000, ratePerCubic: 5.0 },
+        { maxVolume: Infinity, ratePerCubic: 5.7 },
+      ];
+
+      // Базовая ставка акциза для бензина (евро за 1 см³)
+      const EXCISE_PETROL_PER_CUBIC = 0.05;
+      const EXCISE_DIESEL_PER_CUBIC = 0.08;
+
+      // Ставка НДС
+      const VAT_RATE = 0.2;
+
+      // Получение ставки пошлины для авто до 3 лет
+      function getDutyRateUnder3(price) {
+        for (const rate of ageUnder3Rates) {
+          if (price <= rate.maxPrice) {
+            return { percent: rate.percent, minPerCubic: rate.minPerCubic };
+          }
+        }
+        return { percent: 48, minPerCubic: 20 };
+      }
+
+      // Получение ставки пошлины для авто 3-5 лет
+      function getDutyRate3to5(volume) {
+        for (const rate of age3to5Rates) {
+          if (volume <= rate.maxVolume) {
+            return rate.ratePerCubic;
+          }
+        }
+        return 3.6;
+      }
+
+      // Получение ставки пошлины для авто старше 5 лет
+      function getDutyRateOver5(volume) {
+        for (const rate of ageOver5Rates) {
+          if (volume <= rate.maxVolume) {
+            return rate.ratePerCubic;
+          }
+        }
+        return 5.7;
+      }
+
+      // Расчёт акциза
+      function calculateExcise(volume, fuelType) {
+        if (fuelType === "petrol") {
+          return volume * EXCISE_PETROL_PER_CUBIC;
+        } else {
+          return volume * EXCISE_DIESEL_PER_CUBIC;
+        }
+      }
+
+      // Основная функция расчёта
+      function calculateCustoms() {
+        // Получаем значения с проверкой на существование
+        const age = parseInt(document.getElementById("customsAge")?.value) || 0;
+        const price =
+          parseFloat(document.getElementById("customsPrice")?.value) || 0;
+
+        const engineTypeRadio = document.querySelector(
+          'input[name="engineType"]:checked'
         );
-        return getFallbackRate();
-      }
-      // Функция для получения запасного курса
-      async function getFallbackRate() {
-        // 1. Пробуем ваш серверный прокси (рекомендуемый способ)
-        try {
-          const response = await fetch("/api/usd-rate", { method: "GET" });
-          if (response.ok) {
-            const data = await response.json();
-            if (data?.rate && !isNaN(data.rate) && data.rate > 0) {
-              console.log("✅ Курс получен через серверный прокси:", data.rate);
-              return data.rate;
-            }
-          }
-        } catch (error) {
-          console.warn("Серверный эндпоинт не доступен");
-        }
+        const engineType = engineTypeRadio ? engineTypeRadio.value : "fuel";
 
-        // 2. Пробуем публичное API (может быть заблокировано CORS)
-        try {
-          const response = await fetch(
-            "https://api.exchangerate-api.com/v4/latest/USD"
-          );
-          if (response.ok) {
-            const data = await response.json();
-            if (data?.rates?.BYN) {
-              console.log(
-                "✅ Курс получен через ExchangeRate-API:",
-                data.rates.BYN
-              );
-              return data.rates.BYN;
-            }
-          }
-        } catch (error) {
-          console.warn("ExchangeRate-API не доступен");
-        }
-
-        // 3. Финальный резервный курс (обновляйте при необходимости)
-        const FALLBACK_RATE = 3.2;
-        console.warn(
-          `⚠️ Используем приблизительный курс USD/BYN = ${FALLBACK_RATE}`
+        const customsEntityRadio = document.querySelector(
+          'input[name="customsEntity"]:checked'
         );
-        return FALLBACK_RATE;
-      }
+        const customsEntity = customsEntityRadio
+          ? customsEntityRadio.value
+          : "person";
 
-      // Основная функция расчёта (исправленная)
-      async function calculate() {
-        if (calculationTimeout) clearTimeout(calculationTimeout);
-        calculationTimeout = setTimeout(async () => {
-          // Получаем значения
-          const location = locationSelect?.value;
-          const carType = carTypeSelect?.value;
-          const port = portSelect?.value;
-          const isHybrid = isHybridCheckbox?.checked || false;
-          const isOversize = carType === "oversize";
+        const fuelTypeRadio = document.querySelector(
+          'input[name="fuelType"]:checked'
+        );
+        const fuelType = fuelTypeRadio ? fuelTypeRadio.value : "petrol";
 
-          // Показываем/скрываем предупреждение об оверсайзе
-          if (oversizeWarningElement) {
-            oversizeWarningElement.style.display = isOversize
-              ? "block"
-              : "none";
-          }
+        const discountCheckbox = document.getElementById("customsDiscount");
+        const hasDiscount = discountCheckbox ? discountCheckbox.checked : false;
 
-          // Проверяем выбранную локацию
-          if (!location || !logisticsData.inlandRates[location]) {
-            if (finalTotalElement) finalTotalElement.textContent = "— USD";
-            if (finalTotalBYNElement)
-              finalTotalBYNElement.textContent = "— BYN";
-            return;
-          }
+        let volume = 0;
+        if (engineType === "fuel") {
+          const volumeEl = document.getElementById("customsVolume");
+          volume = volumeEl ? parseFloat(volumeEl.value) || 0 : 0;
+        }
 
-          // 1. Инленд (перевозка по США)
-          const inlandCost = logisticsData.inlandRates[location];
+        let duty = 0;
+        let excise = 0;
+        let vat = 0;
+        let total = 0;
 
-          // 2. Доставка от порта с учётом типа авто (используем исправленную функцию)
-          let portRate;
-          if (isOversize) {
-            // Для оверсайз используем ставку седана (не умноженную)
-            portRate = getPortRate(location, port, "sedan");
-            // Применяем оверсайз коэффициент только к портовой ставке
-            portRate = portRate * extraFees.oversizeMultiplier;
+        // Для электромобилей упрощённый расчёт
+        if (engineType === "electric") {
+          let utilFee = 0;
+          if (customsEntity === "person") {
+            utilFee = age < 1 ? 624.92 : 1282.02;
           } else {
-            portRate = getPortRate(location, port, carType);
+            utilFee = age < 1 ? 1500 : 2500;
           }
 
-          // 3. Сбор за гибрид/электро
-          const hybridFee = isHybrid ? extraFees.hybridFee : 0;
+          duty = 0;
+          excise = 0;
+          vat = price * VAT_RATE;
+          total = duty + excise + vat + utilFee;
 
-          // 4. Стоимость автовоза
-          const autoTransporterCost = extraFees.autoTransporter[port] || 0;
-
-          // 5. Стоимость всех дополнительных услуг (все три сразу)
-          const additionalServicesTotal =
-            extraFees.additionalServices.service1 +
-            extraFees.additionalServices.service2 +
-            extraFees.additionalServices.service3;
-
-          // Итоговая стоимость в USD
-          const finalTotalUSD =
-            inlandCost +
-            portRate +
-            hybridFee +
-            autoTransporterCost +
-            additionalServicesTotal;
-
-          // Форматируем USD
-          const formatUSD = (value) =>
-            Math.round(value).toLocaleString("ru-RU") + " USD";
-
-          // Обновляем USD в UI
-          if (finalTotalElement)
-            finalTotalElement.textContent = formatUSD(finalTotalUSD);
-
-          // Получаем курс и обновляем BYN
-          const usdRate = await getUSDBYNRate();
-          if (usdRate && finalTotalBYNElement) {
-            const finalTotalBYN = finalTotalUSD * usdRate;
-            const formatBYN = (value) =>
-              Math.round(value).toLocaleString("ru-RU") + " BYN";
-            finalTotalBYNElement.textContent = `≈ ${formatBYN(finalTotalBYN)}`;
-          } else if (finalTotalBYNElement) {
-            finalTotalBYNElement.textContent = "— BYN (курс не загружен)";
+          if (hasDiscount) {
+            total = total * 0.5;
           }
-        }, 100);
+
+          updateResult(duty, excise, vat, total);
+          return;
+        }
+
+        // Для авто с ДВС
+        if (price === 0 || volume === 0) {
+          updateResult(0, 0, 0, 0);
+          return;
+        }
+
+        // Расчёт таможенной пошлины в зависимости от возраста
+        if (age === 0) {
+          const rate = getDutyRateUnder3(price);
+          const byPercent = price * (rate.percent / 100);
+          const byVolume = volume * rate.minPerCubic;
+          duty = Math.max(byPercent, byVolume);
+        } else if (age === 1) {
+          const ratePerCubic = getDutyRate3to5(volume);
+          duty = volume * ratePerCubic;
+        } else {
+          const ratePerCubic = getDutyRateOver5(volume);
+          duty = volume * ratePerCubic;
+        }
+
+        // Расчёт акциза
+        excise = calculateExcise(volume, fuelType);
+
+        // Расчёт НДС (20% от суммы пошлины + акциз + стоимость авто)
+        const vatBase = price + duty + excise;
+        vat = vatBase * VAT_RATE;
+
+        // Итоговая сумма
+        total = duty + excise + vat;
+
+        // Применяем льготу 50% если есть
+        if (hasDiscount && customsEntity === "person") {
+          total = total * 0.5;
+        }
+
+        updateResult(duty, excise, vat, total);
       }
 
-      // Обновляем option'ы для типа автомобиля
-      function updateCarTypeOptions() {
-        if (!carTypeSelect) return;
-        carTypeSelect.innerHTML = `
-            <option value="sedan">Седан</option>
-            <option value="suv">SUV</option>
-            <option value="oversize">Оверсайз (тяжёлый/большой автомобиль)</option>
-          `;
+      function updateResult(duty, excise, vat, total) {
+        const dutyEl = document.getElementById("dutyAmount");
+        const exciseEl = document.getElementById("exciseAmount");
+        const vatEl = document.getElementById("vatAmount");
+        const totalEl = document.getElementById("totalCustoms");
+
+        if (dutyEl)
+          dutyEl.textContent = Math.round(duty).toLocaleString("ru-RU") + " €";
+        if (exciseEl)
+          exciseEl.textContent =
+            Math.round(excise).toLocaleString("ru-RU") + " €";
+        if (vatEl)
+          vatEl.textContent = Math.round(vat).toLocaleString("ru-RU") + " €";
+        if (totalEl)
+          totalEl.textContent =
+            Math.round(total).toLocaleString("ru-RU") + " €";
       }
 
-      // Навешиваем обработчики
-      function bindEvents() {
-        const elements = [
-          locationSelect,
-          carTypeSelect,
-          portSelect,
-          isHybridCheckbox,
-        ];
-        elements.forEach((el) => {
-          if (el) {
-            el.addEventListener("input", calculate);
-            if (el.type !== "checkbox") {
-              el.addEventListener("change", calculate);
-            }
-          }
-        });
-      }
+      // Управление видимостью полей в зависимости от типа двигателя
+      function toggleFieldsByEngine() {
+        const engineTypeRadio = document.querySelector(
+          'input[name="engineType"]:checked'
+        );
+        const engineType = engineTypeRadio ? engineTypeRadio.value : "fuel";
 
-      // Скрываем блок с детальной разбивкой
-      function hideBreakdown() {
-        const breakdownElement = document.getElementById("breakdown");
-        if (breakdownElement) {
-          breakdownElement.style.display = "none";
+        const volumeGroup = document.getElementById("engineVolumeGroup");
+        const fuelTypeGroup = document.getElementById("fuelTypeGroup");
+
+        if (engineType === "electric") {
+          if (volumeGroup) volumeGroup.style.display = "none";
+          if (fuelTypeGroup) fuelTypeGroup.style.display = "none";
+        } else {
+          if (volumeGroup) volumeGroup.style.display = "block";
+          if (fuelTypeGroup) fuelTypeGroup.style.display = "block";
         }
       }
 
-      // Инициализация
-      populateLocationSelect();
-      updateCarTypeOptions();
-      bindEvents();
-      hideBreakdown();
-      calculate();
-    }
+      // Инициализация обработчиков
+      function initCustomsCalculator() {
+        const btn = document.getElementById("calculateCustomsBtn");
+
+        // Добавляем обработчики на все поля
+        const ageEl = document.getElementById("customsAge");
+        const priceEl = document.getElementById("customsPrice");
+        const volumeEl = document.getElementById("customsVolume");
+
+        if (ageEl) ageEl.addEventListener("input", calculateCustoms);
+        if (priceEl) priceEl.addEventListener("input", calculateCustoms);
+        if (volumeEl) volumeEl.addEventListener("input", calculateCustoms);
+
+        // Радиокнопки
+        document
+          .querySelectorAll('input[name="engineType"]')
+          .forEach((radio) => {
+            radio.addEventListener("change", () => {
+              toggleFieldsByEngine();
+              calculateCustoms();
+            });
+          });
+
+        document
+          .querySelectorAll('input[name="customsEntity"]')
+          .forEach((radio) => {
+            radio.addEventListener("change", calculateCustoms);
+          });
+
+        document.querySelectorAll('input[name="fuelType"]').forEach((radio) => {
+          radio.addEventListener("change", calculateCustoms);
+        });
+
+        const discountCheckbox = document.getElementById("customsDiscount");
+        if (discountCheckbox) {
+          discountCheckbox.addEventListener("change", calculateCustoms);
+        }
+
+        if (btn) btn.addEventListener("click", calculateCustoms);
+
+        // Начальное состояние полей
+        toggleFieldsByEngine();
+        calculateCustoms();
+      }
+
+      // Запускаем инициализацию после загрузки DOM
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initCustomsCalculator);
+      } else {
+        initCustomsCalculator();
+      }
+    })();
 
     // --------------------------------------------------------------
     // 6. RS-Motors CAR SLIDER
@@ -2307,37 +2473,125 @@
   });
 
   // --------------------------------------------------------------
-  // 11. КНОПКА СКРОЛЛА НАВЕРХ (стили в CSS)
+  // 11. КНОПКА СКРОЛЛА НАВЕРХ (исправленная версия)
   // --------------------------------------------------------------
   (function initScrollToTop() {
+    // Функция создания кнопки
     function createScrollButton() {
+      // Проверяем, существует ли уже кнопка
+      if (document.getElementById("scrollToTopBtn")) return;
+
       const btn = document.createElement("button");
       btn.id = "scrollToTopBtn";
       btn.className = "scroll-to-top";
       btn.setAttribute("aria-label", "Прокрутить наверх");
-      btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 4l-8 8h6v8h4v-8h6z"/></svg>`;
+      btn.innerHTML = `<svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 4l-8 8h6v8h4v-8h6z" fill="currentColor"/></svg>`;
       document.body.appendChild(btn);
     }
-    let scrollBtn = document.getElementById("scrollToTopBtn");
-    if (!scrollBtn) {
-      createScrollButton();
-      scrollBtn = document.getElementById("scrollToTopBtn");
+
+    // Функция прокрутки наверх (универсальная)
+    function scrollToTop() {
+      // Вариант 1: плавная прокрутка для современных браузеров
+      if (window.scrollTo && typeof window.scrollTo === "function") {
+        try {
+          window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth",
+          });
+          return;
+        } catch (e) {
+          // Если smooth не поддерживается, используем fallback
+        }
+      }
+
+      // Вариант 2: альтернативная плавная прокрутка через requestAnimationFrame
+      const startPosition =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        0;
+      if (startPosition === 0) return;
+
+      let startTime = null;
+      const duration = 500; // длительность анимации в мс
+
+      function animation(currentTime) {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+        // easing функция для плавности
+        const easeProgress = 1 - Math.pow(1 - progress, 3);
+        const scrollPosition = startPosition * (1 - easeProgress);
+
+        window.scrollTo(0, scrollPosition);
+
+        if (timeElapsed < duration) {
+          requestAnimationFrame(animation);
+        } else {
+          window.scrollTo(0, 0);
+        }
+      }
+
+      requestAnimationFrame(animation);
     }
-    const headerElement = document.querySelector(".home-header");
-    function scrollToHeader() {
-      if (headerElement)
-        headerElement.scrollIntoView({ behavior: "smooth", block: "start" });
-      else window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+
+    // Функция для определения видимости кнопки (с учётом разных браузеров)
     function toggleButtonVisibility() {
-      if (scrollBtn) {
-        if (window.scrollY > 400) scrollBtn.classList.add("show");
-        else scrollBtn.classList.remove("show");
+      const scrollBtn = document.getElementById("scrollToTopBtn");
+      if (!scrollBtn) return;
+
+      // Получаем текущую позицию скролла (кросс-браузерно)
+      const scrollPosition =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        0;
+
+      if (scrollPosition > 400) {
+        scrollBtn.classList.add("show");
+      } else {
+        scrollBtn.classList.remove("show");
       }
     }
-    if (scrollBtn) scrollBtn.addEventListener("click", scrollToHeader);
-    window.addEventListener("scroll", toggleButtonVisibility);
-    toggleButtonVisibility();
+
+    // Функция инициализации
+    function init() {
+      // Создаём кнопку
+      createScrollButton();
+
+      const scrollBtn = document.getElementById("scrollToTopBtn");
+      if (!scrollBtn) return;
+
+      // Удаляем старые обработчики, если есть
+      const newBtn = scrollBtn.cloneNode(true);
+      scrollBtn.parentNode.replaceChild(newBtn, scrollBtn);
+
+      // Добавляем новый обработчик
+      newBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        scrollToTop();
+      });
+
+      // Слушаем событие скролла с оптимизацией (passive)
+      window.addEventListener("scroll", toggleButtonVisibility, {
+        passive: true,
+      });
+
+      // Также проверяем видимость при загрузке и изменении размера окна
+      window.addEventListener("resize", toggleButtonVisibility);
+
+      // Запускаем проверку видимости
+      toggleButtonVisibility();
+    }
+
+    // Запускаем инициализацию после полной загрузки DOM
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
   })();
 
   // --------------------------------------------------------------
