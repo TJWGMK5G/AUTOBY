@@ -3910,6 +3910,42 @@ body::before {
   }
 }
 
+.required-field {
+  color: #e63946;
+  margin-left: 4px;
+}
+
+.error-message {
+  color: #e63946;
+  font-size: 12px;
+  margin-top: 5px;
+  display: none;
+}
+
+.error-message.show {
+  display: block;
+}
+
+.form-control.error {
+  border-color: #e63946;
+  background-color: rgba(230, 57, 70, 0.1);
+}
+
+.form-hint {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  color: #ffd700aa;
+}
+
+.form-group {
+  margin-bottom: 22px;
+}
+
+.form-group .form-hint {
+  margin-bottom: 0;
+}
+
 /* ---------- HERO ---------- */
 .home-hero__note {
   margin-top: 70px;

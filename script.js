@@ -1799,7 +1799,6 @@
       // ============================================================
       const customsAgeEl = document.getElementById("customsAge");
       const customsPriceEl = document.getElementById("customsPrice");
-      const customsVolumeEl = document.getElementById("customsVolume");
 
       // Если нет основных элементов - выходим (ошибок не будет)
       if (!customsAgeEl || !customsPriceEl) {
@@ -1810,6 +1809,9 @@
       // ============================================================
       // ТАМОЖЕННЫЙ КАЛЬКУЛЯТОР НА ОСНОВЕ ПРЕДОСТАВЛЕННОЙ ТАБЛИЦЫ
       // ============================================================
+
+      // Курс евро к бел.руб (ориентировочно)
+      const EUR_TO_BYN_RATE = 3.2;
 
       // Ставки для авто с ДВС (возраст до 3 лет) - в зависимости от стоимости
       const ageUnder3Rates = [
@@ -1841,12 +1843,20 @@
         { maxVolume: Infinity, ratePerCubic: 5.7 },
       ];
 
-      // Базовая ставка акциза для бензина (евро за 1 см³)
+      // Базовая ставка акциза для бензина (евро за 1 см³) - ТОЛЬКО ДЛЯ ЮР.ЛИЦ
       const EXCISE_PETROL_PER_CUBIC = 0.05;
       const EXCISE_DIESEL_PER_CUBIC = 0.08;
 
-      // Ставка НДС
+      // Ставка НДС - ТОЛЬКО ДЛЯ ЮР.ЛИЦ
       const VAT_RATE = 0.2;
+
+      // Утилизационный сбор для физ.лиц (в евро)
+      const UTIL_FEE_PERSON_UNDER_3 = 624.92;
+      const UTIL_FEE_PERSON_OVER_3 = 1282.02;
+
+      // Утилизационный сбор для юр.лиц (в евро)
+      const UTIL_FEE_LEGAL_UNDER_3 = 1500;
+      const UTIL_FEE_LEGAL_OVER_3 = 2500;
 
       // Получение ставки пошлины для авто до 3 лет
       function getDutyRateUnder3(price) {
@@ -1878,8 +1888,25 @@
         return 5.7;
       }
 
-      // Расчёт акциза
-      function calculateExcise(volume, fuelType) {
+      // Расчёт таможенной пошлины для ДВС (для всех)
+      function calculateDutyForFuel(age, price, volume, customsEntity) {
+        if (age === 0) {
+          const rate = getDutyRateUnder3(price);
+          const byPercent = price * (rate.percent / 100);
+          const byVolume = volume * rate.minPerCubic;
+          return Math.max(byPercent, byVolume);
+        } else if (age === 1) {
+          const ratePerCubic = getDutyRate3to5(volume);
+          return volume * ratePerCubic;
+        } else {
+          const ratePerCubic = getDutyRateOver5(volume);
+          return volume * ratePerCubic;
+        }
+      }
+
+      // Расчёт акциза (только для юр.лиц)
+      function calculateExcise(volume, fuelType, customsEntity) {
+        if (customsEntity === "person") return 0;
         if (fuelType === "petrol") {
           return volume * EXCISE_PETROL_PER_CUBIC;
         } else {
@@ -1887,17 +1914,172 @@
         }
       }
 
-      // Основная функция расчёта
-      function calculateCustoms() {
-        // Получаем значения с проверкой на существование
-        const age = parseInt(document.getElementById("customsAge")?.value) || 0;
-        const price =
-          parseFloat(document.getElementById("customsPrice")?.value) || 0;
+      // Расчёт НДС (только для юр.лиц)
+      function calculateVAT(price, duty, excise, customsEntity) {
+        if (customsEntity === "person") return 0;
+        const vatBase = price + duty + excise;
+        return vatBase * VAT_RATE;
+      }
+
+      // Расчёт утилизационного сбора
+      function calculateUtilFee(age, customsEntity) {
+        const isUnder3Years = age === 0;
+
+        if (customsEntity === "person") {
+          return isUnder3Years
+            ? UTIL_FEE_PERSON_UNDER_3
+            : UTIL_FEE_PERSON_OVER_3;
+        } else {
+          return isUnder3Years ? UTIL_FEE_LEGAL_UNDER_3 : UTIL_FEE_LEGAL_OVER_3;
+        }
+      }
+
+      // Валидация полей
+      function validateFields(price, volume, engineType, customsEntity) {
+        let isValid = true;
+
+        // Очищаем предыдущие ошибки
+        document.querySelectorAll(".error-message").forEach((el) => {
+          el.classList.remove("show");
+          el.textContent = "";
+        });
+        document.querySelectorAll(".form-control").forEach((el) => {
+          el.classList.remove("error");
+        });
+
+        // Валидация стоимости
+        if (!price || price <= 0) {
+          const priceError = document.getElementById("priceError");
+          const priceInput = document.getElementById("customsPrice");
+          if (priceError) {
+            priceError.textContent =
+              "Укажите стоимость автомобиля (больше 0 €)";
+            priceError.classList.add("show");
+          }
+          if (priceInput) priceInput.classList.add("error");
+          isValid = false;
+        } else if (price > 1000000) {
+          const priceError = document.getElementById("priceError");
+          const priceInput = document.getElementById("customsPrice");
+          if (priceError) {
+            priceError.textContent = "Стоимость не может превышать 1 000 000 €";
+            priceError.classList.add("show");
+          }
+          if (priceInput) priceInput.classList.add("error");
+          isValid = false;
+        }
+
+        // Валидация объёма (для ДВС)
+        if (engineType === "fuel") {
+          if (!volume || volume <= 0) {
+            const volumeError = document.getElementById("volumeError");
+            const volumeInput = document.getElementById("customsVolume");
+            if (volumeError) {
+              volumeError.textContent =
+                "Укажите объём двигателя (больше 0 см³)";
+              volumeError.classList.add("show");
+            }
+            if (volumeInput) volumeInput.classList.add("error");
+            isValid = false;
+          } else if (volume > 10000) {
+            const volumeError = document.getElementById("volumeError");
+            const volumeInput = document.getElementById("customsVolume");
+            if (volumeError) {
+              volumeError.textContent = "Объём не может превышать 10 000 см³";
+              volumeError.classList.add("show");
+            }
+            if (volumeInput) volumeInput.classList.add("error");
+            isValid = false;
+          }
+        }
+
+        return isValid;
+      }
+
+      // Управление видимостью полей и подсказок
+      function toggleFieldsByEntityAndEngine() {
+        const customsEntityRadio = document.querySelector(
+          'input[name="customsEntity"]:checked'
+        );
+        const customsEntity = customsEntityRadio
+          ? customsEntityRadio.value
+          : "person";
 
         const engineTypeRadio = document.querySelector(
           'input[name="engineType"]:checked'
         );
         const engineType = engineTypeRadio ? engineTypeRadio.value : "fuel";
+
+        const engineVolumeGroup = document.getElementById("engineVolumeGroup");
+        const fuelTypeGroup = document.getElementById("fuelTypeGroup");
+        const discountGroup = document.getElementById("discountGroup");
+        const entityHint = document.getElementById("entityHint");
+        const fuelTypeHint = document.getElementById("fuelTypeHint");
+
+        // Управление видимостью объёма двигателя (зависит от типа двигателя)
+        if (engineType === "electric") {
+          if (engineVolumeGroup) engineVolumeGroup.style.display = "none";
+        } else {
+          if (engineVolumeGroup) engineVolumeGroup.style.display = "block";
+        }
+
+        // Управление видимостью вида топлива (только для ДВС И для юр.лиц)
+        if (engineType === "electric" || customsEntity === "person") {
+          if (fuelTypeGroup) fuelTypeGroup.style.display = "none";
+        } else {
+          if (fuelTypeGroup) fuelTypeGroup.style.display = "block";
+        }
+
+        // Обновление подсказок
+        if (entityHint) {
+          if (customsEntity === "person") {
+            entityHint.textContent =
+              "💡 Для физических лиц: акциз и НДС отсутствуют. Таможенная пошлина рассчитывается по тем же ставкам.";
+          } else {
+            entityHint.textContent =
+              "💡 Для юридических лиц: полный расчёт (пошлина + акциз + НДС + утильсбор).";
+          }
+        }
+
+        if (fuelTypeHint) {
+          if (customsEntity === "person") {
+            fuelTypeHint.textContent =
+              "Для физических лиц вид топлива не влияет на расчёт (акциз отсутствует)";
+          } else {
+            fuelTypeHint.textContent =
+              "Для дизельных авто акциз выше, чем для бензиновых";
+          }
+        }
+
+        // Управление видимостью льготы (только для физ.лиц)
+        if (customsEntity === "person") {
+          if (discountGroup) discountGroup.style.display = "block";
+        } else {
+          if (discountGroup) discountGroup.style.display = "none";
+          // Снимаем галку льготы для юр.лиц
+          const discountCheckbox = document.getElementById("customsDiscount");
+          if (discountCheckbox) discountCheckbox.checked = false;
+        }
+
+        // Управление видимостью строк акциза и НДС в результатах
+        const exciseRow = document.getElementById("exciseRow");
+        const vatRow = document.getElementById("vatRow");
+
+        if (customsEntity === "person") {
+          if (exciseRow) exciseRow.style.display = "none";
+          if (vatRow) vatRow.style.display = "none";
+        } else {
+          if (exciseRow) exciseRow.style.display = "flex";
+          if (vatRow) vatRow.style.display = "flex";
+        }
+      }
+
+      // Основная функция расчёта
+      function calculateCustoms() {
+        // Получаем значения
+        const age = parseInt(document.getElementById("customsAge")?.value) || 0;
+        const price =
+          parseFloat(document.getElementById("customsPrice")?.value) || 0;
 
         const customsEntityRadio = document.querySelector(
           'input[name="customsEntity"]:checked'
@@ -1906,126 +2088,108 @@
           ? customsEntityRadio.value
           : "person";
 
-        const fuelTypeRadio = document.querySelector(
-          'input[name="fuelType"]:checked'
+        const engineTypeRadio = document.querySelector(
+          'input[name="engineType"]:checked'
         );
-        const fuelType = fuelTypeRadio ? fuelTypeRadio.value : "petrol";
+        const engineType = engineTypeRadio ? engineTypeRadio.value : "fuel";
 
         const discountCheckbox = document.getElementById("customsDiscount");
         const hasDiscount = discountCheckbox ? discountCheckbox.checked : false;
 
+        let duty = 0;
+        let excise = 0;
+        let vat = 0;
+        let utilFee = 0;
+        let total = 0;
+
+        // Получаем объём (для ДВС)
         let volume = 0;
         if (engineType === "fuel") {
           const volumeEl = document.getElementById("customsVolume");
           volume = volumeEl ? parseFloat(volumeEl.value) || 0 : 0;
         }
 
-        let duty = 0;
-        let excise = 0;
-        let vat = 0;
-        let total = 0;
+        // Валидация полей
+        if (!validateFields(price, volume, engineType, customsEntity)) {
+          updateResult(0, 0, 0, 0, 0, customsEntity);
+          return;
+        }
 
-        // Для электромобилей упрощённый расчёт
+        // Получаем вид топлива (для юр.лиц с ДВС)
+        let fuelType = "petrol";
+        if (customsEntity === "legal" && engineType === "fuel") {
+          const fuelTypeRadio = document.querySelector(
+            'input[name="fuelType"]:checked'
+          );
+          fuelType = fuelTypeRadio ? fuelTypeRadio.value : "petrol";
+        }
+
+        // Расчёт утилизационного сбора
+        utilFee = calculateUtilFee(age, customsEntity);
+
+        // Расчёт таможенной пошлины
         if (engineType === "electric") {
-          let utilFee = 0;
-          if (customsEntity === "person") {
-            utilFee = age < 1 ? 624.92 : 1282.02;
-          } else {
-            utilFee = age < 1 ? 1500 : 2500;
-          }
-
-          duty = 0;
-          excise = 0;
-          vat = price * VAT_RATE;
-          total = duty + excise + vat + utilFee;
-
-          if (hasDiscount) {
-            total = total * 0.5;
-          }
-
-          updateResult(duty, excise, vat, total);
-          return;
-        }
-
-        // Для авто с ДВС
-        if (price === 0 || volume === 0) {
-          updateResult(0, 0, 0, 0);
-          return;
-        }
-
-        // Расчёт таможенной пошлины в зависимости от возраста
-        if (age === 0) {
-          const rate = getDutyRateUnder3(price);
-          const byPercent = price * (rate.percent / 100);
-          const byVolume = volume * rate.minPerCubic;
-          duty = Math.max(byPercent, byVolume);
-        } else if (age === 1) {
-          const ratePerCubic = getDutyRate3to5(volume);
-          duty = volume * ratePerCubic;
+          duty = 0; // Для электромобилей пошлина 0
         } else {
-          const ratePerCubic = getDutyRateOver5(volume);
-          duty = volume * ratePerCubic;
+          if (price > 0 && volume > 0) {
+            duty = calculateDutyForFuel(age, price, volume, customsEntity);
+          }
         }
 
-        // Расчёт акциза
-        excise = calculateExcise(volume, fuelType);
+        // Расчёт акциза (только для юр.лиц с ДВС)
+        if (customsEntity === "legal" && engineType === "fuel" && volume > 0) {
+          excise = calculateExcise(volume, fuelType, customsEntity);
+        }
 
-        // Расчёт НДС (20% от суммы пошлины + акциз + стоимость авто)
-        const vatBase = price + duty + excise;
-        vat = vatBase * VAT_RATE;
+        // Расчёт НДС (только для юр.лиц)
+        vat = calculateVAT(price, duty, excise, customsEntity);
 
         // Итоговая сумма
-        total = duty + excise + vat;
+        total = duty + excise + vat + utilFee;
 
-        // Применяем льготу 50% если есть
-        if (hasDiscount && customsEntity === "person") {
-          total = total * 0.5;
+        // Применяем льготу 50% только для физ.лиц (только к пошлине)
+        if (customsEntity === "person" && hasDiscount) {
+          const discountedDuty = duty * 0.5;
+          total = discountedDuty + excise + vat + utilFee;
+          duty = discountedDuty; // Обновляем отображаемую пошлину
         }
 
-        updateResult(duty, excise, vat, total);
+        updateResult(duty, excise, vat, total, utilFee, customsEntity);
       }
 
-      function updateResult(duty, excise, vat, total) {
+      function updateResult(duty, excise, vat, total, utilFee, customsEntity) {
         const dutyEl = document.getElementById("dutyAmount");
         const exciseEl = document.getElementById("exciseAmount");
         const vatEl = document.getElementById("vatAmount");
         const totalEl = document.getElementById("totalCustoms");
+        const utilFeeEl = document.getElementById("utilFeeAmount");
+        const totalBYNEl = document.getElementById("totalBYNAmount");
+
+        // Округляем значения
+        const roundedDuty = Math.round(duty);
+        const roundedExcise = Math.round(excise);
+        const roundedVat = Math.round(vat);
+        const roundedUtilFee = Math.round(utilFee);
+        const roundedTotal = Math.round(total);
+        const roundedTotalBYN = Math.round(total * EUR_TO_BYN_RATE);
 
         if (dutyEl)
-          dutyEl.textContent = Math.round(duty).toLocaleString("ru-RU") + " €";
+          dutyEl.textContent = roundedDuty.toLocaleString("ru-RU") + " €";
         if (exciseEl)
-          exciseEl.textContent =
-            Math.round(excise).toLocaleString("ru-RU") + " €";
+          exciseEl.textContent = roundedExcise.toLocaleString("ru-RU") + " €";
         if (vatEl)
-          vatEl.textContent = Math.round(vat).toLocaleString("ru-RU") + " €";
+          vatEl.textContent = roundedVat.toLocaleString("ru-RU") + " €";
+        if (utilFeeEl)
+          utilFeeEl.textContent = roundedUtilFee.toLocaleString("ru-RU") + " €";
         if (totalEl)
-          totalEl.textContent =
-            Math.round(total).toLocaleString("ru-RU") + " €";
-      }
-
-      // Управление видимостью полей в зависимости от типа двигателя
-      function toggleFieldsByEngine() {
-        const engineTypeRadio = document.querySelector(
-          'input[name="engineType"]:checked'
-        );
-        const engineType = engineTypeRadio ? engineTypeRadio.value : "fuel";
-
-        const volumeGroup = document.getElementById("engineVolumeGroup");
-        const fuelTypeGroup = document.getElementById("fuelTypeGroup");
-
-        if (engineType === "electric") {
-          if (volumeGroup) volumeGroup.style.display = "none";
-          if (fuelTypeGroup) fuelTypeGroup.style.display = "none";
-        } else {
-          if (volumeGroup) volumeGroup.style.display = "block";
-          if (fuelTypeGroup) fuelTypeGroup.style.display = "block";
-        }
+          totalEl.textContent = roundedTotal.toLocaleString("ru-RU") + " €";
+        if (totalBYNEl)
+          totalBYNEl.textContent =
+            roundedTotalBYN.toLocaleString("ru-RU") + " BYN";
       }
 
       // Инициализация обработчиков
       function initCustomsCalculator() {
-        const btn = document.getElementById("calculateCustomsBtn");
-
         // Добавляем обработчики на все поля
         const ageEl = document.getElementById("customsAge");
         const priceEl = document.getElementById("customsPrice");
@@ -2035,35 +2199,39 @@
         if (priceEl) priceEl.addEventListener("input", calculateCustoms);
         if (volumeEl) volumeEl.addEventListener("input", calculateCustoms);
 
-        // Радиокнопки
+        // Радиокнопки для типа лица
         document
-          .querySelectorAll('input[name="engineType"]')
+          .querySelectorAll('input[name="customsEntity"]')
           .forEach((radio) => {
             radio.addEventListener("change", () => {
-              toggleFieldsByEngine();
+              toggleFieldsByEntityAndEngine();
               calculateCustoms();
             });
           });
 
+        // Радиокнопки для типа двигателя
         document
-          .querySelectorAll('input[name="customsEntity"]')
+          .querySelectorAll('input[name="engineType"]')
           .forEach((radio) => {
-            radio.addEventListener("change", calculateCustoms);
+            radio.addEventListener("change", () => {
+              toggleFieldsByEntityAndEngine();
+              calculateCustoms();
+            });
           });
 
+        // Радиокнопки для вида топлива (только для юр.лиц)
         document.querySelectorAll('input[name="fuelType"]').forEach((radio) => {
           radio.addEventListener("change", calculateCustoms);
         });
 
+        // Чекбокс льготы
         const discountCheckbox = document.getElementById("customsDiscount");
         if (discountCheckbox) {
           discountCheckbox.addEventListener("change", calculateCustoms);
         }
 
-        if (btn) btn.addEventListener("click", calculateCustoms);
-
         // Начальное состояние полей
-        toggleFieldsByEngine();
+        toggleFieldsByEntityAndEngine();
         calculateCustoms();
       }
 
