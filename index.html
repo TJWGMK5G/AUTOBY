@@ -1124,14 +1124,18 @@
                   <label for="customsPrice"
                     >Стоимость авто <span class="required-field">*</span></label
                   >
-                  <input
-                    type="number"
-                    id="customsPrice"
-                    class="form-control"
-                    placeholder="в евро"
-                    min="0"
-                    step="100"
-                  />
+                  <div class="input-with-currency">
+                    <input
+                      type="number"
+                      id="customsPrice"
+                      class="form-control"
+                      placeholder="в евро"
+                      min="0"
+                      step="100"
+                      value="2000"
+                    />
+                    <span class="currency-symbol">€</span>
+                  </div>
                   <span class="form-hint"
                     >Укажите стоимость автомобиля в евро</span
                   >
@@ -1247,6 +1251,7 @@
             <!-- Результат -->
             <div class="customs-calculator__result" id="customsResult">
               <h3>Стоимость растаможки</h3>
+
               <div class="result-items">
                 <div class="result-row">
                   <span>Таможенная пошлина:</span>
@@ -1262,7 +1267,7 @@
                 </div>
                 <div class="result-row">
                   <span>Утилизационный сбор:</span>
-                  <span id="utilFeeAmount" class="result-value">— €</span>
+                  <span id="utilFeeAmount" class="result-value">— BYN</span>
                 </div>
                 <div class="result-row total-row">
                   <span>ИТОГО к оплате:</span>
@@ -1275,6 +1280,14 @@
                   <span id="totalBYNAmount" class="result-value">— BYN</span>
                 </div>
               </div>
+
+              <!-- Детали расчёта НДС для юр.лиц -->
+              <div
+                id="vatInfoDetail"
+                class="vat-info-detail"
+                style="display: none"
+              ></div>
+
               <div class="result-footer">
                 <span class="rate-info"
                   >* Расчёт является ориентировочным. Точная сумма может

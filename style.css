@@ -3946,6 +3946,120 @@ body::before {
   margin-bottom: 0;
 }
 
+/* Дополнительные стили для калькулятора */
+.input-with-currency {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-currency .form-control {
+  padding-right: 40px;
+}
+
+.currency-symbol {
+  position: absolute;
+  right: 15px;
+  font-weight: bold;
+  color: #666;
+}
+
+.currency-rate-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8f9fa;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.rate-update-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.rate-label {
+  font-weight: 600;
+  color: #333;
+}
+
+.rate-value {
+  font-weight: 700;
+  color: #007bff;
+}
+
+.rate-update-time {
+  font-size: 11px;
+  color: #999;
+}
+
+.refresh-rate-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.refresh-rate-btn:hover {
+  background: #e9ecef;
+  transform: rotate(90deg);
+}
+
+.refresh-rate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.vat-info-detail {
+  margin-top: 15px;
+  padding: 10px;
+  background: #e7f3ff;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #004085;
+}
+
+.error-message {
+  display: none;
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.error-message.show {
+  display: block;
+}
+
+.form-control.error {
+  border-color: #dc3545;
+}
+
+.required-field {
+  color: #dc3545;
+}
+
+.form-hint {
+  display: block;
+  font-size: 12px;
+  color: #89949e;
+  margin-top: 5px;
+}
+/* ============================================================
+    КАЛЬКУЛЯТОР ТАМОЖЕННЫХ ПОШЛИН
+   ============================================================ */
+
 /* ---------- HERO ---------- */
 .home-hero__note {
   margin-top: 70px;
