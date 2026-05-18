@@ -1951,24 +1951,13 @@
 
       // Расчёт утилизационного сбора (В БЕЛАРУССКИХ РУБЛЯХ)
       function calculateUtilFee(age, customsEntity) {
-        if (customsEntity === "person") {
-          // Физические лица
-          if (age === 0) {
-            return UTIL_FEE_PERSON_UNDER_3; // до 3 лет: 624.92 BYN
-          } else if (age === 1) {
-            return UTIL_FEE_PERSON_3_TO_5; // от 3 до 5 лет: 1282.02 BYN
-          } else {
-            return UTIL_FEE_PERSON_OVER_5; // более 5 лет: 1282.02 BYN
-          }
+        // Утильсбор одинаковый для физических и юридических лиц
+        if (age === 0) {
+          return 624.92; // до 3 лет
+        } else if (age === 1) {
+          return 1282.02; // от 3 до 5 лет
         } else {
-          // Юридические лица
-          if (age === 0) {
-            return UTIL_FEE_LEGAL_UNDER_3; // до 3 лет: 1500.00 BYN
-          } else if (age === 1) {
-            return UTIL_FEE_LEGAL_3_TO_5; // от 3 до 5 лет: 3100.00 BYN
-          } else {
-            return UTIL_FEE_LEGAL_OVER_5; // более 5 лет: 3100.00 BYN
-          }
+          return 1282.02; // более 5 лет
         }
       }
 
@@ -2149,8 +2138,8 @@
           duty = duty * 0.5;
         }
 
-        // ИТОГОВАЯ СУММА: стоимость автомобиля + пошлина + НДС + утильсбор
-        total = price + duty + vat + utilFeeInEUR;
+        // ИТОГОВАЯ СУММА: БЕЗ стоимости автомобиля! Только пошлина + НДС + утильсбор
+        total = duty + vat + utilFeeInEUR;
 
         updateResult(duty, vat, total, utilFee, customsEntity, price);
       }
@@ -2171,7 +2160,7 @@
         const roundedTotalBYN = Math.round(total * currentEurRate * 100) / 100;
         const roundedPrice = Math.round(price * 100) / 100;
 
-        // Отображаем стоимость автомобиля
+        // Отображаем стоимость автомобиля (только для информации, не участвует в итоге)
         if (carPriceEl) {
           carPriceEl.textContent = roundedPrice.toLocaleString("ru-RU") + " €";
         }
