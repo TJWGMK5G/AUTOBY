@@ -266,91 +266,85 @@
           </div>
         </div>
       </section>
-      <!-- Форма для обратной связи -->
-      <div class="form-feedback" id="formFeedbackContainer">
-        <div class="speed-stripe"></div>
-        <div class="finish-line"></div>
-
-        <div class="form-header">
-          <h2 class="form-title">Свяжись с нами!</h2>
-          <p class="form-description">
-            Оставьте заявку — и наши специалисты свяжутся с вами в ближайшее
-            время. Ответим на все вопросы, поможем с выбором авто и рассчитаем
-            стоимость.
-          </p>
-          <div class="form-divider"></div>
-        </div>
-
-        <form id="feedbackForm" action="telegram.php" method="post">
-          <div class="input-group">
-            <label for="userName" class="input-label">
-              <span class="label-icon">👤</span>
-              Как к тебе обращаться?
-            </label>
-            <input
-              required
-              type="text"
-              id="userName"
-              name="name"
-              placeholder="Например: Молния МакКуин"
-            />
-            <span class="input-hint"
-              >Имя поможет нам обратиться к тебе лично</span
-            >
-          </div>
-
-          <div class="input-group">
-            <label for="userPhone" class="input-label">
-              <span class="label-icon">📞</span>
-              Твой номер телефона
-            </label>
-            <input
-              type="tel"
-              id="userPhone"
-              name="phone"
-              placeholder="+7 (___)-___-__-__"
-              required
-            />
-            <span class="input-hint">Мы свяжемся с вами</span>
-          </div>
-
-          <div class="input-group">
-            <label for="userEmail" class="input-label">
-              <span class="label-icon">✉️</span>
-              Электронная почта
-            </label>
-            <input
-              required
-              type="email"
-              id="userEmail"
-              name="email"
-              placeholder="tvoi@email.ru"
-            />
-            <span class="input-hint">На почту придет обрытная связь</span>
-          </div>
-
-          <input type="text" name="honeypot" style="display: none" />
-
-          <button type="submit" class="send-button">
-            <span class="button-text">Отправить заявку</span>
-            <span class="button-icon">🏁</span>
-          </button>
-        </form>
-
-        <div id="thanksBlock" class="thanks">
-          <div class="success">✅ Спасибо! Ваша заявка принята.</div>
-          <p>Мы свяжемся с вами в ближайшее время.</p>
-          <a href="index.html">Вернуться на главную</a>
-        </div>
-      </div>
-      <!-- Модальное окно для формы -->
-      <div id="modalForm" class="modal">
-        <div class="modal-content">
-          <span class="modal-close">&times;</span>
-          <div id="modalFormContainer"></div>
-        </div>
-      </div>
     </main>
+
+    <!-- ==================== MODAL CONTACTS ==================== -->
+    <div class="home-modal" id="contactModal">
+      <div class="home-modal__overlay" id="modalOverlay"></div>
+      <div class="home-modal__content">
+        <button
+          class="home-modal__close"
+          id="modalClose"
+          aria-label="Закрыть модальное окно"
+        >
+          ✕
+        </button>
+        <div class="home-modal__header">
+          <h2>Связаться с нами</h2>
+          <p>
+            Мы готовы помочь с подбором автомобиля и ответить на все вопросы
+          </p>
+        </div>
+        <div class="home-modal__body">
+          <div class="home-modal__info">
+            <div class="home-modal__item">
+              <span class="home-modal__icon">📍</span>
+              <div>
+                <strong>Главный офис</strong><br />246017, Республика Беларусь,
+                Гомельская область г. Гомель, ул. Гагарина 89 пом. 4 (2 этаж)
+              </div>
+            </div>
+            <div class="home-modal__item">
+              <span class="home-modal__icon">☎️</span>
+              <div>
+                <strong>Телефон</strong><br /><a href="tel:+375293189865"
+                  >+375293189865</a
+                >
+              </div>
+            </div>
+            <div class="home-modal__item">
+              <span class="home-modal__icon">✉️</span>
+              <div>
+                <strong>Email</strong><br /><a
+                  href="mailto:rsmotorsby@yandex.ru"
+                  >rsmotorsby@yandex.ru</a
+                >
+              </div>
+            </div>
+          </div>
+          <div class="home-modal__note">
+            <strong>Работаем по всей Беларуси</strong><br />
+            Доставка и оформление в Минске, Бресте, Гродно, Витебске, Могилёве и
+            Гомеле
+          </div>
+        </div>
+        <div class="home-modal__footer">
+          <p>Мы ответим вам в течение 30 минут в рабочее время</p>
+        </div>
+      </div>
+    </div>
+    <!-- Плавающая кнопка "Связаться с нами" -->
+    <button
+      class="floating-contact-btn"
+      id="floatingContactBtn"
+      aria-label="Связаться с нами"
+    >
+      <span class="btn-content">
+        <span class="btn-icon">💬</span>
+        <span class="btn-text">Связаться с нами</span>
+      </span>
+    </button>
+    <!-- ПРокрутка страницы вверх -->
+    <button
+      class="scroll-to-top"
+      id="scrollToTopBtn"
+      aria-label="Прокрутить наверх"
+    >
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 4l-8 8h6v8h4v-8h6z" />
+      </svg>
+    </button>
+    <!-- ==================== MODAL CONTACTS ==================== -->
 
     <!-- ==================== FOOTER ==================== -->
     <footer class="home-footer">

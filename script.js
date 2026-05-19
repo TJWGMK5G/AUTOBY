@@ -84,21 +84,12 @@
     // --------------------------------------------------------------
     // 2. АККОРДЕОН ДЛЯ WHY SECTION
     // --------------------------------------------------------------
-    const accordionItems = document.querySelectorAll(".home-why__item");
-
-    if (accordionItems.length) {
+    (function () {
+      const accordionItems = document.querySelectorAll("[data-accordion]");
       let isAnimating = false;
       let activeItem = null;
 
       const isMobile = () => window.innerWidth <= 992;
-
-      const getHeaderOffset = () => {
-        const header = document.querySelector("header, .header, .home-header");
-        if (header) {
-          return header.offsetHeight + 20;
-        }
-        return 90;
-      };
 
       const closeAllAccordionItems = () => {
         accordionItems.forEach((item) => {
@@ -109,123 +100,73 @@
         activeItem = null;
       };
 
-      const scrollToElement = (element, options = {}) => {
-        const { offset = null, behavior = "smooth" } = options;
-        let offsetPosition;
-
-        if (isMobile()) {
-          const headerOffset = getHeaderOffset();
-          const elementPosition = element.getBoundingClientRect().top;
-          offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-        } else {
-          const customOffset = offset !== null ? offset : 100;
-          const elementPosition = element.getBoundingClientRect().top;
-          offsetPosition = elementPosition + window.pageYOffset - customOffset;
+      const handleItemClick = (item, event) => {
+        if (
+          event.target.closest(".home-why__item-list li") ||
+          event.target.closest(".home-why__item-note") ||
+          event.target.closest("h4") ||
+          event.target.closest("ul, li, p")
+        ) {
+          return;
         }
 
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: behavior,
-        });
-      };
+        if (isAnimating) return;
 
-      const scrollToContentOnMobile = (item) => {
-        if (!isMobile()) return;
-        setTimeout(() => {
-          const rect = item.getBoundingClientRect();
-          const headerOffset = getHeaderOffset();
-          const offsetPosition = rect.top + window.pageYOffset - headerOffset;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth",
-          });
-        }, 150);
+        const isActive = item.classList.contains("active");
+
+        if (isActive) {
+          isAnimating = true;
+          item.classList.remove("active");
+          activeItem = null;
+          setTimeout(() => {
+            isAnimating = false;
+          }, 400);
+        } else {
+          isAnimating = true;
+          closeAllAccordionItems();
+          item.classList.add("active");
+          activeItem = item;
+          setTimeout(() => {
+            isAnimating = false;
+          }, 450);
+        }
       };
 
       accordionItems.forEach((item) => {
         item.addEventListener("click", (e) => {
-          if (
-            e.target.closest(".home-why__item-list li") ||
-            e.target.closest(".home-why__item-note") ||
-            e.target.closest("h4")
-          ) {
-            return;
-          }
-
-          if (isAnimating) return;
-
-          const isActive = item.classList.contains("active");
-
-          if (isActive) {
-            isAnimating = true;
-            item.classList.remove("active");
-            activeItem = null;
-            setTimeout(() => {
-              isAnimating = false;
-            }, 400);
-          } else {
-            isAnimating = true;
-            closeAllAccordionItems();
-            item.classList.add("active");
-            activeItem = item;
-
-            if (isMobile()) {
-              scrollToContentOnMobile(item);
-            } else {
-              setTimeout(() => {
-                const rect = item.getBoundingClientRect();
-                const isFullyVisible =
-                  rect.top >= 80 && rect.bottom <= window.innerHeight - 80;
-                if (!isFullyVisible) {
-                  scrollToElement(item, { offset: 90 });
-                }
-                setTimeout(() => {
-                  isAnimating = false;
-                }, 500);
-              }, 100);
-            }
-
-            if (isMobile()) {
-              setTimeout(() => {
-                isAnimating = false;
-              }, 600);
-            }
-          }
+          handleItemClick(item, e);
         });
-      });
 
-      window.addEventListener("resize", () => {
-        if (activeItem && isMobile()) {
-          setTimeout(() => {
-            const rect = activeItem.getBoundingClientRect();
-            const headerOffset = getHeaderOffset();
-            if (rect.top < headerOffset || rect.bottom > window.innerHeight) {
-              scrollToElement(activeItem, { offset: headerOffset });
+        item.addEventListener(
+          "touchstart",
+          (e) => {
+            if (
+              e.target.closest(".home-why__item-list li") ||
+              e.target.closest(".home-why__item-note") ||
+              e.target.closest("h4") ||
+              e.target.closest("ul, li, p")
+            ) {
+              return;
             }
-          }, 100);
-        }
+            e.stopPropagation();
+          },
+          { passive: false }
+        );
       });
 
       if (isMobile()) {
-        let touchStartY = 0;
-        document.addEventListener("touchstart", (e) => {
-          touchStartY = e.touches[0].clientY;
-        });
-        document.addEventListener("touchend", (e) => {
-          const touchEndY = e.changedTouches[0].clientY;
-          const deltaY = touchEndY - touchStartY;
-          if (deltaY < -50 && activeItem && isMobile()) {
-            setTimeout(() => {
-              const rect = activeItem.getBoundingClientRect();
-              const headerOffset = getHeaderOffset();
-              if (rect.top < headerOffset) {
-                scrollToElement(activeItem, { offset: headerOffset });
-              }
-            }, 50);
-          }
-        });
+        const style = document.createElement("style");
+        style.textContent = `.home-why__item.active { scroll-margin-top: 0 !important; }`;
+        document.head.appendChild(style);
       }
-    }
+
+      const allContents = document.querySelectorAll(".home-why__item-content");
+      allContents.forEach((content) => {
+        content.addEventListener("click", (e) => {
+          e.stopPropagation();
+        });
+      });
+    })();
 
     // --------------------------------------------------------------
     // 3. COMPARISON SLIDER (Before / After)
