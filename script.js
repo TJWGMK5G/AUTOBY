@@ -1891,11 +1891,6 @@
       const UTIL_FEE_PERSON_3_TO_5 = 1282.02; // BYN - от 3 до 5 лет
       const UTIL_FEE_PERSON_OVER_5 = 1282.02; // BYN - более 5 лет
 
-      // Для юридических лиц (повышенный коэффициент)
-      const UTIL_FEE_LEGAL_UNDER_3 = 1500.0; // BYN - до 3 лет (юрлица)
-      const UTIL_FEE_LEGAL_3_TO_5 = 3100.0; // BYN - от 3 до 5 лет (юрлица)
-      const UTIL_FEE_LEGAL_OVER_5 = 3100.0; // BYN - более 5 лет (юрлица)
-
       function getDutyRateUnder3(price) {
         for (const rate of ageUnder3Rates) {
           if (price <= rate.maxPrice) {
