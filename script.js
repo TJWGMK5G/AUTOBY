@@ -101,15 +101,6 @@
       };
 
       const handleItemClick = (item, event) => {
-        if (
-          event.target.closest(".home-why__item-list li") ||
-          event.target.closest(".home-why__item-note") ||
-          event.target.closest("h4") ||
-          event.target.closest("ul, li, p")
-        ) {
-          return;
-        }
-
         if (isAnimating) return;
 
         const isActive = item.classList.contains("active");
@@ -136,22 +127,6 @@
         item.addEventListener("click", (e) => {
           handleItemClick(item, e);
         });
-
-        item.addEventListener(
-          "touchstart",
-          (e) => {
-            if (
-              e.target.closest(".home-why__item-list li") ||
-              e.target.closest(".home-why__item-note") ||
-              e.target.closest("h4") ||
-              e.target.closest("ul, li, p")
-            ) {
-              return;
-            }
-            e.stopPropagation();
-          },
-          { passive: false }
-        );
       });
 
       if (isMobile()) {
@@ -162,9 +137,7 @@
 
       const allContents = document.querySelectorAll(".home-why__item-content");
       allContents.forEach((content) => {
-        content.addEventListener("click", (e) => {
-          e.stopPropagation();
-        });
+        content.addEventListener("click", (e) => {});
       });
     })();
 
